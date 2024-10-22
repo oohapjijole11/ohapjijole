@@ -20,12 +20,12 @@ import java.util.List;
 @RequestMapping("/auction/ticket")
 public class TicketController {
 
-    TicketService ticketService;
+    private final TicketService ticketService;
 
+    // 티켓 생성
     @PostMapping
     public ResponseEntity<TicketMessageResponseDto> createTicket(@RequestBody TicketRequestDto ticketRequestDto) {
-        // 티켓 생성
-        ticketService.createAuction(ticketRequestDto);
+        ticketService.createticket(ticketRequestDto);
         // 메시지를 담은 응답 생성
         TicketMessageResponseDto responseDto = new TicketMessageResponseDto("티켓이 성공적으로 생성되었습니다.");
         // 응답으로 메시지를 반환

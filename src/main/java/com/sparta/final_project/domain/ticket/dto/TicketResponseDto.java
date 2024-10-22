@@ -5,6 +5,7 @@ import com.sparta.final_project.domain.ticket.entity.Ticket;
 import com.sparta.final_project.domain.ticket.entity.TicketStatus;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Data
@@ -12,9 +13,9 @@ public class TicketResponseDto {
     private String ticketTitle;
     private String ticketDescription;
     private TicketStatus ticketStatus;
-    private String ticketCount;
+    private Long ticketCount;
     private Grade ticketGrade;
-    private LocalTime ticketCreatedAt;
+
 
     public TicketResponseDto(Ticket ticket) {
         this.ticketTitle = ticket.getTicketTitle();

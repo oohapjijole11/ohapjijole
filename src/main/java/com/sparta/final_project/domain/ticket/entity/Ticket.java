@@ -13,6 +13,7 @@ import java.time.LocalTime;
 @Setter
 @NoArgsConstructor
 @Entity
+@Table(name = "tickets")
 public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,14 +28,11 @@ public class Ticket {
     @Column(nullable = false)
     private TicketStatus ticketStatus;
 
-    @Column(nullable = false)
-    private LocalTime createdAt;
-
     @Column
     private Grade ticketGrade;
 
     @Column
-    private String ticketCount;
+    private Long ticketCount;
 
     public Ticket(TicketRequestDto ticketRequestDto) {
         this.ticketTitle = ticketRequestDto.getTicketTitle();

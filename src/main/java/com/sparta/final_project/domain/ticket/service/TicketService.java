@@ -13,10 +13,10 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class TicketService {
-    TicketRepository ticketRepository;
+    private final TicketRepository ticketRepository;
 
     //티켓 생성
-    public Ticket createAuction(TicketRequestDto ticketRequestDto) {
+    public Ticket createticket(TicketRequestDto ticketRequestDto) {
         Ticket ticket = new Ticket(ticketRequestDto);
         Ticket savedTicket = ticketRepository.save(ticket);
         return savedTicket;
