@@ -1,15 +1,14 @@
-package com.sparta.final_project.domain.auction.dto;
+package com.sparta.final_project.domain.auction.dto.response;
 
 import com.sparta.final_project.domain.auction.entity.Auction;
 import com.sparta.final_project.domain.auction.entity.Grade;
 import com.sparta.final_project.domain.auction.entity.Status;
 import lombok.Data;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Data
-public class AuctionResponseDto {
+public class AuctionResponse {
 
     private int startPrice;
     private LocalTime startTime;
@@ -17,7 +16,7 @@ public class AuctionResponseDto {
     private Grade grade;
     private Status status;
 
-    public AuctionResponseDto(Auction auction) {
+    public AuctionResponse(Auction auction) {
 
         this.startPrice = auction.getStartPrice();
         this.startTime = auction.getStartTime();

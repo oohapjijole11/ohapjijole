@@ -1,5 +1,6 @@
 package com.sparta.final_project.domain.user.entity;
 
+import com.sparta.final_project.config.AuthUser;
 import com.sparta.final_project.domain.item.entity.Item;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -43,6 +44,23 @@ public class User {
         this.password = password;
         this.name = name;
         this.role = role;
+    }
+
+    // AuthUser로 User만들 때
+    public User(String email, String name, UserRole role) {
+        this.email = email;
+        this.name = name;
+        this.role = role;
+    }
+
+    // 유저 생성 AuthUser로 하는방식
+    public static User fromAuthUser(AuthUser authUser) {
+        return new User(authUser.getName(), authUser.getEmail(), authUser.getRole());
+    }
+
+    // 회원 탈퇴 메소드
+    public void deletedUser(String email, String password) {
+        this.isdeleted = true;
     }
 
 }
