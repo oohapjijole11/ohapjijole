@@ -11,4 +11,5 @@ import lombok.NoArgsConstructor;
 public class ItemUpdateRequest {
     private String itemName;
     private String itemDescription;
+
 }
