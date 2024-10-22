@@ -1,8 +1,6 @@
 package com.sparta.final_project.domain.ticket.service;
-import com.sparta.final_project.domain.auction.dto.AuctionResponseDto;
-import com.sparta.final_project.domain.auction.entity.Auction;
-import com.sparta.final_project.domain.ticket.dto.TicketRequestDto;
-import com.sparta.final_project.domain.ticket.dto.TicketResponseDto;
+import com.sparta.final_project.domain.ticket.dto.request.TicketRequest;
+import com.sparta.final_project.domain.ticket.dto.response.TicketResponse;
 import com.sparta.final_project.domain.ticket.entity.Ticket;
 import com.sparta.final_project.domain.ticket.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,23 +14,23 @@ public class TicketService {
     private final TicketRepository ticketRepository;
 
     //티켓 생성
-    public Ticket createticket(TicketRequestDto ticketRequestDto) {
-        Ticket ticket = new Ticket(ticketRequestDto);
+    public Ticket createticket(TicketRequest ticketRequest) {
+        Ticket ticket = new Ticket(ticketRequest);
         Ticket savedTicket = ticketRepository.save(ticket);
         return savedTicket;
     }
 
     //티켓 단건조회
-    public TicketResponseDto getTicket(Long ticketId) {
+    public TicketResponse getTicket(Long ticketId) {
         Ticket ticket = ticketRepository.findById(ticketId).orElseThrow(()
                 -> new RuntimeException("없는 티켓입니다"));
-        return new TicketResponseDto(ticket);
+        return new TicketResponse(ticket);
     }
 
     //티켓 다건 조회
-    public List<TicketResponseDto> getticketList() {
+    public List<TicketResponse> getticketList() {
         List<Ticket> ticketList = ticketRepository.findAll();
-        return ticketList.stream().map(TicketResponseDto::new).toList();
+        return ticketList.stream().map(TicketResponse::new).toList();
     }
 
     //티켓 삭제

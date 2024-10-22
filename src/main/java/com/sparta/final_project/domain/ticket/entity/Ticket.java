@@ -1,13 +1,12 @@
 package com.sparta.final_project.domain.ticket.entity;
 
 import com.sparta.final_project.domain.auction.entity.Grade;
-import com.sparta.final_project.domain.ticket.dto.TicketRequestDto;
+import com.sparta.final_project.domain.ticket.dto.request.TicketRequest;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -17,7 +16,8 @@ import java.time.LocalTime;
 public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ticketId;
+    @Column(name = "ticket_id")
+    private Long id;
 
     @Column(nullable = false)
     private String ticketTitle;
@@ -34,12 +34,12 @@ public class Ticket {
     @Column
     private Long ticketCount;
 
-    public Ticket(TicketRequestDto ticketRequestDto) {
-        this.ticketTitle = ticketRequestDto.getTicketTitle();
-        this.ticketDescription = ticketRequestDto.getTicketDescription();
-        this.ticketStatus = ticketRequestDto.getTicketStatus();
-        this.ticketCount = ticketRequestDto.getTicketCount();
-        this.ticketGrade = ticketRequestDto.getTicketGrade();
+    public Ticket(TicketRequest ticketRequest) {
+        this.ticketTitle = ticketRequest.getTicketTitle();
+        this.ticketDescription = ticketRequest.getTicketDescription();
+        this.ticketStatus = ticketRequest.getTicketStatus();
+        this.ticketCount = ticketRequest.getTicketCount();
+        this.ticketGrade = ticketRequest.getTicketGrade();
     }
 
 }
