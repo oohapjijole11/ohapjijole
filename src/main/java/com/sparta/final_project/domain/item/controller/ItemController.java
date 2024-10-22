@@ -38,7 +38,6 @@ public class ItemController {
         return ResponseEntity.ok(itemResponse);
     }
 
-    // 상품 수정
     @PatchMapping("/{itemId}")
     public ResponseEntity<ItemUpdateResponse> updateItem(
             @PathVariable Long itemId,
@@ -49,7 +48,7 @@ public class ItemController {
         // 아이템 업데이트 로직
         ItemUpdateResponse itemUpdateResponse = itemService.updateItem(itemId, file, itemName, itemDescription);
 
-        return ResponseEntity.ok(itemUpdateResponse);
+        return ResponseEntity.ok(itemUpdateResponse); // 수정된 아이템 정보 반환
     }
 
      // 상품 삭제
