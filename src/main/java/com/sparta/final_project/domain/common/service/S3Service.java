@@ -1,5 +1,8 @@
 package com.sparta.final_project.domain.common.service;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -38,13 +41,12 @@ public class S3Service {
     }
 
     // 파일 삭제 메서드
-    public void deleteFile(String fileUrl) {
+    public void deleteFile(MultipartFile file) {
         try {
-            String[] split = fileUrl.split("/"); // URL에서 파일 이름 추출
-            String fileName = split[split.length - 1];
-            amazonS3Client.deleteObject(bucket, fileName); // S3에서 파일 삭제
+            String fileName = file.getOriginalFilename();
+            amazonS3Client.deleteObject(bucket, fileName);
         } catch (Exception e) {
-            throw new QueensTrelloException(ErrorCode.FILE_DELETE_ERROR); // 커스텀 예외 처리
+            throw new QueensTrelloException(ErrorCode.FILE_DELETE_ERROR);
         }
     }
 }

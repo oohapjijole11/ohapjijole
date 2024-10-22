@@ -12,4 +12,6 @@ public class ItemSimpleResponse {
     private String itemDescription; // 상품 설명
     private String itemUrl; // 상품 URL
     private Long userId; // 사용자 ID
+
+
 }
