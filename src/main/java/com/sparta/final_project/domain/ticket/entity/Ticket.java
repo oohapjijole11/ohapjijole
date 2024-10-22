@@ -25,7 +25,7 @@ public class Ticket {
     private String ticketDescription;
 
     @Column(nullable = false)
-    private String ticketStatus;
+    private TicketStatus ticketStatus;
 
     @Column(nullable = false)
     private LocalTime createdAt;
