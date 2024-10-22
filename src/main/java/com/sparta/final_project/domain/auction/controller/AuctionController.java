@@ -1,7 +1,7 @@
 package com.sparta.final_project.domain.auction.controller;
 
-import com.sparta.final_project.domain.auction.dto.AuctionRequestDto;
-import com.sparta.final_project.domain.auction.dto.AuctionResponseDto;
+import com.sparta.final_project.domain.auction.dto.request.AuctionRequest;
+import com.sparta.final_project.domain.auction.dto.response.AuctionResponse;
 import com.sparta.final_project.domain.auction.service.AuctionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,23 +19,23 @@ public class AuctionController {
 
 //    생성
     @PostMapping
-    public ResponseEntity<AuctionResponseDto> createAuction(@RequestBody AuctionRequestDto auctionRequestDto) {
-        return ResponseEntity.ok().body(auctionService.createAuction(auctionRequestDto));
+    public ResponseEntity<AuctionResponse> createAuction(@RequestBody AuctionRequest auctionRequest) {
+        return ResponseEntity.ok().body(auctionService.createAuction(auctionRequest));
     }
 //    단건조회
     @GetMapping("/{auctionId}")
-    public ResponseEntity<AuctionResponseDto> getAuction(@PathVariable("auctionId") Long auctionId) {
+    public ResponseEntity<AuctionResponse> getAuction(@PathVariable("auctionId") Long auctionId) {
         return ResponseEntity.ok().body(auctionService.getAuction(auctionId));
     }
 //    다건조회
-    @GetMapping("/auctionList")
-    public ResponseEntity<List<AuctionResponseDto>> getAuctionList() {
+    @GetMapping("/auctions")
+    public ResponseEntity<List<AuctionResponse>> getAuctionList() {
         return ResponseEntity.ok().body(auctionService.getAuctionList());
     }
 //    수정
     @PutMapping("/{auctionId}")
-    public ResponseEntity<AuctionResponseDto> updateAuction(@PathVariable("auctionId") Long auctionId, @RequestBody AuctionRequestDto auctionRequestDto) {
-        return ResponseEntity.ok().body(auctionService.updateAuction(auctionId, auctionRequestDto));
+    public ResponseEntity<AuctionResponse> updateAuction(@PathVariable("auctionId") Long auctionId, @RequestBody AuctionRequest auctionRequest) {
+        return ResponseEntity.ok().body(auctionService.updateAuction(auctionId, auctionRequest));
     }
 //    삭제
     @DeleteMapping("/{auctionId}")
