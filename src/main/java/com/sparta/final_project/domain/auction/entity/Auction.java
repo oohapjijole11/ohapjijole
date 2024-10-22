@@ -34,6 +34,7 @@ public class Auction extends Timestamped {
     @Enumerated(EnumType.STRING)
     private Grade grade;
 
+    @Enumerated(EnumType.STRING)
     private Status status;
 
 //    아이템 연관관계
