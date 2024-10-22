@@ -6,6 +6,7 @@ import com.sparta.final_project.domain.auction.entity.Auction;
 import com.sparta.final_project.domain.auction.entity.Grade;
 import com.sparta.final_project.domain.auction.entity.Status;
 import com.sparta.final_project.domain.auction.repository.AuctionRepository;
+import com.sparta.final_project.domain.item.entity.Item;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ public class AuctionService {
 
     private final AuctionRepository auctionRepository;
 //    private final UserRepository userRepository;
+//    private final ItemRepository itemRepository;
 
 
 //    생성
@@ -67,7 +69,7 @@ public class AuctionService {
         } else {
             auction.setGrade(Grade.L);
         }
-        auction.setStatus(Status.BID);
+        auction.setStatus(Status.WAITING);
         return auction;
     }
 
