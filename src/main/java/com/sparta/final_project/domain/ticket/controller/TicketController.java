@@ -32,18 +32,20 @@ public class TicketController {
         return ResponseEntity.ok(responseDto);
     }
 
+    //티켓 단건조회
     @GetMapping("/{ticketId}")
-    public ResponseEntity<TicketResponseDto> getTicket(@PathVariable("auctionId") Long ticketId) {
+    public ResponseEntity<TicketResponseDto> getTicket(@PathVariable("ticketId") Long ticketId) {
         return ResponseEntity.ok().body(ticketService.getTicket(ticketId));
     }
 
+    //티켓 다건조회
     @GetMapping("/ticketList")
     public ResponseEntity<List<TicketResponseDto>> getTicketList() {
         return ResponseEntity.ok().body(ticketService.getticketList());
     }
 
     @DeleteMapping("/{ticketId}")
-    public ResponseEntity<String> deleteTicket(@PathVariable("auctionId") Long ticketId) {
+    public ResponseEntity<String> deleteTicket(@PathVariable("ticketId") Long ticketId) {
         ticketService.deleteTicket(ticketId);
         return ResponseEntity.ok().body("경매가 삭제되었습니다.");
     }

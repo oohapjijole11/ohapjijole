@@ -38,7 +38,7 @@ public class TicketService {
     //티켓 삭제
     public void deleteTicket(Long ticketId) {
         Ticket ticket = ticketRepository.findById(ticketId).orElseThrow(()
-                -> new IllegalArgumentException("존재하지 않는 경매입니다."));
+                -> new IllegalArgumentException("존재하지 않는 티켓입니다."));
         ticketRepository.delete(ticket);
     }
 
