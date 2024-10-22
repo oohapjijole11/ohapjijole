@@ -18,8 +18,10 @@ public class Sbid extends Timestamped {
     @Column(name="bid_id")
     private Long id;
 
+    @Column(nullable = false)
     private Integer price;
 
+    @Column(nullable = false)
     private Integer charge;
 
     @ManyToOne(fetch = FetchType.LAZY)

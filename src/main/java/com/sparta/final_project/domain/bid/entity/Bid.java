@@ -19,6 +19,7 @@ public class Bid extends Timestamped {
     @Column(name="bid_id")
     private Long id;
 
+    @Column(nullable = false)
     private Integer price;
 
     @ManyToOne(fetch = FetchType.LAZY)
