@@ -30,6 +30,8 @@ public class Auction extends Timestamped {
     @Column(nullable = false)
     private LocalTime endTime;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Grade grade;
 
     private Status status;
@@ -45,7 +47,7 @@ public class Auction extends Timestamped {
         this.startTime = auctionRequest.getStartTime();
         this.endTime = auctionRequest.getEndTime();
         this.grade = auctionRequest.getGrade();
-        this.status = Status.BID;
+        this.status = Status.WAITING;
     }
 
     public void update(AuctionRequest auctionRequest) {
