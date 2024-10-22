@@ -18,6 +18,7 @@ bin/
 !**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
+application.properties
 .idea
 *.iws
 *.iml
@@ -37,4 +38,4 @@ out/
 .vscode/
 
 ### ignore ###
-application.properties
+*.properties
