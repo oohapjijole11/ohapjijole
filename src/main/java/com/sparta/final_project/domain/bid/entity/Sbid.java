@@ -24,7 +24,7 @@ public class Sbid extends Timestamped {
     @Column(nullable = false)
     private Integer charge;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "auction_id")
     private Auction auction;
 
