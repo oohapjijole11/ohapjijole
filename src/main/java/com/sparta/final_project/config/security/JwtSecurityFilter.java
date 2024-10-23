@@ -1,4 +1,4 @@
-package com.sparta.final_project.config;
+package com.sparta.final_project.config.security;
 
 import com.sparta.final_project.domain.common.exception.ErrorCode;
 import com.sparta.final_project.domain.common.exception.OhapjijoleException;
@@ -28,6 +28,7 @@ public class JwtSecurityFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
 
+
     @Override
     protected void doFilterInternal(
             // JWT 토큰 검증, 사용자 인증 확인
@@ -43,15 +44,15 @@ public class JwtSecurityFilter extends OncePerRequestFilter {
             try {
                 // 토큰에서 추출
                 Claims claims = jwtUtil.extractClaims(jwt); // 토큰의 주체
-                Long userId = Long.valueOf(claims.getSubject());
-                String nickname = claims.get("name",String.class);
+                Long userId = Long.parseLong(claims.getSubject());
+                String name = claims.get("name",String.class);
                 String email = claims.get("email", String.class);
                 UserRole userRole = UserRole.of(claims.get("role", String.class));
 
 
                 // 인증
                 if (SecurityContextHolder.getContext().getAuthentication() == null) {
-                    AuthUser authUser = new AuthUser(userId, nickname, email, userRole);
+                    AuthUser authUser = new AuthUser(userId, name, email, userRole);
 
                     JwtAuthenticationToken authenticationToken = new JwtAuthenticationToken(authUser);
                     authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpRequest));

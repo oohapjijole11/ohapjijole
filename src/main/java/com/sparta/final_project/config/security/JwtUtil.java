@@ -1,4 +1,4 @@
-package com.sparta.final_project.config;
+package com.sparta.final_project.config.security;
 
 
 import com.sparta.final_project.domain.common.exception.ErrorCode;
