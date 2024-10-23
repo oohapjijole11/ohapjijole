@@ -3,10 +3,12 @@ package com.sparta.final_project.domain.ticket.dto.response;
 import lombok.Data;
 
 @Data
-public class TicketMessageResponse {
+
+public class BuyTicketsResponse {
     private String message;
 
-    public TicketMessageResponse(String message) {
+    public BuyTicketsResponse(String message) {
+
         this.message = message;
     }
 
