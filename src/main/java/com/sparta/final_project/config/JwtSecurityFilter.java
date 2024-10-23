@@ -1,7 +1,7 @@
 package com.sparta.final_project.config;
 
-import com.sparta.final_project.domain.common.entity.ErrorStatus;
-import com.sparta.final_project.domain.common.exception.ApiException;
+import com.sparta.final_project.domain.common.exception.ErrorCode;
+import com.sparta.final_project.domain.common.exception.OhapjijoleException;
 import com.sparta.final_project.domain.user.entity.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -44,9 +44,9 @@ public class JwtSecurityFilter extends OncePerRequestFilter {
                 // 토큰에서 추출
                 Claims claims = jwtUtil.extractClaims(jwt); // 토큰의 주체
                 Long userId = Long.valueOf(claims.getSubject());
-                String nickname = claims.get("nickname",String.class);
+                String nickname = claims.get("name",String.class);
                 String email = claims.get("email", String.class);
-                UserRole userRole = UserRole.of(claims.get("userRole", String.class));
+                UserRole userRole = UserRole.of(claims.get("role", String.class));
 
 
                 // 인증
@@ -60,15 +60,13 @@ public class JwtSecurityFilter extends OncePerRequestFilter {
 
                 // 예외 처리
             } catch (SecurityException | MalformedJwtException e) {
-                throw new ApiException(ErrorStatus._UNAUTHORIZED_INVALID_TOKEN);
+                throw new OhapjijoleException(ErrorCode._UNAUTHORIZED_INVALID_TOKEN);
             } catch (ExpiredJwtException e) {
-                throw new ApiException(ErrorStatus._UNAUTHORIZED_EXPIRED_TOKEN);
+                throw new OhapjijoleException(ErrorCode._UNAUTHORIZED_EXPIRED_TOKEN);
             } catch (UnsupportedJwtException e) {
-                throw new ApiException(ErrorStatus._BAD_REQUEST_UNSUPPORTED_TOKEN);
+                throw new OhapjijoleException(ErrorCode._BAD_REQUEST_UNSUPPORTED_TOKEN);
             }
         }
         chain.doFilter(httpRequest, httpResponse);
     }
-
-
 }

@@ -1,61 +1,112 @@
 package com.sparta.final_project.domain.auction.service;
 
+import com.sparta.final_project.config.AuthUser;
 import com.sparta.final_project.domain.auction.dto.request.AuctionRequest;
+import com.sparta.final_project.domain.auction.dto.response.AuctionProgressResponse;
 import com.sparta.final_project.domain.auction.dto.response.AuctionResponse;
 import com.sparta.final_project.domain.auction.entity.Auction;
 import com.sparta.final_project.domain.auction.entity.Grade;
 import com.sparta.final_project.domain.auction.entity.Status;
 import com.sparta.final_project.domain.auction.repository.AuctionRepository;
-import com.sparta.final_project.domain.item.entity.Item;
+import com.sparta.final_project.domain.common.exception.ErrorCode;
+import com.sparta.final_project.domain.common.exception.OhapjijoleException;
+import com.sparta.final_project.domain.item.repository.ItemRepository;
+import com.sparta.final_project.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuctionService {
 
     private final AuctionRepository auctionRepository;
-//    private final UserRepository userRepository;
-//    private final ItemRepository itemRepository;
-
+    private final UserRepository userRepository;
+    private final ItemRepository itemRepository;
 
 //    생성
-    public AuctionResponse createAuction(AuctionRequest auctionRequest) {
+    public AuctionResponse createAuction(AuthUser authUser, Long itemId, AuctionRequest auctionRequest) {
+        userRepository.findById(authUser.getUserId()).orElseThrow(() -> new OhapjijoleException(ErrorCode._USER_NOT_FOUND));
+        itemRepository.findById(itemId).orElseThrow(()-> new OhapjijoleException(ErrorCode._NOT_FOUND_ITEM));
 //        경매 등급 측정, 경매 상태, AuctionEntity 정보 저장 메소드
         Auction auction = gradeMeasurement(auctionRequest);
         auctionRepository.save(auction);
         return new AuctionResponse(auction);
     }
 //    단건조회
-    public AuctionResponse getAuction(Long auctionId) {
-        Auction auction = auctionRepository.findById(auctionId).orElseThrow(()
-                -> new IllegalArgumentException("존재하지 않는 경매입니다."));
-
+    public AuctionResponse getAuction(Long userId,Long auctionId) {
+        userRepository.findById(userId).orElseThrow(() -> new OhapjijoleException(ErrorCode._USER_NOT_FOUND));
+        Auction auction = auctionRepository.findById(auctionId).orElseThrow(() -> new OhapjijoleException(ErrorCode._NOT_FOUND_AUCTION));
         return new AuctionResponse(auction);
     }
 //    다건조회
-    public List<AuctionResponse> getAuctionList() {
+    public List<AuctionResponse> getAuctionList(Long userId) {
+        userRepository.findById(userId).orElseThrow(()-> new OhapjijoleException(ErrorCode._USER_NOT_FOUND));
         List<Auction> auctionList = auctionRepository.findAll();
         return auctionList.stream().map(AuctionResponse::new).toList();
     }
 //    수정
-    public AuctionResponse updateAuction(Long auctionId, AuctionRequest auctionRequest) {
-        Auction auction = auctionRepository.findById(auctionId).orElseThrow(()
-                -> new IllegalArgumentException("존재하지 않는 경매입니다."));
-        auction.update(auctionRequest);
-        gradeMeasurement(auctionRequest);
+    public AuctionResponse updateAuction(Long userId,Long auctionId, AuctionRequest auctionRequest) {
+        userRepository.findById(userId).orElseThrow(()-> new OhapjijoleException(ErrorCode._USER_NOT_FOUND));
+        Auction auction = auctionRepository.findById(auctionId).orElseThrow(() -> new OhapjijoleException(ErrorCode._NOT_FOUND_AUCTION));
+        if(auction.getStatus() != Status.WAITING){
+            throw new IllegalArgumentException("경매가 준비중일 때 수정가능합니다.");
+        }
+//        수정메소드
+        gradeMeasurementForUpdate(auction,auctionRequest);
         auctionRepository.save(auction);
         return new AuctionResponse(auction);
     }
 //    삭제
-    public void deleteAuction(Long auctionId) {
-        Auction auction = auctionRepository.findById(auctionId).orElseThrow(()
-                -> new IllegalArgumentException("존재하지 않는 경매입니다."));
+    public void deleteAuction(Long userId,Long auctionId) {
+        userRepository.findById(userId).orElseThrow(()-> new OhapjijoleException(ErrorCode._USER_NOT_FOUND));
+        Auction auction = auctionRepository.findById(auctionId).orElseThrow(() -> new OhapjijoleException(ErrorCode._NOT_FOUND_AUCTION));
         auctionRepository.delete(auction);
     }
 
+//    경매 시작
+    @Scheduled(fixedRate = 1000)
+    public void startAuctionScheduler() {
+        LocalDateTime now = LocalDateTime.now();
+        List<Auction> auctions = auctionRepository.findAllByStatusAndStartTimeLessThan(Status.WAITING, now);
+        for (Auction auction : auctions) {
+            auction.setStatus(Status.BID);
+            auctionRepository.save(auction);
+        }
+    }
+
+
+    public AuctionProgressResponse getAuctionProgress(Long auctionId) {
+        Auction auction = auctionRepository.findById(auctionId).orElseThrow(() -> new OhapjijoleException(ErrorCode._NOT_FOUND_AUCTION));
+        long remainingTime = java.time.Duration.between(LocalDateTime.now(), auction.getEndTime()).toSeconds();
+        if(remainingTime < 0) {
+            remainingTime = 0;
+        }
+        return new AuctionProgressResponse(auction,remainingTime);
+    }
+
+
+//    경매 마감
+    @Scheduled(fixedRate = 1000)
+    public void endAuctionScheduler() {
+        LocalDateTime now = LocalDateTime.now();
+        List<Auction> auctions = auctionRepository.findAllByStatusAndEndTimeLessThan(Status.BID, now);
+        for (Auction auction : auctions) {
+            auction.setStatus(Status.SUCCESSBID);
+//            유찰 추가
+            auctionRepository.save(auction);
+        }
+    }
+
+
+
+
+//    경매 생성 및 등급 측정
     public Auction gradeMeasurement(AuctionRequest auctionRequest){
         Auction auction = new Auction(auctionRequest);
         if(auctionRequest.getStartPrice() <= 10000000){
@@ -73,13 +124,19 @@ public class AuctionService {
         return auction;
     }
 
-//    유저,경매 검증
-//    public Auction validateAuction(Authen authen, AuctionResponse AuctionResponse){
-//        User loggedInUser = userRepository.findById(authen.getId()).orElseThrow(()
-//                -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
-//        Auction auction = auctionRepository.findById(AuctionResponse.getAuctionId()).orElseThrow(()
-//                -> new IllegalArgumentException("존재하지 않는 경매입니다."));
-//        return auction;
-//    }
-
+//    경매 수정
+    public void gradeMeasurementForUpdate(Auction auction, AuctionRequest auctionRequest){
+        if(auctionRequest.getStartPrice() <= 10000000){
+            auction.setGrade(Grade.C);
+        } else if(auctionRequest.getStartPrice() <= 15000000) {
+            auction.setGrade(Grade.B);
+        } else if(auctionRequest.getStartPrice() <= 20000000) {
+            auction.setGrade(Grade.A);
+        } else if(auctionRequest.getStartPrice() <= 30000000) {
+            auction.setGrade(Grade.S);
+        } else {
+            auction.setGrade(Grade.L);
+        }
+        auction.setStatus(Status.WAITING);
+    }
 }

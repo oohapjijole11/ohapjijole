@@ -2,6 +2,11 @@ package com.sparta.final_project.config;
 
 import com.sparta.final_project.domain.user.entity.UserRole;
 import lombok.Getter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+import java.util.Collection;
+import java.util.Collections;
 
 @Getter
 public class AuthUser {
@@ -17,13 +22,15 @@ public class AuthUser {
 
     private final UserRole role;
 
-//    private final Collection<? extends GrantedAuthority> authorities;
+    private final Collection<? extends GrantedAuthority> authorities;
 
     public AuthUser(Long userId, String name, String email, UserRole role) {
         this.userId = userId;
         this.name = name;
         this.email = email;
         this.role = role;
+        this.authorities = role != null
+                ? Collections.singletonList(new SimpleGrantedAuthority(role.name()))
+                : Collections.emptyList();
     }
-
 }
