@@ -3,6 +3,7 @@ package com.sparta.final_project.domain.common.service;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.sparta.final_project.domain.common.exception.ServerException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -36,18 +37,19 @@ public class S3Service {
             // 업로드된 파일의 URL 반환
             return amazonS3Client.getUrl(bucket, fileName).toString();
         } catch (IOException e) {
-            throw new QueensTrelloException(ErrorCode.FILE_UPLOAD_ERROR); // 커스텀 예외 처리
+            throw new ServerException("테스트"); // 커스텀 예외 처리
         }
     }
 
     // 파일 삭제 메서드
-    public void deleteFile(MultipartFile file) {
+    public void deleteFile(String fileUrl) {
         try {
-            String fileName = file.getOriginalFilename();
+            String fileName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1); // URL에서 파일 이름 추출
             amazonS3Client.deleteObject(bucket, fileName);
         } catch (Exception e) {
-            throw new QueensTrelloException(ErrorCode.FILE_DELETE_ERROR);
+            throw new ServerException("테스트");
         }
     }
-}
+    }
+
 

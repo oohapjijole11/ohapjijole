@@ -1,18 +1,25 @@
 package com.sparta.final_project.domain.item.service;
 
 import com.sparta.final_project.domain.common.service.S3Service;
+import com.sparta.final_project.domain.item.dto.request.ItemSaveRequest;
 import com.sparta.final_project.domain.item.dto.request.ItemUpdateRequest;
 import com.sparta.final_project.domain.item.dto.response.ItemSaveResponse;
 import com.sparta.final_project.domain.item.dto.response.ItemSimpleResponse;
 import com.sparta.final_project.domain.item.dto.response.ItemUpdateResponse;
 import com.sparta.final_project.domain.item.entity.Item;
+import com.sparta.final_project.domain.item.entity.ItemAttachments;
+import com.sparta.final_project.domain.item.repository.ItemAttachmentsRepository;
 import com.sparta.final_project.domain.item.repository.ItemRepository;
 import com.sparta.final_project.domain.user.entity.User;
+import com.sparta.final_project.domain.user.reository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @RequiredArgsConstructor
@@ -20,75 +27,106 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class ItemService {
     private final ItemRepository itemRepository;
+    private final ItemAttachmentsRepository itemAttachmentsRepository;
     private final S3Service s3Service;
+    private final UserRepository userRepository;
 
     @Transactional
-    public ItemSaveResponse uploadItems(MultipartFile file, String itemName, String itemDescription, Long userId) {
-        // userId로 User 조회
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+    //Auth유저로 변경하기
+    public ItemSaveResponse createItem(ItemSaveRequest itemSaveRequest, Long userId) {
+        // 아이템 생성
+        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found"));
+        Item item = new Item(itemSaveRequest.getItemName(), itemSaveRequest.getItemDescription(), null, user );
+        Item savedItem = itemRepository.save(item);
 
-        // S3에 파일 업로드 후 URL 반환
-        String fileUrl = s3Service.uploadFile(file);
-
-        // 새로운 아이템 생성 및 저장
-        Item newItem = new Item(itemName, itemDescription, fileUrl, user);
-        itemRepository.save(newItem); // DB에 아이템 저장 후 id 생성
-
-        return new ItemSaveResponse(newItem.getItemId(), newItem.getItemName(), newItem.getItemDescription(), fileUrl, user.getUserId());
+        // 이미지 URL 처리 및 첨부파일 저장
+        List<ItemAttachments> attachments = new ArrayList<>();
+        for (MultipartFile file : itemSaveRequest.getItemImages()) {
+            String fileUrl = s3Service.uploadFile(file); // S3에 파일 업로드
+            attachments.add(new ItemAttachments(fileUrl, savedItem)); // 첨부파일 추가
+        }
+        // 첨부파일 저장
+        itemAttachmentsRepository.saveAll(attachments);
+        // 응답 반환
+        return new ItemSaveResponse(savedItem);
     }
-    // 상품 조회
-    @Transactional(readOnly = true) // 읽기 작업이므로 readOnly 설정
+
+    //조회
+    @Transactional(readOnly = true)
     public ItemSimpleResponse getItem(Long itemId) {
-        Item item = findItemById(itemId); // DB에서 아이템 조회
-        return new ItemSimpleResponse(item.getId(), item.getItemName(), item.getItemDescription(), item.getItemUrl(), item.getUserId());
-    }
+        // 아이템 조회
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new EntityNotFoundException("아이템을 찾을 수 없습니다."));
 
-    @Transactional // 쓰기 작업이므로 트랜잭션을 활성화합니다.
-    public ItemUpdateResponse updateItem(Long itemId, MultipartFile file, ItemUpdateRequest itemUpdateRequest) {
-        Item existingItem = findItemById(itemId); // DB에서 아이템 조회
-        if (existingItem == null) {
-            throw new EntityNotFoundException("Item not found with id: " + itemId);
+        // 첨부파일 조회
+        List<ItemAttachments> attachments = itemAttachmentsRepository.findByItem_ItemId(itemId);
+
+        // 파일 URL 목록 초기화
+        List<String> fileUrls = new ArrayList<>();
+        for (ItemAttachments attachment : attachments) {
+            fileUrls.add(attachment.getFileUrl()); // 각 첨부파일의 URL을 추가
         }
 
-        // S3에서 기존 파일 삭제
-        s3Service.deleteFile(existingItem.getItemUrl());
+        // 응답 객체 반환
+        return new ItemSimpleResponse(item.getItemId(), item.getItemName(), item.getItemDescription(), fileUrls, item.getUser().getUserId());
+    }
+        @Transactional
+    public ItemUpdateResponse updateItem(Long itemId, ItemUpdateRequest itemUpdateRequest, Long userId) {
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new EntityNotFoundException("아이템을 찾을 수 없습니다."));
 
-        // 새 파일 유효성 검사
-        if (file == null || file.isEmpty()) {
-            throw new IllegalArgumentException("File must not be null or empty");
+        // 기존 정보 수정
+        item.setItemName(itemUpdateRequest.getItemName());
+        item.setItemDescription(itemUpdateRequest.getItemDescription());
+
+
+        // 기존 첨부파일 삭제 및 새로운 첨부파일 업데이트
+        List<ItemAttachments> existingAttachments = itemAttachmentsRepository.findByItem_ItemId(itemId);
+        for (ItemAttachments attachment : existingAttachments) {
+            String fileUrl = attachment.getFileUrl(); // URL을 가져옴
+            if (fileUrl != null) {
+                s3Service.deleteFile(fileUrl); // S3에서 기존 파일 삭제
+            }
         }
+        itemAttachmentsRepository.deleteAll(existingAttachments); // 기존 첨부파일 삭제
 
-        // 새 파일 업로드
-        String newFileUrl = s3Service.uploadFile(file);
+        // 새로운 파일 업로드 및 저장
+        List<ItemAttachments> newAttachments = new ArrayList<>();
+        for (MultipartFile file : itemUpdateRequest.getItemImages()) {
+            String fileUrl = s3Service.uploadFile(file); // S3에 파일 업로드
+            newAttachments.add(new ItemAttachments(fileUrl, item)); // 새로운 ItemAttachments 객체 추가
+        }
+        itemAttachmentsRepository.saveAll(newAttachments); // 새 첨부파일 저장
 
-        // 아이템 업데이트
-        existingItem.setItemName(itemUpdateRequest.getItemName());
-        existingItem.setItemDescription(itemUpdateRequest.getItemDescription());
-        existingItem.setItemUrl(newFileUrl);
-        saveItem(existingItem); // DB에 업데이트
+        // 첨부파일 URL 리스트 반환
+        List<String> newFileUrls = newAttachments.stream()
+                .map(ItemAttachments::getFileUrl)
+                .toList();
 
-        return new ItemUpdateResponse(existingItem.getId(), existingItem.getItemName(), existingItem.getItemDescription(), newFileUrl, existingItem.getUserId());
+        itemRepository.save(item); // 아이템 정보 저장
+        return new ItemUpdateResponse(item.getItemId(), item.getItemName(), item.getItemDescription(), newFileUrls, item.getUser().getUserId());
     }
 
-    // 상품 삭제
     @Transactional
-    public void deleteItem(Long itemId) {
-        Item existingItem = findItemById(itemId);
-        s3Service.deleteFile(existingItem.getItemUrl());
-        removeItem(existingItem);
-    }
+    public void deleteItem(Long itemId, Long creatorId) {
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new EntityNotFoundException("아이템을 찾을 수 없습니다."));
 
-    private void saveItem(Item item) {
-        itemRepository.save(item);
-    }
+        // 삭제할 수 있는 권한 체크
+        if (!item.getUser().getUserId().equals(creatorId)) { // User 엔티티에서 ID를 가져옴
+            throw new IllegalArgumentException("이 아이템을 삭제할 권한이 없습니다.");
+        }
 
-    private Item findItemById(Long itemId) {
-        return itemRepository.findById(itemId)
-                .orElseThrow(() -> new QueensTrelloException(ErrorCode.ITEM_NOT_FOUND));
-    }
+        // 아이템과 연결된 첨부파일 삭제 및 S3에서 파일 제거
+        List<ItemAttachments> attachments = itemAttachmentsRepository.findByItem_ItemId(itemId); // 첨부파일 가져오기
+        for (ItemAttachments attachment : attachments) {
+            s3Service.deleteFile(attachment.getFileUrl()); // S3에서 파일 삭제
+        }
 
-    private void removeItem(Item item) {
+        // 첨부파일 삭제
+        itemAttachmentsRepository.deleteByItem(item); // 아이템에 연결된 모든 첨부파일 삭제
+
+        // 아이템 삭제
         itemRepository.delete(item);
     }
 }
