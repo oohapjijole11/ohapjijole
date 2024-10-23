@@ -60,8 +60,8 @@ public class AuthService {
 
         User newUser = new User(
                 signupRequestDto.getEmail(),
-                signupRequestDto.getName(),
                 encodedPassword,
+                signupRequestDto.getName(),
                 role
         );
 
