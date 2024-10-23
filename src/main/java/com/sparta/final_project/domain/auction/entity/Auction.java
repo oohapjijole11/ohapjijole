@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Getter
@@ -25,15 +26,17 @@ public class Auction extends Timestamped {
     private int startPrice;
 
     @Column(nullable = false)
-    private LocalTime startTime;
+    private LocalDateTime startTime;
 
     @Column(nullable = false)
-    private LocalTime endTime;
+    private LocalDateTime endTime;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Grade grade;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Status status;
 
 //    아이템 연관관계
@@ -54,5 +57,12 @@ public class Auction extends Timestamped {
         this.startPrice = auctionRequest.getStartPrice();
         this.startTime = auctionRequest.getStartTime();
         this.endTime = auctionRequest.getEndTime();
+        this.grade = auctionRequest.getGrade();
+        this.status = Status.WAITING;
+    }
+
+    public void BidSuccess(Status status ,LocalDateTime endTime) {
+        this.status = status;
+        this.endTime = endTime;
     }
 }
