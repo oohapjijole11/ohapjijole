@@ -1,8 +1,9 @@
 package com.sparta.final_project.domain.ticket.controller;
 
 
-import com.sparta.final_project.domain.ticket.dto.request.TicketRequest;
+
 import com.sparta.final_project.domain.ticket.dto.response.TicketMessageResponse;
+import com.sparta.final_project.domain.ticket.dto.request.TicketRequest;
 import com.sparta.final_project.domain.ticket.dto.response.TicketResponse;
 import com.sparta.final_project.domain.ticket.service.TicketService;
 import lombok.RequiredArgsConstructor;
@@ -21,12 +22,13 @@ public class TicketController {
 
     // 티켓 생성
     @PostMapping
-    public ResponseEntity<TicketMessageResponse> createTicket(@RequestBody TicketRequest ticketRequest) {
-        ticketService.createticket(ticketRequest);
+
+    public ResponseEntity<TicketMessageResponse> createTicket(@RequestBody TicketRequest ticketRequestDto) {
+        ticketService.createticket(ticketRequestDto);
         // 메시지를 담은 응답 생성
-        TicketMessageResponse response = new TicketMessageResponse("티켓이 성공적으로 생성되었습니다.");
+        TicketMessageResponse responseDto = new TicketMessageResponse("티켓이 성공적으로 생성되었습니다.");
         // 응답으로 메시지를 반환
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(responseDto);
     }
 
     //티켓 단건조회
@@ -46,6 +48,7 @@ public class TicketController {
         ticketService.deleteTicket(ticketId);
         return ResponseEntity.ok().body("경매가 삭제되었습니다.");
     }
+
 
 
 }

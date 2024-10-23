@@ -1,8 +1,11 @@
 package com.sparta.final_project.domain.user.entity;
 
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 
 @Getter
 @Entity
@@ -14,5 +17,6 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="user_id")
     private Long id;
+
 
 }
