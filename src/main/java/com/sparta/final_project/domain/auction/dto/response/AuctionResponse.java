@@ -4,11 +4,12 @@ import com.sparta.final_project.domain.auction.entity.Auction;
 import com.sparta.final_project.domain.auction.entity.Grade;
 import com.sparta.final_project.domain.auction.entity.Status;
 import lombok.Data;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-@Data
+@Getter
 public class AuctionResponse {
 
     private int startPrice;
