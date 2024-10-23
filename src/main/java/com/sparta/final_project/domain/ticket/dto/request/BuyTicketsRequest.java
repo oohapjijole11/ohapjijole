@@ -7,4 +7,5 @@ import lombok.Getter;
 public class BuyTicketsRequest {
     private Long ticketId;
     private Long userId;
+    private Long ticketNumber;
 }
