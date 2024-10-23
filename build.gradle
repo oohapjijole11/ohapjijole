@@ -27,12 +27,12 @@ dependencies {
     implementation 'at.favre.lib:bcrypt:0.10.2'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
-
     implementation 'org.springframework.kafka:spring-kafka'
     testImplementation 'org.springframework.kafka:spring-kafka-test'
     implementation 'com.github.mwiede:jsch:0.2.17'
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
-
+//    실시간
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
     // JWT
     compileOnly group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
