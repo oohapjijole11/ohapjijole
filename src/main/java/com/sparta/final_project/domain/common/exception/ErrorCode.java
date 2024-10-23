@@ -43,6 +43,7 @@ public enum ErrorCode {
     //item
     _NOT_FOUND_ITEM(HttpStatus.NOT_FOUND,"상품이 존재하지 않습니다."),
 
+    _ATTACHMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "첨부파일을 찾을 수 없습니다."),
     //auction
     _NOT_FOUND_AUCTION(HttpStatus.NOT_FOUND, "경매가 존재하지 않습니다"),
 
@@ -68,4 +69,5 @@ public enum ErrorCode {
         this.status = status;
         this.message = message;
     }
+
 }

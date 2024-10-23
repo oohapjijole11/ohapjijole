@@ -11,7 +11,7 @@ import com.sparta.final_project.domain.item.entity.ItemAttachments;
 import com.sparta.final_project.domain.item.repository.ItemAttachmentsRepository;
 import com.sparta.final_project.domain.item.repository.ItemRepository;
 import com.sparta.final_project.domain.user.entity.User;
-import com.sparta.final_project.domain.user.reository.UserRepository;
+import com.sparta.final_project.domain.user.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -36,17 +36,18 @@ public class ItemService {
     public ItemSaveResponse createItem(ItemSaveRequest itemSaveRequest, Long userId) {
         // 아이템 생성
         User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found"));
-        Item item = new Item(itemSaveRequest.getItemName(), itemSaveRequest.getItemDescription(), null, user );
+        Item item = new Item(itemSaveRequest.getItemName(), itemSaveRequest.getItemDescription(), itemSaveRequest.getItemUrls(), user );
         Item savedItem = itemRepository.save(item);
+
 
         // 이미지 URL 처리 및 첨부파일 저장
         List<ItemAttachments> attachments = new ArrayList<>();
-        for (MultipartFile file : itemSaveRequest.getItemImages()) {
-            String fileUrl = s3Service.uploadFile(file); // S3에 파일 업로드
-            attachments.add(new ItemAttachments(fileUrl, savedItem)); // 첨부파일 추가
-        }
+//        for (MultipartFile file : itemSaveRequest.getItemImages()) {
+//            String fileUrl = s3Service.uploadFile(file); // S3에 파일 업로드
+//            attachments.add(new ItemAttachments(fileUrl, savedItem)); // 첨부파일 추가
+//        }
         // 첨부파일 저장
-        itemAttachmentsRepository.saveAll(attachments);
+//        itemAttachmentsRepository.saveAll(attachments);
         // 응답 반환
         return new ItemSaveResponse(savedItem);
     }
@@ -68,7 +69,7 @@ public class ItemService {
         }
 
         // 응답 객체 반환
-        return new ItemSimpleResponse(item.getItemId(), item.getItemName(), item.getItemDescription(), fileUrls, item.getUser().getUserId());
+        return new ItemSimpleResponse(item.getItemId(), item.getItemName(), item.getItemDescription(), fileUrls, item.getUser().getId());
     }
         @Transactional
     public ItemUpdateResponse updateItem(Long itemId, ItemUpdateRequest itemUpdateRequest, Long userId) {
@@ -104,7 +105,7 @@ public class ItemService {
                 .toList();
 
         itemRepository.save(item); // 아이템 정보 저장
-        return new ItemUpdateResponse(item.getItemId(), item.getItemName(), item.getItemDescription(), newFileUrls, item.getUser().getUserId());
+        return new ItemUpdateResponse(item.getItemId(), item.getItemName(), item.getItemDescription(), newFileUrls, item.getUser().getId());
     }
 
     @Transactional
@@ -113,7 +114,7 @@ public class ItemService {
                 .orElseThrow(() -> new EntityNotFoundException("아이템을 찾을 수 없습니다."));
 
         // 삭제할 수 있는 권한 체크
-        if (!item.getUser().getUserId().equals(creatorId)) { // User 엔티티에서 ID를 가져옴
+        if (!item.getUser().getId().equals(creatorId)) { // User 엔티티에서 ID를 가져옴
             throw new IllegalArgumentException("이 아이템을 삭제할 권한이 없습니다.");
         }
 

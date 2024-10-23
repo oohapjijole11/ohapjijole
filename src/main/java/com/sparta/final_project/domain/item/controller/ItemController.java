@@ -26,6 +26,8 @@ public class ItemController {
     public ResponseEntity<ItemSaveResponse> createItem(
             @RequestBody ItemSaveRequest itemSaveRequest,
             @PathVariable Long userId) { // AuthUser 주입
+        System.out.println(itemSaveRequest.getItemName());
+        System.out.println(itemSaveRequest.getItemDescription());
         ItemSaveResponse itemSaveResponse = itemService.createItem(itemSaveRequest, userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(itemSaveResponse);
     }

@@ -42,8 +42,8 @@ public class Item {
         this.user = user;
     }
 
-    public Long getUserId() {
-        return user != null ? user.getUserId() : null; // null 체크
-    }
+//    public Long getUserId() {
+//        return user != null ? user.getId() : null; // null 체크
+//    }
 
 }
