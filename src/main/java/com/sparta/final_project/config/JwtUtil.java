@@ -3,6 +3,7 @@ package com.sparta.final_project.config;
 
 import com.sparta.final_project.domain.common.entity.ErrorStatus;
 import com.sparta.final_project.domain.common.exception.ApiException;
+import com.sparta.final_project.domain.user.entity.UserRating;
 import com.sparta.final_project.domain.user.entity.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -26,7 +27,7 @@ public class JwtUtil {
     @Value("${JWT_SECRET_KEY}")
     private String secretKey;
     private Key key;
-    private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
+    private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS512;
 
     @PostConstruct
     public void init() {
@@ -34,8 +35,8 @@ public class JwtUtil {
         key = Keys.hmacShaKeyFor(bytes);
     }
 
-    // 토큰생성
-    public String createToken(Long userId, String name, String email, UserRole role) {
+    // 토큰생
+    public String createToken(Long userId, String name, String email, String password,UserRole role ) {
         Date date = new Date();
 
         // 토큰에 BEARER 추가해서 반환, 총 7자
@@ -44,6 +45,7 @@ public class JwtUtil {
                         .setSubject(String.valueOf(userId))
                         .claim("name", name)
                         .claim("email", email)
+                        .claim("password",password)
                         .claim("role", role)
                         .setExpiration(new Date(date.getTime() + TOKEN_TIME)) // 토큰 만료기간
                         .setIssuedAt(date) // 발급일

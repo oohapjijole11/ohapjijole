@@ -35,12 +35,11 @@ public class User {
     @Column(nullable = false)
     private UserRole role;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private UserRating rating;
+//    @Enumerated(EnumType.STRING)
+//    private UserRating rating;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    private Vaccount vaccount;
+//    @OneToOne(fetch = FetchType.LAZY)
+//    private Vaccount vaccount;
 
     // 회원탈퇴 유무
     private Boolean isdeleted = false;

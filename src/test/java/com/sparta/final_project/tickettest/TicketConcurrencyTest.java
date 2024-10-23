@@ -1,3 +1,5 @@
+package com.sparta.final_project.tickettest;
+
 import com.sparta.final_project.domain.ticket.dto.request.BuyTicketsRequest;
 import com.sparta.final_project.domain.ticket.service.BuyTicketsService;
 import org.junit.jupiter.api.Test;
@@ -18,21 +20,21 @@ public class TicketConcurrencyTest {
     @Test
     @Transactional
     public void testMultipleUsersBuyingTickets() throws InterruptedException {
-        // 쓰레드를 통해 여러 사용자가 동시에 티켓을 구매하는 상황을 시뮬레이션
+        // ExecutorService를 사용하여 여러 사용자가 동시에 티켓을 구매하는 상황을 시뮬레이션
         ExecutorService executorService = Executors.newFixedThreadPool(10); // 10명의 사용자 동시 실행
         Long ticketId = 1L; // 테스트할 티켓 ID
-        Long userId = 1L; // 사용자 ID (테스트 용도)
         Long ticketNumber = 1L; // 구매할 티켓 수량
 
         for (int i = 0; i < 10; i++) {
             int userNumber = i;
             executorService.submit(() -> {
-                BuyTicketsRequest request = new BuyTicketsRequest(ticketId, userId + userNumber, ticketNumber);
+                Long userId = 1L + userNumber; // 각 사용자 ID 설정
+                BuyTicketsRequest request = new BuyTicketsRequest(ticketId, userId, ticketNumber);
                 try {
-                    buyTicketsService.buyTicket(request);
-                    System.out.println("User " + (userId + userNumber) + " purchased a ticket successfully.");
+                    String result = buyTicketsService.buyTicket(request);
+                    System.out.println("User " + userId + " purchased a ticket successfully: " + result);
                 } catch (Exception e) {
-                    System.err.println("User " + (userId + userNumber) + " failed to purchase a ticket: " + e.getMessage());
+                    System.err.println("User " + userId + " failed to purchase a ticket: " + e.getMessage());
                 }
             });
         }

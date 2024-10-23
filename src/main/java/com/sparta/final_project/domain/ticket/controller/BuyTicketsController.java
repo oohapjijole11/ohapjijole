@@ -1,17 +1,18 @@
 package com.sparta.final_project.domain.ticket.controller;
 
 import com.sparta.final_project.domain.ticket.dto.request.BuyTicketsRequest;
-import com.sparta.final_project.domain.ticket.dto.request.TicketRequest;
 import com.sparta.final_project.domain.ticket.dto.response.BuyTicketsResponse;
 import com.sparta.final_project.domain.ticket.dto.response.TicketMessageResponse;
+import com.sparta.final_project.domain.ticket.dto.response.TicketResponse;
 import com.sparta.final_project.domain.ticket.service.BuyTicketsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class BuyTicketsController {
     private final BuyTicketsService buyTicketsService;
     
-    // 티켓 생성
+    // 구매 티켓 생성
     @GetMapping
     public ResponseEntity<TicketMessageResponse> buyTicket(@RequestBody BuyTicketsRequest buyTicketsRequest) {
         buyTicketsService.buyTicket(buyTicketsRequest);
@@ -27,5 +28,11 @@ public class BuyTicketsController {
         TicketMessageResponse responseDto = new TicketMessageResponse("티켓이 성공적으로 생성되었습니다.");
         // 응답으로 메시지를 반환
         return ResponseEntity.ok(responseDto);
+    }
+
+    //티켓 다건조회
+    @GetMapping("/buyticketList")
+    public ResponseEntity<List<BuyTicketsResponse>> getTicketList() {
+        return ResponseEntity.ok().body(buyTicketsService.getbuyticketList());
     }
 }

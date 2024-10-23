@@ -2,6 +2,7 @@ package com.sparta.final_project.config;
 
 import com.sparta.final_project.domain.common.entity.ErrorStatus;
 import com.sparta.final_project.domain.common.exception.ApiException;
+import com.sparta.final_project.domain.user.entity.UserRating;
 import com.sparta.final_project.domain.user.entity.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -44,14 +45,15 @@ public class JwtSecurityFilter extends OncePerRequestFilter {
                 // 토큰에서 추출
                 Claims claims = jwtUtil.extractClaims(jwt); // 토큰의 주체
                 Long userId = Long.valueOf(claims.getSubject());
-                String nickname = claims.get("nickname",String.class);
+                String nickname = claims.get("name",String.class);
                 String email = claims.get("email", String.class);
+                String password = claims.get("password", String.class);
                 UserRole userRole = UserRole.of(claims.get("userRole", String.class));
 
 
                 // 인증
                 if (SecurityContextHolder.getContext().getAuthentication() == null) {
-                    AuthUser authUser = new AuthUser(userId, nickname, email, userRole);
+                    AuthUser authUser = new AuthUser(userId, nickname, email, password, userRole);
 
                     JwtAuthenticationToken authenticationToken = new JwtAuthenticationToken(authUser);
                     authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpRequest));

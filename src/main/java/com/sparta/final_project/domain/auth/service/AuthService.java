@@ -8,6 +8,7 @@ import com.sparta.final_project.domain.auth.dto.request.SignupRequestDto;
 import com.sparta.final_project.domain.auth.dto.response.SignupResponseDto;
 import com.sparta.final_project.domain.common.exception.ApiException;
 import com.sparta.final_project.domain.user.entity.User;
+import com.sparta.final_project.domain.user.entity.UserRating;
 import com.sparta.final_project.domain.user.entity.UserRole;
 import com.sparta.final_project.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -58,6 +59,8 @@ public class AuthService {
 
         UserRole role = UserRole.of(signupRequestDto.getUserRole());
 
+
+
         User newUser = new User(
                 signupRequestDto.getEmail(),
                 signupRequestDto.getName(),
@@ -69,7 +72,7 @@ public class AuthService {
         User savedUser = userRepository.save(newUser);
 
         // 유저 정보를 가지고 토큰을 생성
-        String bearerToken = jwtUtil.createToken(savedUser.getId(), savedUser.getName(), savedUser.getEmail(), role);
+        String bearerToken = jwtUtil.createToken(savedUser.getId(), savedUser.getName(), savedUser.getEmail(), savedUser.getPassword(),role);
 
         return new SignupResponseDto(bearerToken);
     }
@@ -100,7 +103,7 @@ public class AuthService {
             throw new ApiException(ErrorStatus._DELETED_USER);
         }
 
-        String bearerToken = jwtUtil.createToken(user.getId(), user.getName(), user.getEmail(), user.getRole());
+        String bearerToken = jwtUtil.createToken(user.getId(), user.getName(), user.getEmail(), user.getPassword(), user.getRole());
 
         return new SigninResponseDto(bearerToken);
     }

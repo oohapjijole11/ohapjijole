@@ -1,18 +1,21 @@
 package com.sparta.final_project.domain.ticket.service;
 
 import com.sparta.final_project.domain.ticket.dto.request.BuyTicketsRequest;
+import com.sparta.final_project.domain.ticket.dto.response.BuyTicketsMessageResponse;
 import com.sparta.final_project.domain.ticket.dto.response.BuyTicketsResponse;
+import com.sparta.final_project.domain.ticket.dto.response.TicketResponse;
 import com.sparta.final_project.domain.ticket.entity.BuyTickets;
 import com.sparta.final_project.domain.ticket.entity.Ticket;
 import com.sparta.final_project.domain.ticket.repository.BuyTicketsRepository;
 import com.sparta.final_project.domain.ticket.repository.TicketRepository;
 import com.sparta.final_project.domain.user.entity.User;
 import com.sparta.final_project.domain.user.repository.UserRepository;
-import jakarta.transaction.Transactional;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -43,7 +46,13 @@ public class BuyTicketsService {
         buyTicketsRepository.save(buyTickets);
         ticketRepository.save(ticket);  // 티켓 수 업데이트
         return "티켓 구매가 성공적으로 완료되었습니다.";
+
     }
 
+    //구매 티켓 다건 조회
+    public List<BuyTicketsResponse> getbuyticketList() {
+        List<BuyTickets> buyticketList = buyTicketsRepository.findAll();
+        return buyticketList.stream().map(BuyTicketsResponse::new).toList();
+    }
 
 }

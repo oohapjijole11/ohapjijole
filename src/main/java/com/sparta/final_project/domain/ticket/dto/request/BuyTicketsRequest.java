@@ -8,4 +8,12 @@ public class BuyTicketsRequest {
     private Long ticketId;
     private Long userId;
     private Long ticketNumber;
+
+    public BuyTicketsRequest(Long ticketId, Long userId, Long ticketNumber) {
+        this.ticketId = ticketId;
+        this.userId = userId;
+        this.ticketNumber = ticketNumber;
+    }
+
+
 }
