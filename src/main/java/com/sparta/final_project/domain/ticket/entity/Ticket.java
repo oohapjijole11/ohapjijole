@@ -34,6 +34,9 @@ public class Ticket {
     @Column
     private Long ticketCount;
 
+    @Version
+    private Long version;
+
     public Ticket(TicketRequest ticketRequest) {
         this.ticketTitle = ticketRequest.getTicketTitle();
         this.ticketDescription = ticketRequest.getTicketDescription();
