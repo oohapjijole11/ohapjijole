@@ -6,6 +6,7 @@ import lombok.Getter;
 @Getter
 public class AuthUser {
 
+    // 토큰에 유저정보를 가져와서 권한을 확인하기 위한 자료
     // 인증하는곳에서는 중요한 정보를 넣으면 안됌
     // 로그인정보
     private final Long userId;

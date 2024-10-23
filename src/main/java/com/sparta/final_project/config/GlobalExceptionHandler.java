@@ -1,10 +1,16 @@
 package com.sparta.final_project.config;
 
 import com.sparta.final_project.domain.common.exception.OhapjijoleException;
+import com.sparta.final_project.domain.common.entity.ApiResponse;
+import com.sparta.final_project.domain.common.entity.ReasonDto;
+import com.sparta.final_project.domain.common.exception.ApiException;
+import jakarta.validation.constraints.Null;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,9 +28,8 @@ public class GlobalExceptionHandler {
     }
 
 
-
     /**
-     * @param status : 오류 상태 코드
+     * @param status  : 오류 상태 코드
      * @param message : 오류 메시지
      * @return 해당 내용이 담긴 에러 ResponseEntity 객체
      */
