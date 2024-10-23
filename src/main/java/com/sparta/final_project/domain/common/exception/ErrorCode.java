@@ -42,14 +42,14 @@ public enum ErrorCode {
     //auction
 
     //bid
-    NOT_LARGER_PRICE(HttpStatus.BAD_REQUEST, "입찰가는 현재 최고 입찰가보다 커야합니다."),
+    _NOT_LARGER_PRICE(HttpStatus.BAD_REQUEST, "입찰가는 현재 최고 입찰가보다 커야합니다."),
 
     //sbid
 
     //ticket
 
     // ### 아래 코드 위에 ErrorCode 작성해 주세요! ErrorCode 메서드 사이는 ,(컴마)로 구분해 주세요! ###
-    NOT_FOUND(HttpStatus.NOT_FOUND, "찾지못했습니다.");
+    _NOT_FOUND(HttpStatus.NOT_FOUND, "찾지못했습니다.");
 
 
 

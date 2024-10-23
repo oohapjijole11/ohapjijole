@@ -31,7 +31,7 @@ public class BidService {
         Auction auction = auctionRepository.findById(request.getAuctionId()).orElseThrow(() -> new NullPointerException("해당하는 경매가 존재하지 않습니다."));
         List<Bid> bidList = bidRepository.findAllByAuctionOrderByCreatedAtDesc(auction);
         int maxBid = bidList.size()==0? auction.getStartPrice()-1 : bidList.get(0).getPrice();
-        if(request.getPrice()<=maxBid) throw new OhapjijoleException(ErrorCode.NOT_LARGER_PRICE);
+        if(request.getPrice()<=maxBid) throw new OhapjijoleException(ErrorCode._NOT_LARGER_PRICE);
         Bid bid = new Bid(request, user, auction);
         Bid newBid = bidRepository.save(bid);
         return new BidResponse(newBid);
