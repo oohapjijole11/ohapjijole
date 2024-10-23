@@ -2,7 +2,7 @@ package com.sparta.final_project.domain.auth.service;
 
 import com.sparta.final_project.domain.auth.dto.request.SigninRequestDto;
 import com.sparta.final_project.domain.auth.dto.response.SigninResponseDto;
-import com.sparta.final_project.config.JwtUtil;
+import com.sparta.final_project.config.security.JwtUtil;
 import com.sparta.final_project.domain.auth.dto.request.SignupRequestDto;
 import com.sparta.final_project.domain.common.exception.ErrorCode;
 import com.sparta.final_project.domain.common.exception.OhapjijoleException;
