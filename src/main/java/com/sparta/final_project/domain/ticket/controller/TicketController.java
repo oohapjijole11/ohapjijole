@@ -1,6 +1,7 @@
 package com.sparta.final_project.domain.ticket.controller;
 
 
+
 import com.sparta.final_project.domain.ticket.dto.response.TicketMessageResponse;
 import com.sparta.final_project.domain.ticket.dto.request.TicketRequest;
 import com.sparta.final_project.domain.ticket.dto.response.TicketResponse;
@@ -21,6 +22,7 @@ public class TicketController {
 
     // 티켓 생성
     @PostMapping
+
     public ResponseEntity<TicketMessageResponse> createTicket(@RequestBody TicketRequest ticketRequestDto) {
         ticketService.createticket(ticketRequestDto);
         // 메시지를 담은 응답 생성

@@ -19,8 +19,8 @@ public class TicketService {
     private final TicketRepository ticketRepository;
 
     //티켓 생성
-    public Ticket createticket(TicketRequest ticketRequestDto) {
-        Ticket ticket = ticketStatus(ticketRequestDto);
+    public Ticket createticket(TicketRequest ticketRequest) {
+        Ticket ticket = ticketStatus(ticketRequest);
         Ticket savedTicket = ticketRepository.save(ticket);
         return savedTicket;
     }
@@ -45,8 +45,8 @@ public class TicketService {
         ticketRepository.delete(ticket);
     }
 
-    public Ticket ticketStatus(TicketRequest ticketRequestDto){
-        Ticket ticket = new Ticket(ticketRequestDto);
+    public Ticket ticketStatus(TicketRequest ticketRequest){
+        Ticket ticket = new Ticket(ticketRequest);
         ticket.setTicketStatus(TicketStatus.PROGRESS);
         return ticket;
     }
