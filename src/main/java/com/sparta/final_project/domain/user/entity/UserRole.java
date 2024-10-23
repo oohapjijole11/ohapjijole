@@ -1,7 +1,7 @@
 package com.sparta.final_project.domain.user.entity;
 
-import com.sparta.final_project.domain.common.entity.ErrorStatus;
-import com.sparta.final_project.domain.common.exception.ApiException;
+import com.sparta.final_project.domain.common.exception.ErrorCode;
+import com.sparta.final_project.domain.common.exception.OhapjijoleException;
 import lombok.Getter;
 
 import java.util.Arrays;
@@ -14,7 +14,7 @@ public enum UserRole {
         return Arrays.stream(UserRole.values())
                 .filter(r -> r.name().equalsIgnoreCase(role))
                 .findFirst()
-                .orElseThrow(() -> new ApiException(ErrorStatus._USER_ROLE_IS_NULL));
+                .orElseThrow(() -> new OhapjijoleException(ErrorCode._USER_ROLE_IS_NULL));
     }
 
     public static class Authority {
