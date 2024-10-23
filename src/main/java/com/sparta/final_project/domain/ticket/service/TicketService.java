@@ -2,12 +2,17 @@ package com.sparta.final_project.domain.ticket.service;
 import com.sparta.final_project.domain.ticket.dto.request.TicketRequest;
 import com.sparta.final_project.domain.ticket.dto.response.TicketResponse;
 import com.sparta.final_project.domain.ticket.entity.Ticket;
+import com.sparta.final_project.domain.ticket.entity.TicketStatus;
 import com.sparta.final_project.domain.ticket.repository.TicketRepository;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Getter
+@Setter
 @Service
 @RequiredArgsConstructor
 public class TicketService {
@@ -15,7 +20,7 @@ public class TicketService {
 
     //티켓 생성
     public Ticket createticket(TicketRequest ticketRequest) {
-        Ticket ticket = new Ticket(ticketRequest);
+        Ticket ticket = ticketStatus(ticketRequest);
         Ticket savedTicket = ticketRepository.save(ticket);
         return savedTicket;
     }
@@ -39,5 +44,12 @@ public class TicketService {
                 -> new IllegalArgumentException("존재하지 않는 티켓입니다."));
         ticketRepository.delete(ticket);
     }
+
+    public Ticket ticketStatus(TicketRequest ticketRequest){
+        Ticket ticket = new Ticket(ticketRequest);
+        ticket.setTicketStatus(TicketStatus.PROGRESS);
+        return ticket;
+    }
+
 
 }

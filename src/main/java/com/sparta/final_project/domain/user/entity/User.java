@@ -2,9 +2,12 @@ package com.sparta.final_project.domain.user.entity;
 
 import com.sparta.final_project.config.AuthUser;
 import com.sparta.final_project.domain.item.entity.Item;
+
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 
 import java.util.List;
 
@@ -62,5 +65,6 @@ public class User {
     public void deletedUser(String email, String password) {
         this.isdeleted = true;
     }
+
 
 }

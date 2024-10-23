@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -16,8 +17,7 @@ import lombok.Setter;
 public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ticket_id")
-    private Long id;
+    private Long ticketId;
 
     @Column(nullable = false)
     private String ticketTitle;
