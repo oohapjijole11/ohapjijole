@@ -3,7 +3,8 @@ package com.sparta.final_project.domain.common.service;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.sparta.final_project.domain.common.exception.ServerException;
+import com.sparta.final_project.domain.common.exception.ErrorCode;
+import com.sparta.final_project.domain.common.exception.OhapjijoleException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -37,7 +38,7 @@ public class S3Service {
             // 업로드된 파일의 URL 반환
             return amazonS3Client.getUrl(bucket, fileName).toString();
         } catch (IOException e) {
-            throw new ServerException("테스트"); // 커스텀 예외 처리
+            throw new OhapjijoleException(ErrorCode._ATTACHMENT_NOT_FOUND); // 커스텀 예외 처리
         }
     }
 
@@ -47,7 +48,7 @@ public class S3Service {
             String fileName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1); // URL에서 파일 이름 추출
             amazonS3Client.deleteObject(bucket, fileName);
         } catch (Exception e) {
-            throw new ServerException("테스트");
+            throw new OhapjijoleException(ErrorCode._ATTACHMENT_NOT_FOUND);
         }
     }
     }

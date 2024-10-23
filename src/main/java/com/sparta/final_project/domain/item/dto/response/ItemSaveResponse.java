@@ -19,7 +19,7 @@ public class ItemSaveResponse {
             this.itemUrls = item.getItemUrls();  // List로 처리
             this.itemName = item.getItemName();
             this.itemDescription = item.getItemDescription();
-            this.userId = item.getUser().getUserId();
+            this.userId = item.getUser().getId();
         }
 
 
