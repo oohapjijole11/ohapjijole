@@ -39,6 +39,9 @@ public class User {
     @Column(nullable = false)
     private UserRating rating;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    private Vaccount vaccount;
+
     // 회원탈퇴 유무
     private Boolean isdeleted = false;
 
