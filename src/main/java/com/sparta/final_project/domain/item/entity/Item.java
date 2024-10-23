@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -15,7 +17,7 @@ public class Item {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "item_id")
+    @Column(nullable = false)
     private Long itemId;
 
     @Column(nullable = false, length = 300)
@@ -24,18 +26,24 @@ public class Item {
     @Column(length = 500)
     private String itemDescription;
 
-    @Column(length = 500)
-    private String itemUrl;
+    // List로 변경
+    @ElementCollection
+    private List<String> itemUrls;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false) // 외래 키 명시
+    @JoinColumn(nullable = false)
     private User user;
 
     // 생성자
-    public Item(String itemName, String itemDescription, String itemUrl, User user) {
+    public Item(String itemName, String itemDescription, List<String> itemUrls, User user) {
         this.itemName = itemName;
         this.itemDescription = itemDescription;
-        this.itemUrl = itemUrl;
+        this.itemUrls = itemUrls;
         this.user = user;
     }
+
+    public Long getUserId() {
+        return user != null ? user.getUserId() : null; // null 체크
+    }
+
 }
