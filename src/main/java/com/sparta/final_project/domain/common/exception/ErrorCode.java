@@ -20,7 +20,9 @@ public enum ErrorCode {
     _NOT_FOUND_TOKEN(HttpStatus.NOT_FOUND,  "JWT 토큰이 필요합니다."),
     _NO_MORE_STORE(HttpStatus.BAD_REQUEST,"최대 3개 운영가능"),
     _TEST_ERROR(HttpStatus.BAD_REQUEST,  "ApiException 예외 처리 테스트"),
+    _NOT_PERMITTED_USER(HttpStatus.BAD_REQUEST, "허용되지 않는 유저 입니다"),
     //Auth,USer관련 코드
+    _NOT_FOUND_USER(HttpStatus.BAD_REQUEST,"유저를 찾을 수 없습니다"),
     _USERNAME_IS_SAME(HttpStatus.BAD_REQUEST,"변경하려는 이름이 전과 동일합니다"),
     _NOT_FOUND_EMAIL(HttpStatus.BAD_REQUEST,"이메일을 찾을 수 없습니다."),
     _DELETED_USER(HttpStatus.BAD_REQUEST,"탈퇴한 계정입니다."),
