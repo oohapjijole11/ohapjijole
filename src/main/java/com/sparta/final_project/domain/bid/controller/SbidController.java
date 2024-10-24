@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.*;
 public class SbidController {
     private final com.sparta.final_project.domain.bid.service.SbidService sbidService;
 
-    @PostMapping("/success/{auctionId}/{userId}")
-    public SbidResponse createSbid(@PathVariable Long userId, @PathVariable Long auctionId) {
-        return sbidService.createSbid(userId, auctionId);
+    @PostMapping("/success/{auctionId}")
+    public SbidResponse createSbid(@PathVariable Long auctionId) {
+        return sbidService.createSbid(auctionId);
     }
 
     @GetMapping("/purchase")

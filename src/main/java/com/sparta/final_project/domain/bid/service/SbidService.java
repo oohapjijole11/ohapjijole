@@ -5,6 +5,7 @@ import com.sparta.final_project.domain.auction.entity.Status;
 import com.sparta.final_project.domain.auction.repository.AuctionRepository;
 import com.sparta.final_project.domain.bid.dto.response.SbidResponse;
 import com.sparta.final_project.domain.bid.dto.response.SbidSimpleResponse;
+import com.sparta.final_project.domain.bid.entity.Bid;
 import com.sparta.final_project.domain.bid.entity.Sbid;
 import com.sparta.final_project.domain.bid.repository.BidRepository;
 import com.sparta.final_project.domain.bid.repository.SbidRepository;
@@ -31,12 +32,14 @@ public class SbidService {
     private final BidRepository bidRepository;
 
     @Transactional
-    public SbidResponse createSbid(Long userId, Long auctionId) {
-        User user = userRepository.findById(userId).orElseThrow(()-> new OhapjijoleException(ErrorCode._USER_NOT_FOUND));
+    public SbidResponse createSbid(Long auctionId) {
         Auction auction = auctionRepository.findById(auctionId).orElseThrow(()-> new OhapjijoleException(ErrorCode._NOT_FOUND_AUCTION));
-        int maxPrice = bidRepository.findAllByAuctionOrderByCreatedAtDesc(auction).get(0).getPrice();
+        if(auction.getStatus()==Status.SUCCESSBID||auction.getStatus()==Status.FAILBID) throw new OhapjijoleException(ErrorCode._BID_STATUS_END);
         auction.bidSuccess(Status.SUCCESSBID, LocalDateTime.now());
-        Sbid sbid = new Sbid(user, auction,maxPrice);
+        Bid lastBid = bidRepository.findAllByAuctionOrderByCreatedAtDesc(auction).get(0);
+        int maxPrice = lastBid.getPrice();
+        User sBidder = lastBid.getUser();
+        Sbid sbid = new Sbid(sBidder, auction,maxPrice);
         Sbid saveSbid = sbidRepository.save(sbid);
         return new SbidResponse(saveSbid);
     }

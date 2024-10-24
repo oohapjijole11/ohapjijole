@@ -46,6 +46,7 @@ public enum ErrorCode {
 
     //bid
     _NOT_LARGER_PRICE(HttpStatus.BAD_REQUEST, "입찰가는 현재 최고 입찰가보다 커야합니다."),
+    _BID_STATUS_END(HttpStatus.BAD_REQUEST, "이미 끝난 경매입니다."),
 
     //sbid
 
