@@ -1,6 +1,5 @@
 package com.sparta.final_project.domain.user.entity;
 
-import com.sparta.final_project.domain.common.entity.ErrorStatus;
 import com.sparta.final_project.domain.common.exception.ErrorCode;
 import com.sparta.final_project.domain.common.exception.OhapjijoleException;
 import lombok.Getter;
