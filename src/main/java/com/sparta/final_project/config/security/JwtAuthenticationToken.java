@@ -1,11 +1,6 @@
-package com.sparta.final_project.config;
+package com.sparta.final_project.config.security;
 
-import com.sparta.final_project.domain.user.entity.UserRole;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
-import java.util.Collections;
-import java.util.List;
 
 // ArgumentResolver 역홣을 대신해줌
 public class JwtAuthenticationToken extends AbstractAuthenticationToken {
@@ -14,7 +9,7 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 
     public JwtAuthenticationToken(AuthUser authUser) {
         // 부모 클래스가 필요로 하는 권한 정보(GrantedAuthority 타입)
-        super(convertToAuthorities(authUser.getRole()));
+        super(authUser.getAuthorities());
         this.authUser = authUser;
         setAuthenticated(true); // 인증 완료로 설정
     }
@@ -28,10 +23,4 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
     public Object getPrincipal() {
         return authUser; // 인증된 사용자 정보 반환
     }
-
-    // UserRole을 GrantedAuthority로 변화하는 메소드
-    private static List<SimpleGrantedAuthority> convertToAuthorities(UserRole role) {
-        return Collections.singletonList(new SimpleGrantedAuthority(role.name()));
-    }
-
 }
