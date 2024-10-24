@@ -1,7 +1,7 @@
 package com.sparta.final_project.tickettest;
 
 import com.sparta.final_project.domain.ticket.dto.request.BuyTicketsRequest;
-import com.sparta.final_project.domain.ticket.service.BuyTicketsService;
+import com.sparta.final_project.domain.ticket.service.TicketBuyService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 public class TicketConcurrencyTest {
 
     @Autowired
-    private BuyTicketsService buyTicketsService;
+    private TicketBuyService ticketBuyService;
 
     @Test
     @Transactional
@@ -31,7 +31,7 @@ public class TicketConcurrencyTest {
                 Long userId = 1L + userNumber; // 각 사용자 ID 설정
                 BuyTicketsRequest request = new BuyTicketsRequest(ticketId, userId, ticketNumber);
                 try {
-                    String result = buyTicketsService.buyTicket(request);
+                    String result = ticketBuyService.buyTicket(request);
                     System.out.println("User " + userId + " purchased a ticket successfully: " + result);
                 } catch (Exception e) {
                     System.err.println("User " + userId + " failed to purchase a ticket: " + e.getMessage());

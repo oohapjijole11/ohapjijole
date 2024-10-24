@@ -1,4 +1,5 @@
 package com.sparta.final_project.domain.ticket.service;
+import com.sparta.final_project.config.security.AuthUser;
 import com.sparta.final_project.domain.ticket.dto.request.TicketRequest;
 import com.sparta.final_project.domain.ticket.dto.response.TicketResponse;
 import com.sparta.final_project.domain.ticket.entity.Ticket;
@@ -7,6 +8,7 @@ import com.sparta.final_project.domain.ticket.repository.TicketRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
