@@ -69,5 +69,7 @@ public class User {
         this.isdeleted = true;
     }
 
-
+    public void updateUserRole(UserRole newUserRole){
+        this.role = newUserRole;
+    }
 }
