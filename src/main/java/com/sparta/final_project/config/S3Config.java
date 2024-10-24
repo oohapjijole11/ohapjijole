@@ -13,11 +13,11 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class S3Config {
 
-//    @Bean
-//    public ObjectMapper objectMapper() {
-//        return new ObjectMapper()
-//                .setPropertyNamingStrategy(PropertyNamingStrategies.LOWER_CAMEL_CASE);
-//    }
+    @Bean
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper()
+                .setPropertyNamingStrategy(PropertyNamingStrategies.LOWER_CAMEL_CASE);
+    }
 
     @Value("${cloud.aws.credentials.access-key}")
     private String accessKey;
