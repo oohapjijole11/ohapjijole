@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,9 +23,8 @@ public class GlobalExceptionHandler {
     }
 
 
-
     /**
-     * @param status : 오류 상태 코드
+     * @param status  : 오류 상태 코드
      * @param message : 오류 메시지
      * @return 해당 내용이 담긴 에러 ResponseEntity 객체
      */
