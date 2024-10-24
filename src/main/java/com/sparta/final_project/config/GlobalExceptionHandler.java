@@ -1,11 +1,6 @@
 package com.sparta.final_project.config;
 
 import com.sparta.final_project.domain.common.exception.OhapjijoleException;
-import com.sparta.final_project.domain.common.entity.ApiResponse;
-import com.sparta.final_project.domain.common.entity.ReasonDto;
-import com.sparta.final_project.domain.common.exception.ApiException;
-import jakarta.validation.constraints.Null;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

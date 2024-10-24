@@ -15,21 +15,15 @@ public class AuthUser {
 
     private final String email;
 
-    private final String password;
-
     private final UserRole role;
-
 
 //    private final Collection<? extends GrantedAuthority> authorities;
 
-    public AuthUser(Long userId, String name, String email, String password ,UserRole role) {
+    public AuthUser(Long userId, String name, String email, UserRole role) {
         this.userId = userId;
         this.name = name;
         this.email = email;
-        this.password = password;
         this.role = role;
-
-
     }
 
 }
