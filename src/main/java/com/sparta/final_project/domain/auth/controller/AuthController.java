@@ -3,7 +3,6 @@ package com.sparta.final_project.domain.auth.controller;
 import com.sparta.final_project.domain.auth.dto.request.SigninRequestDto;
 import com.sparta.final_project.domain.auth.dto.request.SignupRequestDto;
 import com.sparta.final_project.domain.auth.dto.response.SigninResponseDto;
-import com.sparta.final_project.domain.auth.dto.response.SignupResponseDto;
 import com.sparta.final_project.domain.auth.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +18,9 @@ public class AuthController {
 
     // 회원가입
     @PostMapping("/auth/signup")
-    public SignupResponseDto signup(@Valid @RequestBody SignupRequestDto signupRequestDto) {
-        return authService.signup(signupRequestDto);
+    public String signup(@Valid @RequestBody SignupRequestDto signupRequestDto) {
+        authService.signup(signupRequestDto);
+        return "회원가입 완료";
     }
 
     // 로그인

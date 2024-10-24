@@ -10,6 +10,7 @@ public enum ErrorCode {
 
     //auth
     //jwt token 예외
+    _BAD_REQUEST_INVALID_EMAIL(HttpStatus.BAD_REQUEST,"이메일 형식으로 작성해야합니다"),
     _BAD_REQUEST_UNSUPPORTED_TOKEN(HttpStatus.BAD_REQUEST,"지원되지 않는 JWT 토큰입니다."),
     _BAD_REQUEST_ILLEGAL_TOKEN(HttpStatus.BAD_REQUEST,"잘못된 JWT 토큰입니다."),
     _UNAUTHORIZED_INVALID_TOKEN(HttpStatus.UNAUTHORIZED,"유효하지 않는 JWT 서명입니다."),
@@ -40,8 +41,10 @@ public enum ErrorCode {
     _USER_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 유저를 찾을 수 없습니다." ),
 
     //item
+    _NOT_FOUND_ITEM(HttpStatus.NOT_FOUND,"상품이 존재하지 않습니다."),
 
     //auction
+    _NOT_FOUND_AUCTION(HttpStatus.NOT_FOUND, "경매가 존재하지 않습니다"),
 
     //bid
     _NOT_LARGER_PRICE(HttpStatus.BAD_REQUEST, "입찰가는 현재 최고 입찰가보다 커야합니다."),

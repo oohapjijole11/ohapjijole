@@ -1,4 +1,4 @@
-package com.sparta.final_project.config;
+package com.sparta.final_project.config.security;
 
 
 import com.sparta.final_project.domain.common.exception.ErrorCode;
@@ -35,15 +35,15 @@ public class JwtUtil {
     }
 
     // 토큰생성
-    public String createToken(Long userId, String name, String email, UserRole role) {
+    public String createToken(Long userId, String email,String name, UserRole role) {
         Date date = new Date();
 
         // 토큰에 BEARER 추가해서 반환, 총 7자
         return BEARER_PREFIX +
                 Jwts.builder()
                         .setSubject(String.valueOf(userId))
-                        .claim("name", name)
                         .claim("email", email)
+                        .claim("name", name)
                         .claim("role", role)
                         .setExpiration(new Date(date.getTime() + TOKEN_TIME)) // 토큰 만료기간
                         .setIssuedAt(date) // 발급일

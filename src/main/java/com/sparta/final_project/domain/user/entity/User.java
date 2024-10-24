@@ -1,15 +1,19 @@
 package com.sparta.final_project.domain.user.entity;
 
-import com.sparta.final_project.config.AuthUser;
+import com.sparta.final_project.config.security.AuthUser;
+import com.sparta.final_project.domain.common.exception.ErrorCode;
+import com.sparta.final_project.domain.common.exception.OhapjijoleException;
 import com.sparta.final_project.domain.item.entity.Item;
 
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
 
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Entity
@@ -22,22 +26,23 @@ public class User {
     @Column(name = "user_id")
     private Long id;
 
+    @Column(unique = true)
     private String email;
 
     private String password;
 
     private String name;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = false)
-    private List<Item> items;
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserRole role;
 
-//    @Enumerated(EnumType.STRING)
-//    @Column
-//    private UserRating rating;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = false)
+    private List<Item> items;
+
+    @Enumerated(EnumType.STRING)
+    @Column
+    private UserRating rating;
 
     @OneToOne(fetch = FetchType.LAZY)
     private Vaccount vaccount;
@@ -59,9 +64,18 @@ public class User {
         this.role = role;
     }
 
-    // 유저 생성 AuthUser로 하는방식
+    private User(Long id, String email, UserRole role) {
+        this.id = id;
+        this.email = email;
+        this.role = role;
+    }
     public static User fromAuthUser(AuthUser authUser) {
-        return new User(authUser.getName(), authUser.getEmail(), authUser.getRole());
+        List<String> roles = authUser.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
+        // Handle multiple roles or pick the main role
+        UserRole role = UserRole.of(roles.get(0)); // Assuming single role for now
+        return new User(authUser.getId(), authUser.getEmail(), role);
     }
 
     // 회원 탈퇴 메소드
