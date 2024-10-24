@@ -1,8 +1,8 @@
 package com.sparta.final_project.config;
 
 
-import com.sparta.final_project.domain.common.entity.ErrorStatus;
-import com.sparta.final_project.domain.common.exception.ApiException;
+import com.sparta.final_project.domain.common.exception.ErrorCode;
+import com.sparta.final_project.domain.common.exception.OhapjijoleException;
 import com.sparta.final_project.domain.user.entity.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -56,7 +56,7 @@ public class JwtUtil {
         if(StringUtils.hasText(tokenValue) && tokenValue.startsWith(BEARER_PREFIX)) {
             return tokenValue.substring(7);
         }
-        throw new ApiException(ErrorStatus._NOT_FOUND_TOKEN); // 토큰이 없거나 유효하지 않을 때
+        throw new OhapjijoleException(ErrorCode._NOT_FOUND_TOKEN); // 토큰이 없거나 유효하지 않을 때
      }
 
      public Claims extractClaims(String token) {
