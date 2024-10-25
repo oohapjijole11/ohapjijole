@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,6 +29,37 @@ public class AuctionService {
     private final AuctionRepository auctionRepository;
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
+    private long remainingSeconds;
+
+//    경매시작
+    @Scheduled(fixedRate = 1000)
+    public void startAuction() {
+        List<Auction> auctions = auctionRepository.findAll();
+        for (Auction auction : auctions) {
+            LocalDateTime now = LocalDateTime.now();
+            if(auction.getStatus().equals(Status.WAITING) && now.isAfter(auction.getStartTime())) {
+                auction.setStatus(Status.BID);
+                auctionRepository.save(auction);
+            }
+            if(auction.getStatus().equals(Status.BID) && now.isAfter(auction.getEndTime())) {
+                auction.setStatus(Status.SUCCESSBID);
+                auctionRepository.save(auction);
+            }
+        }
+    }
+
+    public long getRemainingTime(Auction auction) {
+        if(auction.getStatus().equals(Status.BID) && auction.getEndTime() != null) {
+            remainingSeconds = Duration.between(LocalDateTime.now(), auction.getEndTime()).getSeconds();
+            if(remainingSeconds <= 0){
+                remainingSeconds = 0;
+            }
+        }
+        return remainingSeconds;
+    }
+
+
+
 
 //    생성
     public AuctionResponse createAuction(AuthUser authUser, Long itemId, AuctionRequest auctionRequest) {
@@ -55,7 +87,7 @@ public class AuctionService {
         userRepository.findById(authUser.getId()).orElseThrow(()-> new OhapjijoleException(ErrorCode._USER_NOT_FOUND));
         Auction auction = auctionRepository.findById(auctionId).orElseThrow(() -> new OhapjijoleException(ErrorCode._NOT_FOUND_AUCTION));
         if(auction.getStatus() != Status.WAITING){
-            throw new IllegalArgumentException("경매가 준비중일 때 수정가능합니다.");
+            throw new OhapjijoleException(ErrorCode._NOT_ALLOWED_TO_UPDATE);
         }
 //        수정메소드
         gradeMeasurementForUpdate(auction,auctionRequest);
