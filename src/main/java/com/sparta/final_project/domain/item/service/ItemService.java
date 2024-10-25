@@ -3,7 +3,6 @@ package com.sparta.final_project.domain.item.service;
 import com.sparta.final_project.config.security.AuthUser;
 import com.sparta.final_project.domain.common.exception.ErrorCode;
 import com.sparta.final_project.domain.common.exception.OhapjijoleException;
-import com.sparta.final_project.domain.common.service.S3Service;
 import com.sparta.final_project.domain.item.dto.request.ItemCreateRequest;
 import com.sparta.final_project.domain.item.dto.request.ItemUpdateRequest;
 import com.sparta.final_project.domain.item.dto.response.ItemCreateResponse;
@@ -13,14 +12,9 @@ import com.sparta.final_project.domain.item.entity.Item;
 import com.sparta.final_project.domain.item.repository.ItemRepository;
 import com.sparta.final_project.domain.user.entity.User;
 import com.sparta.final_project.domain.user.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Service
