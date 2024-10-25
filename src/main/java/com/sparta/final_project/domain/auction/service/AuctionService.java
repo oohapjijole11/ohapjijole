@@ -2,7 +2,6 @@ package com.sparta.final_project.domain.auction.service;
 
 import com.sparta.final_project.config.security.AuthUser;
 import com.sparta.final_project.domain.auction.dto.request.AuctionRequest;
-import com.sparta.final_project.domain.auction.dto.response.AuctionProgressResponse;
 import com.sparta.final_project.domain.auction.dto.response.AuctionResponse;
 import com.sparta.final_project.domain.auction.entity.Auction;
 import com.sparta.final_project.domain.auction.entity.Grade;
@@ -112,18 +111,7 @@ public class AuctionService {
         }
     }
 
-
-    public AuctionProgressResponse getAuctionProgress(Long auctionId) {
-        Auction auction = auctionRepository.findById(auctionId).orElseThrow(() -> new OhapjijoleException(ErrorCode._NOT_FOUND_AUCTION));
-        long remainingTime = java.time.Duration.between(LocalDateTime.now(), auction.getEndTime()).toSeconds();
-        if(remainingTime < 0) {
-            remainingTime = 0;
-        }
-        return new AuctionProgressResponse(auction,remainingTime);
-    }
-
-
-//    경매 마감
+    //    경매 마감
     @Scheduled(fixedRate = 1000)
     public void endAuctionScheduler() {
         LocalDateTime now = LocalDateTime.now();
