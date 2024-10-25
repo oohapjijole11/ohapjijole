@@ -1,4 +1,4 @@
-package com.sparta.final_project.config;
+package com.sparta.final_project.config.security;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -37,3 +37,4 @@ public class S3Config {
                 .build();
     }
 }
+

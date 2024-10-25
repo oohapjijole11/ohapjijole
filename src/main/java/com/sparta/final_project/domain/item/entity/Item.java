@@ -4,46 +4,33 @@ import com.sparta.final_project.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import java.util.List;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
-@Table(name = "items")
+@Table(name = "Items")
 public class Item {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
-    private Long itemId;
+    private Long id;
 
-    @Column(nullable = false, length = 300)
-    private String itemName;
-
-    @Column(length = 500)
-    private String itemDescription;
-
-    // List로 변경
-    @ElementCollection
-    private List<String> itemUrls;
+    private String name;
+    private String description;
+    private String imageUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "user_id")
     private User user;
-
-    // 생성자
-    public Item(String itemName, String itemDescription, List<String> itemUrls, User user) {
-        this.itemName = itemName;
-        this.itemDescription = itemDescription;
-        this.itemUrls = itemUrls;
+    // 생성자 추가 (선택 사항)
+    public Item(String name, String description, String imageUrl, User user) {
+        this.name = name;
+        this.description = description;
+        this.imageUrl = imageUrl;
         this.user = user;
     }
-
-//    public Long getUserId() {
-//        return user != null ? user.getId() : null; // null 체크
-//    }
-
+    public void update(String name, String description, String imageUrl) {
+        this.name = name;
+        this.description = description;
+        this.imageUrl = imageUrl;
+    }
 }

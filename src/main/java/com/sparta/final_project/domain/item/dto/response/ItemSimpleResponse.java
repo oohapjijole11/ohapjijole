@@ -7,20 +7,18 @@ import java.util.List;
 
 @Getter
 public class ItemSimpleResponse {
-        private Long id; // 아이템 ID
-        private String itemName; // 상품명
-        private String itemDescription; // 상품 설명
-        private List<String> itemUrls; // 상품 URL 목록
-        private Long userId; // 사용자 ID
+    private final Long id;
+    private final String name;
+    private final String description;
+    private final String imageUrl;
 
-        public ItemSimpleResponse(Long id, String itemName, String itemDescription, List<String> itemUrls, Long userId) {
-            this.id = id;
-            this.itemName = itemName;
-            this.itemDescription = itemDescription;
-            this.itemUrls = itemUrls; // 변경: List<String>으로 수정
-            this.userId = userId;
-        }
-
+    // 생성자
+    public ItemSimpleResponse(Long id, String name, String description, String imageUrl) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.imageUrl = imageUrl;
     }
+}
 
 

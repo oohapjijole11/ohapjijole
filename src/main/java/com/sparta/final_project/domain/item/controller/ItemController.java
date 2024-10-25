@@ -1,13 +1,12 @@
 package com.sparta.final_project.domain.item.controller;
 
-import com.sparta.final_project.domain.common.service.S3Service;
-import com.sparta.final_project.domain.item.dto.request.ItemSaveRequest;
+import com.sparta.final_project.config.security.AuthUser;
+import com.sparta.final_project.domain.item.dto.request.ItemCreateRequest;
 import com.sparta.final_project.domain.item.dto.request.ItemUpdateRequest;
-import com.sparta.final_project.domain.item.dto.response.ItemSaveResponse;
+import com.sparta.final_project.domain.item.dto.response.ItemCreateResponse;
 import com.sparta.final_project.domain.item.dto.response.ItemSimpleResponse;
 import com.sparta.final_project.domain.item.dto.response.ItemUpdateResponse;
 import com.sparta.final_project.domain.item.service.ItemService;
-import com.sparta.final_project.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,44 +14,50 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 
-@RestController
 @RequiredArgsConstructor
-@RequestMapping
+@RestController
+
 public class ItemController {
+
     private final ItemService itemService;
-    private final S3Service s3Service;
 
-    @PostMapping("/item/{userId}")
-    public ResponseEntity<ItemSaveResponse> createItem(
-            @RequestBody ItemSaveRequest itemSaveRequest,
-            @PathVariable Long userId) { // AuthUser 주입
-        System.out.println(itemSaveRequest.getItemName());
-        System.out.println(itemSaveRequest.getItemDescription());
-        ItemSaveResponse itemSaveResponse = itemService.createItem(itemSaveRequest, userId);
-        return ResponseEntity.status(HttpStatus.CREATED).body(itemSaveResponse);
+
+    // 상품 등록
+    @PostMapping("/items")
+    public ResponseEntity<ItemCreateResponse> createItem(
+            @RequestBody ItemCreateRequest request,
+            @AuthenticationPrincipal AuthUser authUser
+    ) {
+        // 상품 생성
+        ItemCreateResponse itemCreateResponse = itemService.createItem(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(itemCreateResponse);
     }
-
-    @GetMapping("/{itemId}/{userId}")
-    public ResponseEntity<ItemSimpleResponse> getItem(@PathVariable Long itemId) {
-        ItemSimpleResponse itemSimpleResponse = itemService.getItem(itemId);
+    // 상품 조회
+    @GetMapping("/itemss/{id}")
+    public ResponseEntity<ItemSimpleResponse> getItem(@PathVariable Long id) {
+        ItemSimpleResponse itemSimpleResponse = itemService.getItem(id);
         return ResponseEntity.ok(itemSimpleResponse);
     }
 
-    @PutMapping("/{itemId}/{userId}")
+    // 상품 수정
+    @PutMapping("/items/{id}")
     public ResponseEntity<ItemUpdateResponse> updateItem(
-            @PathVariable Long itemId,
-            @RequestBody ItemUpdateRequest itemUpdateRequest,
-            @PathVariable Long userId) { // AuthUser 주입
-        ItemUpdateResponse itemUpdateResponse = itemService.updateItem(itemId, itemUpdateRequest, userId);
-        return ResponseEntity.ok(itemUpdateResponse);
+            @PathVariable Long id,
+            @RequestBody ItemUpdateRequest request,
+            @AuthenticationPrincipal AuthUser authUser
+
+    ) {
+        ItemUpdateResponse updatedItem = itemService.updateItem(id, request, authUser);
+
+        // 업데이트된 상품 정보를 담은 응답 반환
+        return ResponseEntity.ok(updatedItem);
     }
 
-    @DeleteMapping("/{itemId}/{userId}")
-    public ResponseEntity<Void> deleteItem(
-            @PathVariable Long itemId,
-            @PathVariable Long userId) { // AuthUser 주입
-//        Long userId = authUser.getUserId();
-        itemService.deleteItem(itemId, userId);
+    // 상품 삭제
+    @DeleteMapping("items/{id}")
+    public ResponseEntity<Void> deleteItem(@PathVariable Long id) {
+        itemService.deleteItem(id);
         return ResponseEntity.noContent().build();
+
     }
 }

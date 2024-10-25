@@ -1,8 +1,6 @@
 package com.sparta.final_project.domain.user.entity;
 
 import com.sparta.final_project.config.security.AuthUser;
-import com.sparta.final_project.domain.common.exception.ErrorCode;
-import com.sparta.final_project.domain.common.exception.OhapjijoleException;
 import com.sparta.final_project.domain.item.entity.Item;
 
 
@@ -13,7 +11,6 @@ import org.springframework.security.core.GrantedAuthority;
 
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @Entity
