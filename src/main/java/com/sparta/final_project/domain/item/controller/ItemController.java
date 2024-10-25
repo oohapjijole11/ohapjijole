@@ -21,7 +21,6 @@ public class ItemController {
 
     private final ItemService itemService;
 
-
     // 상품 등록
     @PostMapping("/items")
     public ResponseEntity<ItemCreateResponse> createItem(
@@ -29,11 +28,11 @@ public class ItemController {
             @AuthenticationPrincipal AuthUser authUser
     ) {
         // 상품 생성
-        ItemCreateResponse itemCreateResponse = itemService.createItem(request);
+        ItemCreateResponse itemCreateResponse = itemService.createItem(request, authUser);
         return ResponseEntity.status(HttpStatus.CREATED).body(itemCreateResponse);
     }
     // 상품 조회
-    @GetMapping("/itemss/{id}")
+    @GetMapping("/items/{id}")
     public ResponseEntity<ItemSimpleResponse> getItem(@PathVariable Long id) {
         ItemSimpleResponse itemSimpleResponse = itemService.getItem(id);
         return ResponseEntity.ok(itemSimpleResponse);
@@ -43,11 +42,11 @@ public class ItemController {
     @PutMapping("/items/{id}")
     public ResponseEntity<ItemUpdateResponse> updateItem(
             @PathVariable Long id,
-            @RequestBody ItemUpdateRequest request,
-            @AuthenticationPrincipal AuthUser authUser
+            @RequestBody ItemUpdateRequest request
+//            @AuthenticationPrincipal AuthUser authUser
 
     ) {
-        ItemUpdateResponse updatedItem = itemService.updateItem(id, request, authUser);
+        ItemUpdateResponse updatedItem = itemService.updateItem(id, request);
 
         // 업데이트된 상품 정보를 담은 응답 반환
         return ResponseEntity.ok(updatedItem);

@@ -27,7 +27,7 @@ public class ItemService {
     //상품 생성
     @Transactional
     public ItemCreateResponse createItem(ItemCreateRequest request, AuthUser authUser) {
-        User user = userRepository.findById(authUser.getUserId()).orElseThrow(() -> new OhapjijoleException(ErrorCode._USER_NOT_FOUND));
+        User user = userRepository.findById(authUser.getId()).orElseThrow(() -> new OhapjijoleException(ErrorCode._USER_NOT_FOUND));
         Item item = new Item(request.getName(), request.getDescription(), request.getImageUrl(), user);
         Item savedItem = itemRepository.save(item);
 

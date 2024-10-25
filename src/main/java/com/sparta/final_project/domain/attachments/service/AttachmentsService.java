@@ -12,9 +12,9 @@ import org.springframework.web.multipart.MultipartFile;
 public class AttachmentsService {
     private final S3Service s3Service;
 
-    public String uploadImage(MultipartFile file) {
+    public String uploadImage(MultipartFile files) {
         // S3에 파일 업로드 후 URL 반환
-        return s3Service.uploadFile(file);
+        return s3Service.uploadFile(files);
     }
 
     // deleteImage 메서드 추가

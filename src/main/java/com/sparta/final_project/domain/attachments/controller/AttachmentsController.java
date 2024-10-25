@@ -20,3 +20,5 @@ public class AttachmentsController {
         return ResponseEntity.ok(imageUrls);
     }
 }
+
+
