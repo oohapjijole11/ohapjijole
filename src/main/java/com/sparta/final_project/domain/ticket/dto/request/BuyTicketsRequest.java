@@ -14,6 +14,21 @@ public class BuyTicketsRequest {
         this.userId = userId;
         this.ticketNumber = ticketNumber;
     }
+    public BuyTicketsRequest() {
+    }
+
+    // Getters and setters
+    public Long getTicketId() {
+        return ticketId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public Long getTicketNumber() {
+        return ticketNumber;
+    }
 
 
 }

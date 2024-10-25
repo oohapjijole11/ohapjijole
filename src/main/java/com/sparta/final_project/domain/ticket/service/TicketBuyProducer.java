@@ -15,5 +15,7 @@ public class TicketBuyProducer {
     // 티켓 구매 요청을 카프카에 보냅니다.
     public void sendBuyRequest(BuyTicketsRequest buyTicketsRequest) {
         kafkaTemplate.send(TOPIC, buyTicketsRequest);
+        System.out.println("Kafka 메시지가 전송되었습니다: " + buyTicketsRequest);
+
     }
 }

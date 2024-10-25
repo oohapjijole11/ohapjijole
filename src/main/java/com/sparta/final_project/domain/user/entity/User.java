@@ -77,4 +77,13 @@ public class User {
         UserRole role = UserRole.of(roles.get(0)); // Assuming single role for now
         return new User(authUser.getId(), authUser.getEmail(), role);
     }
+
+    // 회원 탈퇴 메소드
+    public void deletedUser(String email, String password) {
+        this.isdeleted = true;
+    }
+
+    public void updateUserRole(UserRole newUserRole){
+        this.role = newUserRole;
+    }
 }

@@ -1,6 +1,6 @@
 package com.sparta.final_project.domain.user.service;
 
-import com.sparta.final_project.config.AuthUser;
+import com.sparta.final_project.config.security.AuthUser;
 import com.sparta.final_project.domain.common.exception.ErrorCode;
 import com.sparta.final_project.domain.common.exception.OhapjijoleException;
 import com.sparta.final_project.domain.user.dto.request.DeleteUserRequestDto;
@@ -46,7 +46,7 @@ public class UserService {
 
     @Transactional
     public void updateUserAuthority(Long id, AuthUser authUser) {
-        if(!authUser.getRole().equals(UserRole.ADMIN)) {
+        if(!authUser.getAuthorities().equals(UserRole.ADMIN)) {
             throw new OhapjijoleException(ErrorCode._NOT_PERMITTED_USER);
         }
         User user = userRepository.findById(id).orElseThrow(()-> new OhapjijoleException(ErrorCode._NOT_FOUND_USER));

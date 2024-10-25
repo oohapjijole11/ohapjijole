@@ -27,7 +27,7 @@ dependencies {
     implementation 'at.favre.lib:bcrypt:0.10.2'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
-
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
     implementation 'org.springframework.kafka:spring-kafka'
     testImplementation 'org.springframework.kafka:spring-kafka-test'
     implementation 'com.github.mwiede:jsch:0.2.17'

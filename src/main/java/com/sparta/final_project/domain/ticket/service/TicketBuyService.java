@@ -29,7 +29,7 @@ public class TicketBuyService {
 
 
 
-    public String buyTicket(BuyTicketsRequest buyTicketsRequest) {
+    public void buyTicket(BuyTicketsRequest buyTicketsRequest) {
 
         Ticket ticket = ticketRepository.findById(buyTicketsRequest.getTicketId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 티켓을 찾을 수 없습니다."));
@@ -47,8 +47,6 @@ public class TicketBuyService {
 
         buyTicketsRepository.save(buyTickets);
         ticketRepository.save(ticket);  // 티켓 수 업데이트
-        return "티켓 구매가 성공적으로 완료되었습니다.";
-
     }
 
     //구매 티켓 다건 조회
