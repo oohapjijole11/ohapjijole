@@ -27,10 +27,10 @@ public class BidService {
 
     @Transactional
     public BidResponse createBid(Long userId, BidRequest request) {
-        User user = userRepository.findById(userId).orElseThrow(()-> new NullPointerException("해당하는 아이디의 유저가 존재하지 않습니다"));
-        Auction auction = auctionRepository.findById(request.getAuctionId()).orElseThrow(() -> new NullPointerException("해당하는 경매가 존재하지 않습니다."));
+        User user = userRepository.findById(userId).orElseThrow(()-> new OhapjijoleException(ErrorCode._USER_NOT_FOUND));
+        Auction auction = auctionRepository.findById(request.getAuctionId()).orElseThrow(() -> new OhapjijoleException(ErrorCode._NOT_FOUND_AUCTION));
         List<Bid> bidList = bidRepository.findAllByAuctionOrderByCreatedAtDesc(auction);
-        int maxBid = bidList.size()==0? auction.getStartPrice()-1 : bidList.get(0).getPrice();
+        int maxBid = bidList.isEmpty() ? auction.getStartPrice()-1 : bidList.get(0).getPrice();
         if(request.getPrice()<=maxBid) throw new OhapjijoleException(ErrorCode._NOT_LARGER_PRICE);
         Bid bid = new Bid(request, user, auction);
         Bid newBid = bidRepository.save(bid);
@@ -38,7 +38,7 @@ public class BidService {
     }
 
     public List<BidSimpleResponse> getBids(Long auctionId) {
-        Auction auction = auctionRepository.findById(auctionId).orElseThrow(() -> new NullPointerException("해당하는 경매가 존재하지 않습니다."));
+        Auction auction = auctionRepository.findById(auctionId).orElseThrow(() -> new OhapjijoleException(ErrorCode._NOT_FOUND_AUCTION));
         List<Bid> bidList = bidRepository.findAllByAuctionOrderByCreatedAtDesc(auction);
         return bidList.stream().map(BidSimpleResponse::new).toList();
     }
