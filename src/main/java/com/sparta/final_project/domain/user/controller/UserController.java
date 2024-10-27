@@ -1,6 +1,5 @@
 package com.sparta.final_project.domain.user.controller;
 
-
 import com.sparta.final_project.config.security.AuthUser;
 import com.sparta.final_project.domain.user.dto.request.DeleteUserRequestDto;
 import com.sparta.final_project.domain.user.service.UserService;

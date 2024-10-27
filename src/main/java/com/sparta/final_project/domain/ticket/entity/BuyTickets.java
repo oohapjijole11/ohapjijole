@@ -19,11 +19,11 @@ public class BuyTickets {
     @Column(name = "buytickets_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ticket_id")
     private Ticket ticket;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -31,7 +31,7 @@ public class BuyTickets {
     private Long ticketnumber;
 
 
-    public BuyTickets(BuyTicketsRequest buyTicketsRequest,Ticket ticket, User user) {
+    public BuyTickets(BuyTicketsRequest buyTicketsRequest, Ticket ticket, User user) {
         this.ticket = ticket;
         this.user = user;
         this.ticketnumber = buyTicketsRequest.getTicketNumber();
