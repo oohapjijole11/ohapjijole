@@ -5,6 +5,8 @@ import com.amazonaws.services.sqs.model.Message;
 import com.amazonaws.services.sqs.model.SendMessageRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sparta.final_project.domain.common.exception.ErrorCode;
+import com.sparta.final_project.domain.common.exception.OhapjijoleException;
 import com.sparta.final_project.domain.ticket.dto.request.BuyTicketsRequest;
 import com.sparta.final_project.domain.ticket.dto.response.BuyTicketsResponse;
 import com.sparta.final_project.domain.ticket.entity.BuyTickets;
@@ -44,13 +46,14 @@ public class TicketBuyService {
     @Transactional
     public String buyTicket(BuyTicketsRequest buyTicketsRequest) {
         Ticket ticket = ticketRepository.findById(buyTicketsRequest.getTicketId())
-                .orElseThrow(() -> new IllegalArgumentException("해당 티켓을 찾을 수 없습니다."));
+                .orElseThrow(() -> new OhapjijoleException(ErrorCode._NOT_FIND_TICKET));
         // 사용자 찾기
         User user = userRepository.findById(buyTicketsRequest.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new OhapjijoleException(ErrorCode._NOT_FOUND_USER));
+
         // 티켓 수량 확인
         if (ticket.getTicketCount() == 0) {
-            throw new IllegalArgumentException("구매하려는 티켓의 수량이 부족합니다.");
+            throw new OhapjijoleException(ErrorCode._NOT_ENOUGH_TICKET);
         }
         // 티켓 수량 감소
         ticket.setTicketCount(ticket.getTicketCount() - 1);
@@ -80,15 +83,13 @@ public class TicketBuyService {
             try {
                 // 메시지 본문 처리
                 BuyTicketsRequest buyTicketsRequest = parseMessage(message.getBody());
-
                 // 티켓 구매 처리
                 buyTicket(buyTicketsRequest);
-
                 // 처리 후 메시지 삭제
                 amazonSQSAsync.deleteMessage(queueUrl, message.getReceiptHandle());
             } catch (Exception e) {
                 // 에러 처리
-                System.err.println("Error processing message: " + e.getMessage());
+                System.err.println("메세지처리중 오류 발생 " + e.getMessage());
             }
         }
     }
