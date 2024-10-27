@@ -43,6 +43,11 @@ public enum ErrorCode {
     //item
     _NOT_FOUND_ITEM(HttpStatus.NOT_FOUND,"상품이 존재하지 않습니다."),
 
+    //attachments
+    _ATTACHMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "첨부파일을 찾을 수 없습니다."),
+    _FILE_EMPTY(HttpStatus.BAD_REQUEST, "업로드할 파일이 없습니다."),
+    _FILE_UPLOAD_FAILED(HttpStatus.UNSUPPORTED_MEDIA_TYPE, "파일을 업로드 할 수 없습니다."),
+
     //auction
     _NOT_FOUND_AUCTION(HttpStatus.NOT_FOUND, "경매가 존재하지 않습니다"),
 
@@ -53,6 +58,10 @@ public enum ErrorCode {
     //sbid
 
     //ticket
+
+    //S3service
+    FILE_UPLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드 에러입니다."),
+    FILE_DELETE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "파일 삭제 에러입니다."),
 
     // ### 아래 코드 위에 ErrorCode 작성해 주세요! ErrorCode 메서드 사이는 ,(컴마)로 구분해 주세요! ###
     _NOT_FOUND(HttpStatus.NOT_FOUND, "찾지못했습니다.");
