@@ -69,6 +69,7 @@ public class AuctionService {
         auctionRepository.delete(auction);
     }
 
+// 수정이 필요 시작
 //    경매 시작
     @Scheduled(fixedRate = 1000)
     public void startAuctionScheduler() {
@@ -103,7 +104,7 @@ public class AuctionService {
         }
     }
 
-
+// 여기까지
 
 
 //    경매 생성 및 등급 측정

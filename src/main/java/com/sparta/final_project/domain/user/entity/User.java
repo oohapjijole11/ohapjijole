@@ -66,19 +66,20 @@ public class User {
         this.email = email;
         this.role = role;
     }
-    public static User fromAuthUser(AuthUser authUser) {
-        List<String> roles = authUser.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .toList();
-        // Handle multiple roles or pick the main role
-        UserRole role = UserRole.of(roles.get(0)); // Assuming single role for now
-        return new User(authUser.getId(), authUser.getEmail(), role);
-    }
+//    public static User fromAuthUser(AuthUser authUser) {
+//        List<String> roles = authUser.getAuthorities().stream()
+//                .map(GrantedAuthority::getAuthority)
+//                .toList();
+//        // Handle multiple roles or pick the main role
+//        UserRole role = UserRole.of(roles.get(0)); // Assuming single role for now
+//        return new User(authUser.getId(), authUser.getEmail(), role);
+//    }
 
     // 회원 탈퇴 메소드
     public void deletedUser(String email, String password) {
         this.isdeleted = true;
     }
+
 
     public void updateUserRole(UserRole newUserRole){
         this.role = newUserRole;
