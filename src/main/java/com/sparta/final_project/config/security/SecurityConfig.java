@@ -40,7 +40,7 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable) // BasicAuthenticationFilter 비활성화
                 .logout(AbstractHttpConfigurer::disable) // LogoutFilter 비활성화
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/users/**").permitAll() // 회원가입, 로그인 허용
+                        .requestMatchers("/auth/**","/auction/ticket").permitAll() // 회원가입, 로그인 허용
                         .anyRequest().authenticated()) // 그 외 모든 요청은 로그인 필요
                 .addFilterBefore(jwtSecurityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
