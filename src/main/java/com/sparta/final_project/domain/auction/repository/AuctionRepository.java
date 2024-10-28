@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
@@ -16,8 +17,6 @@ public interface AuctionRepository extends JpaRepository<Auction, Long> {
 
     List<Auction> findAllByStatusAndEndTimeLessThan(Status status, LocalDateTime now);
 
-    List<Auction> findByStatusAndStartTimeLessThan(Status status, LocalDateTime now);
-
-    List<Auction> findByStatusAndEndTimeLessThan(Status status, LocalDateTime now);
+    Auction findByIdAndStatus(Long auctionId, Status status);
 
 }

@@ -13,11 +13,8 @@ import com.sparta.final_project.domain.item.repository.ItemRepository;
 import com.sparta.final_project.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -28,36 +25,6 @@ public class AuctionService {
     private final AuctionRepository auctionRepository;
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
-    private long remainingSeconds;
-
-//    경매시작
-    @Scheduled(fixedRate = 1000)
-    public void startAuction() {
-        List<Auction> auctions = auctionRepository.findAll();
-        for (Auction auction : auctions) {
-            LocalDateTime now = LocalDateTime.now();
-            if(auction.getStatus().equals(Status.WAITING) && now.isAfter(auction.getStartTime())) {
-                auction.setStatus(Status.BID);
-                auctionRepository.save(auction);
-            }
-            if(auction.getStatus().equals(Status.BID) && now.isAfter(auction.getEndTime())) {
-                auction.setStatus(Status.SUCCESSBID);
-                auctionRepository.save(auction);
-            }
-        }
-    }
-
-    public long getRemainingTime(Auction auction) {
-        if(auction.getStatus().equals(Status.BID) && auction.getEndTime() != null) {
-            remainingSeconds = Duration.between(LocalDateTime.now(), auction.getEndTime()).getSeconds();
-            if(remainingSeconds <= 0){
-                remainingSeconds = 0;
-            }
-        }
-        return remainingSeconds;
-    }
-
-
 
 
 //    생성
@@ -100,33 +67,7 @@ public class AuctionService {
         auctionRepository.delete(auction);
     }
 
-//    경매 시작
-    @Scheduled(fixedRate = 1000)
-    public void startAuctionScheduler() {
-        LocalDateTime now = LocalDateTime.now();
-        List<Auction> auctions = auctionRepository.findAllByStatusAndStartTimeLessThan(Status.WAITING, now);
-        for (Auction auction : auctions) {
-            auction.setStatus(Status.BID);
-            auctionRepository.save(auction);
-        }
-    }
-
-    //    경매 마감
-    @Scheduled(fixedRate = 1000)
-    public void endAuctionScheduler() {
-        LocalDateTime now = LocalDateTime.now();
-        List<Auction> auctions = auctionRepository.findAllByStatusAndEndTimeLessThan(Status.BID, now);
-        for (Auction auction : auctions) {
-            auction.setStatus(Status.SUCCESSBID);
-//            유찰 추가
-            auctionRepository.save(auction);
-        }
-    }
-
-
-
-
-//    경매 생성 및 등급 측정
+    //    경매 생성 및 등급 측정
     public Auction gradeMeasurement(AuctionRequest auctionRequest){
         Auction auction = new Auction(auctionRequest);
         if(auctionRequest.getStartPrice() <= 10000000){
