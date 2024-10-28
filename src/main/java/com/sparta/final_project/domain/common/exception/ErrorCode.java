@@ -59,7 +59,8 @@ public enum ErrorCode {
     //sbid
 
     //ticket
-
+    _NOT_FIND_TICKET(HttpStatus.BAD_REQUEST,"존재하지 않는 티켓입니다."),
+    _NOT_ENOUGH_TICKET(HttpStatus.BAD_REQUEST,"티켓의 수량이 부족합니다."),
     //S3service
     FILE_UPLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드 에러입니다."),
     FILE_DELETE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "파일 삭제 에러입니다."),
