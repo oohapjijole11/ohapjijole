@@ -2,7 +2,6 @@ package com.sparta.final_project.domain.auction.service;
 
 import com.sparta.final_project.config.security.AuthUser;
 import com.sparta.final_project.domain.auction.dto.request.AuctionRequest;
-import com.sparta.final_project.domain.auction.dto.response.AuctionProgressResponse;
 import com.sparta.final_project.domain.auction.dto.response.AuctionResponse;
 import com.sparta.final_project.domain.auction.entity.Auction;
 import com.sparta.final_project.domain.auction.entity.Grade;
@@ -14,10 +13,8 @@ import com.sparta.final_project.domain.item.repository.ItemRepository;
 import com.sparta.final_project.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -28,6 +25,7 @@ public class AuctionService {
     private final AuctionRepository auctionRepository;
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
+
 
 //    생성
     public AuctionResponse createAuction(AuthUser authUser, Long itemId, AuctionRequest auctionRequest) {
@@ -55,7 +53,7 @@ public class AuctionService {
         userRepository.findById(authUser.getId()).orElseThrow(()-> new OhapjijoleException(ErrorCode._USER_NOT_FOUND));
         Auction auction = auctionRepository.findById(auctionId).orElseThrow(() -> new OhapjijoleException(ErrorCode._NOT_FOUND_AUCTION));
         if(auction.getStatus() != Status.WAITING){
-            throw new IllegalArgumentException("경매가 준비중일 때 수정가능합니다.");
+            throw new OhapjijoleException(ErrorCode._NOT_ALLOWED_TO_UPDATE);
         }
 //        수정메소드
         gradeMeasurementForUpdate(auction,auctionRequest);
@@ -69,44 +67,7 @@ public class AuctionService {
         auctionRepository.delete(auction);
     }
 
-//    경매 시작
-    @Scheduled(fixedRate = 1000)
-    public void startAuctionScheduler() {
-        LocalDateTime now = LocalDateTime.now();
-        List<Auction> auctions = auctionRepository.findAllByStatusAndStartTimeLessThan(Status.WAITING, now);
-        for (Auction auction : auctions) {
-            auction.setStatus(Status.BID);
-            auctionRepository.save(auction);
-        }
-    }
-
-
-    public AuctionProgressResponse getAuctionProgress(Long auctionId) {
-        Auction auction = auctionRepository.findById(auctionId).orElseThrow(() -> new OhapjijoleException(ErrorCode._NOT_FOUND_AUCTION));
-        long remainingTime = java.time.Duration.between(LocalDateTime.now(), auction.getEndTime()).toSeconds();
-        if(remainingTime < 0) {
-            remainingTime = 0;
-        }
-        return new AuctionProgressResponse(auction,remainingTime);
-    }
-
-
-//    경매 마감
-    @Scheduled(fixedRate = 1000)
-    public void endAuctionScheduler() {
-        LocalDateTime now = LocalDateTime.now();
-        List<Auction> auctions = auctionRepository.findAllByStatusAndEndTimeLessThan(Status.BID, now);
-        for (Auction auction : auctions) {
-            auction.setStatus(Status.SUCCESSBID);
-//            유찰 추가
-            auctionRepository.save(auction);
-        }
-    }
-
-
-
-
-//    경매 생성 및 등급 측정
+    //    경매 생성 및 등급 측정
     public Auction gradeMeasurement(AuctionRequest auctionRequest){
         Auction auction = new Auction(auctionRequest);
         if(auctionRequest.getStartPrice() <= 10000000){

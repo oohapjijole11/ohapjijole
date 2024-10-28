@@ -50,6 +50,8 @@ public enum ErrorCode {
 
     //auction
     _NOT_FOUND_AUCTION(HttpStatus.NOT_FOUND, "경매가 존재하지 않습니다"),
+    _NOT_ALLOWED_TO_UPDATE(HttpStatus.NOT_MODIFIED,"진행중인 경매는 수정할 수 없습니다 "),
+    _NOT_PROGRESS_AUCTION(HttpStatus.NOT_FOUND, "진행 중인 경매가 존재하지않습니다"),
 
     //bid
     _NOT_LARGER_PRICE(HttpStatus.BAD_REQUEST, "입찰가는 현재 최고 입찰가보다 커야합니다."),
