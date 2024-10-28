@@ -1,6 +1,7 @@
 package com.sparta.final_project.domain.bid.service;
 
 import com.sparta.final_project.domain.auction.entity.Auction;
+import com.sparta.final_project.domain.auction.entity.Status;
 import com.sparta.final_project.domain.auction.repository.AuctionRepository;
 import com.sparta.final_project.domain.bid.dto.request.BidRequest;
 import com.sparta.final_project.domain.bid.dto.response.BidResponse;
@@ -29,6 +30,7 @@ public class BidService {
     public BidResponse createBid(Long userId, BidRequest request) {
         User user = userRepository.findById(userId).orElseThrow(()-> new OhapjijoleException(ErrorCode._USER_NOT_FOUND));
         Auction auction = auctionRepository.findById(request.getAuctionId()).orElseThrow(() -> new OhapjijoleException(ErrorCode._NOT_FOUND_AUCTION));
+        if(auction.getStatus()!= Status.BID) throw new OhapjijoleException(ErrorCode._BID_NOT_GOING);
         List<Bid> bidList = bidRepository.findAllByAuctionOrderByCreatedAtDesc(auction);
         int maxBid = bidList.isEmpty() ? auction.getStartPrice()-1 : bidList.get(0).getPrice();
         if(request.getPrice()<=maxBid) throw new OhapjijoleException(ErrorCode._NOT_LARGER_PRICE);
