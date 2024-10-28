@@ -1,18 +1,16 @@
 package com.sparta.final_project.domain.ticket.dto.response;
 
+import com.sparta.final_project.domain.ticket.entity.BuyTickets;
+import com.sparta.final_project.domain.ticket.entity.Ticket;
 import lombok.Data;
 
 @Data
-
 public class BuyTicketsResponse {
-    private String message;
+    Long buyTicketsId;
+    Long TicketNumber;
 
-    public BuyTicketsResponse(String message) {
-
-        this.message = message;
-    }
-
-    public String getMessage() {
-        return message;
+    public BuyTicketsResponse(BuyTickets buyTickets) {
+        this.buyTicketsId = buyTickets.getId();
+        this.TicketNumber = buyTickets.getTicketnumber();
     }
 }

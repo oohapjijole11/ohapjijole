@@ -1,8 +1,6 @@
 package com.sparta.final_project.domain.user.entity;
 
 import com.sparta.final_project.config.security.AuthUser;
-import com.sparta.final_project.domain.common.exception.ErrorCode;
-import com.sparta.final_project.domain.common.exception.OhapjijoleException;
 import com.sparta.final_project.domain.item.entity.Item;
 
 
@@ -13,7 +11,6 @@ import org.springframework.security.core.GrantedAuthority;
 
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @Entity
@@ -76,5 +73,14 @@ public class User {
         // Handle multiple roles or pick the main role
         UserRole role = UserRole.of(roles.get(0)); // Assuming single role for now
         return new User(authUser.getId(), authUser.getEmail(), role);
+    }
+
+    // 회원 탈퇴 메소드
+    public void deletedUser(String email, String password) {
+        this.isdeleted = true;
+    }
+
+    public void updateUserRole(UserRole newUserRole){
+        this.role = newUserRole;
     }
 }
