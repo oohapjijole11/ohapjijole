@@ -11,14 +11,14 @@ public class ItemSimpleResponse implements Serializable {
     private final Long id;
     private final String name;
     private final String description;
-    private final String imageUrl;
+    private final List<String> imageUrls;
 
     // 생성자
-    public ItemSimpleResponse(Long id, String name, String description, String imageUrl) {
+    public ItemSimpleResponse(Long id, String name, String description, List<String> imageUrls) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.imageUrl = imageUrl;
+        this.imageUrls = imageUrls;
     }
 }
 

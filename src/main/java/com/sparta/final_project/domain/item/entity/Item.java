@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Getter
@@ -19,21 +20,23 @@ public class Item implements Serializable {
 
     private String name;
     private String description;
-    private String imageUrl;
+    @ElementCollection
+    @CollectionTable(name = "item_images", joinColumns = @JoinColumn(name = "item_id"))
+    private List<String> imageUrls;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
     // 생성자 추가 (선택 사항)
-    public Item(String name, String description, String imageUrl, User user) {
+    public Item(String name, String description, List<String> imageUrls, User user) {
         this.name = name;
         this.description = description;
-        this.imageUrl = imageUrl;
+        this.imageUrls = imageUrls;
         this.user = user;
     }
-    public void update(String name, String description, String imageUrl) {
+    public void update(String name, String description, List<String> imageUrls) {
         this.name = name;
         this.description = description;
-        this.imageUrl = imageUrl;
+        this.imageUrls = imageUrls;
     }
 }

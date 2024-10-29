@@ -29,14 +29,14 @@ public class ItemService {
     public ItemCreateResponse createItem(ItemCreateRequest request, AuthUser authUser) {
         User user = userRepository.findById(authUser.getId())
                 .orElseThrow(() -> new OhapjijoleException(ErrorCode._USER_NOT_FOUND));
-        Item item = new Item(request.getName(), request.getDescription(), request.getImageUrl(), user);
+        Item item = new Item(request.getName(), request.getDescription(), request.getImageUrls(), user);
         Item savedItem = itemRepository.save(item);
 
         return new ItemCreateResponse(
                 savedItem.getId(),
                 savedItem.getName(),
                 savedItem.getDescription(),
-                savedItem.getImageUrl()
+                savedItem.getImageUrls()
         );
     }
 
@@ -49,8 +49,9 @@ public class ItemService {
                 item.getId(),
                 item.getName(),
                 item.getDescription(),
-                item.getImageUrl()
+                item.getImageUrls()
         );
+
     }
 
     // 상품 수정
@@ -59,13 +60,13 @@ public class ItemService {
     public ItemUpdateResponse updateItem(Long id, ItemUpdateRequest request) {
         Item item = itemRepository.findById(id)
                 .orElseThrow(() -> new OhapjijoleException(ErrorCode._ATTACHMENT_NOT_FOUND));
-        item.update(request.getName(), request.getDescription(), request.getImageUrl());
+        item.update(request.getName(), request.getDescription(), request.getImageUrls());
 
         return new ItemUpdateResponse(
                 item.getId(),
                 item.getName(),
                 item.getDescription(),
-                item.getImageUrl(),
+                item.getImageUrls(),
                 item.getId()
         );
     }
