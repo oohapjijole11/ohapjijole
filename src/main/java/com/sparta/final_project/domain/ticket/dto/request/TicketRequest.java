@@ -1,5 +1,6 @@
 package com.sparta.final_project.domain.ticket.dto.request;
 
+import com.sparta.final_project.domain.auction.entity.Auction;
 import com.sparta.final_project.domain.auction.entity.Grade;
 import com.sparta.final_project.domain.ticket.entity.TicketStatus;
 import lombok.Getter;
@@ -11,5 +12,7 @@ public class TicketRequest {
     private TicketStatus ticketStatus;
     private Grade ticketGrade;
     private Long ticketCount;
+    private Long auctionId;
 
 }
+

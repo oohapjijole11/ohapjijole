@@ -30,6 +30,18 @@ dependencies {
     implementation 'com.github.mwiede:jsch:0.2.17'
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
+    // 실시간
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+
+    // AWS Lambda 지원 라이브러리 추가
+    implementation 'software.amazon.awssdk:lambda:2.20.38'
+    implementation 'com.amazonaws:aws-lambda-java-core:1.2.1'
+    implementation 'com.amazonaws:aws-lambda-java-events:3.11.0'
+
+// Jackson 라이브러리 추가 (JSON 직렬화/역직렬화에 필요)
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+
     // Security
     implementation 'com.amazonaws:aws-java-sdk-s3:1.12.300'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -38,7 +50,7 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-validation"
 
     implementation 'com.amazonaws:aws-java-sdk-sqs:1.12.559' // AWS SDK v1
-
+    implementation 'com.amazonaws:aws-java-sdk-lambda:1.12.559' // Lambda 추가
 
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
