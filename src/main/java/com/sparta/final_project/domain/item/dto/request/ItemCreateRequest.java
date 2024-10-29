@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @NotBlank
 @Getter
 @Setter
@@ -14,5 +16,5 @@ import lombok.Setter;
 public class ItemCreateRequest {
     private String name;
     private String description;
-    private String imageUrl;
+    private List<String> imageUrls;
 }

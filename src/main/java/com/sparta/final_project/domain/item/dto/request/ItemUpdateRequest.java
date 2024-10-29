@@ -18,5 +18,5 @@ import java.util.List;
 public class ItemUpdateRequest {
     private String name;
     private String description;
-    private String imageUrl;
+    private List<String> imageUrls;
 }
