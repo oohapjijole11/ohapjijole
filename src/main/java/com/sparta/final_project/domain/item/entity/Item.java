@@ -5,11 +5,14 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Entity
 @Getter
 @NoArgsConstructor
 @Table(name = "Items")
-public class Item {
+public class Item implements Serializable {
+    private static final long serialVersionUID = 1L; // 직렬화 버전 UID
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

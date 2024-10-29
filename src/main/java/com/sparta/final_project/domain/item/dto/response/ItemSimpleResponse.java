@@ -2,11 +2,12 @@ package com.sparta.final_project.domain.item.dto.response;
 
 import lombok.Getter;
 
+import java.io.Serializable;
 import java.util.List;
 
 
 @Getter
-public class ItemSimpleResponse {
+public class ItemSimpleResponse implements Serializable {
     private final Long id;
     private final String name;
     private final String description;

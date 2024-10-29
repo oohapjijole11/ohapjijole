@@ -3,8 +3,6 @@ package com.sparta.final_project.domain.item.service;
 import com.sparta.final_project.config.security.AuthUser;
 import com.sparta.final_project.domain.common.exception.ErrorCode;
 import com.sparta.final_project.domain.common.exception.OhapjijoleException;
-import com.sparta.final_project.domain.common.service.RedisService;
-import com.sparta.final_project.domain.common.service.S3Service;
 import com.sparta.final_project.domain.item.dto.request.ItemCreateRequest;
 import com.sparta.final_project.domain.item.dto.request.ItemUpdateRequest;
 import com.sparta.final_project.domain.item.dto.response.ItemCreateResponse;
@@ -25,11 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class ItemService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
-    private final RedisService redisService;
-    private final S3Service s3Service;
 
-
-    // 상품 생성
+    // 상품 생성 (상품 생성 시에는 @Cacheable이 필요X)
     @Transactional
     public ItemCreateResponse createItem(ItemCreateRequest request, AuthUser authUser) {
         User user = userRepository.findById(authUser.getId())
@@ -58,21 +53,24 @@ public class ItemService {
         );
     }
 
-    // 상품 수정 (캐시 무효화)
+    // 상품 수정
     @Transactional
     @CacheEvict(value = "items", key = "#id")
     public ItemUpdateResponse updateItem(Long id, ItemUpdateRequest request) {
         Item item = itemRepository.findById(id)
                 .orElseThrow(() -> new OhapjijoleException(ErrorCode._ATTACHMENT_NOT_FOUND));
         item.update(request.getName(), request.getDescription(), request.getImageUrl());
-        return new ItemUpdateResponse(item.getId(),
+
+        return new ItemUpdateResponse(
+                item.getId(),
                 item.getName(),
                 item.getDescription(),
                 item.getImageUrl(),
-                item.getId());
+                item.getId()
+        );
     }
 
-    // 상품 삭제 (캐시 무효화)
+    // 상품 삭제
     @Transactional
     @CacheEvict(value = "items", key = "#id")
     public void deleteItem(Long id) {
