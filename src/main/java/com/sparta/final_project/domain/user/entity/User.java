@@ -4,9 +4,11 @@ import com.sparta.final_project.config.security.AuthUser;
 import com.sparta.final_project.domain.item.entity.Item;
 
 
+import com.sparta.final_project.domain.ticket.entity.BuyTickets;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
 
@@ -15,6 +17,7 @@ import java.util.List;
 @Getter
 @Entity
 @NoArgsConstructor
+@Setter
 @Table(name = "users")
 public class User {
 
@@ -31,7 +34,7 @@ public class User {
     private String name;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column
     private UserRole role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = false)
@@ -40,6 +43,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column
     private UserRating rating;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = false)
+    private List<BuyTickets> tickets;
 
     @OneToOne(fetch = FetchType.LAZY)
     private Vaccount vaccount;
@@ -66,19 +72,20 @@ public class User {
         this.email = email;
         this.role = role;
     }
-    public static User fromAuthUser(AuthUser authUser) {
-        List<String> roles = authUser.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .toList();
-        // Handle multiple roles or pick the main role
-        UserRole role = UserRole.of(roles.get(0)); // Assuming single role for now
-        return new User(authUser.getId(), authUser.getEmail(), role);
-    }
+//    public static User fromAuthUser(AuthUser authUser) {
+//        List<String> roles = authUser.getAuthorities().stream()
+//                .map(GrantedAuthority::getAuthority)
+//                .toList();
+//        // Handle multiple roles or pick the main role
+//        UserRole role = UserRole.of(roles.get(0)); // Assuming single role for now
+//        return new User(authUser.getId(), authUser.getEmail(), role);
+//    }
 
     // 회원 탈퇴 메소드
     public void deletedUser(String email, String password) {
         this.isdeleted = true;
     }
+
 
     public void updateUserRole(UserRole newUserRole){
         this.role = newUserRole;
