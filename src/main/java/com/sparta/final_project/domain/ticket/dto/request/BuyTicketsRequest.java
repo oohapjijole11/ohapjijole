@@ -9,5 +9,12 @@ public class BuyTicketsRequest {
     private Long ticketId;
     private Long userId;
     private Long ticketNumber;
-
+    @Override
+    public String toString() {
+        return "BuyTicketsRequest{" +
+                "ticketId='" + ticketId + '\'' +
+                ", userId='" + userId + '\'' +
+                ", ticketNumber=" + ticketNumber +
+                '}';
+    }
 }
