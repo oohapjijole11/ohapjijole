@@ -4,9 +4,11 @@ import com.sparta.final_project.config.security.AuthUser;
 import com.sparta.final_project.domain.item.entity.Item;
 
 
+import com.sparta.final_project.domain.ticket.entity.BuyTickets;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
 
@@ -15,6 +17,7 @@ import java.util.List;
 @Getter
 @Entity
 @NoArgsConstructor
+@Setter
 @Table(name = "users")
 public class User {
 
@@ -40,6 +43,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column
     private UserRating rating;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = false)
+    private List<BuyTickets> tickets;
 
     @OneToOne(fetch = FetchType.LAZY)
     private Vaccount vaccount;
