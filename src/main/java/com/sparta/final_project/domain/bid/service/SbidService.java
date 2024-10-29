@@ -1,5 +1,8 @@
 package com.sparta.final_project.domain.bid.service;
 
+import com.slack.api.Slack;
+import com.slack.api.model.Attachment;
+import com.slack.api.model.Field;
 import com.sparta.final_project.domain.auction.entity.Auction;
 import com.sparta.final_project.domain.auction.entity.Status;
 import com.sparta.final_project.domain.auction.repository.AuctionRepository;
@@ -8,7 +11,6 @@ import com.sparta.final_project.domain.bid.dto.response.SbidSimpleResponse;
 import com.sparta.final_project.domain.bid.entity.Bid;
 import com.sparta.final_project.domain.bid.entity.Sbid;
 import com.sparta.final_project.domain.bid.repository.BidRepository;
-import com.sparta.final_project.domain.bid.repository.EmitterRepository;
 import com.sparta.final_project.domain.bid.repository.SbidRepository;
 import com.sparta.final_project.domain.common.exception.ErrorCode;
 import com.sparta.final_project.domain.common.exception.OhapjijoleException;
@@ -21,7 +23,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.awt.*;
+import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
+
+import static com.slack.api.webhook.WebhookPayloads.payload;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +39,8 @@ public class SbidService {
     private final AuctionRepository auctionRepository;
     private final BidRepository bidRepository;
     private final BidCommonService commonService;
-    private final EmitterRepository emitterRepository;
+
+    private final Slack slackClient = Slack.getInstance();
 
     //낙찰
     @Transactional
@@ -57,9 +65,7 @@ public class SbidService {
         //낙찰 알림 보내고 실시간 연결 끊기
         commonService.sseSend(lastBid, Status.SUCCESSBID);
 
-        //해당 경매장의 실시간 모두 끊기
-//        emitterRepository.deleteAllEmitterStartWithAuctionId(String.valueOf(auctionId));
-        
+
         //todo 낙찰자에게 slack 알림 보내기
 
         return new SbidResponse(saveSbid);
@@ -72,6 +78,25 @@ public class SbidService {
         Page<Sbid> sbids = sbidRepository.findAllByUserIdOrderByCreatedAtDesc(userId, pageable);
         return sbids.map(SbidSimpleResponse::new);
     }
+
+    //낙찰때 슬랙 알림
+    public void sendSlack(String slackUrl, String title, String message, String content, String fieldTitle, String fieldContent) throws IOException {
+        String a = "해당 상품을 낙찰하셨습니다";
+        slackClient.send(slackUrl, payload(p -> p
+                .text(title) // 메시지 제목
+                .iconUrl("https://raw.githubusercontent.com/kang-sumin/queens-trello/refs/heads/feat/search/src/main/resources/static/img/queens-icon.webp")
+                .username("ohapjijole")
+                .attachments(List.of(
+                        Attachment.builder()
+                                .color("#ff0000") // 메시지 색상
+                                .pretext(message)// 메시지 본문 내용
+                                .fields(List.of(
+                                        new Field(fieldTitle, fieldContent, false)
+                                ))
+                                .build())))
+        );
+    }
+
 
 
 }
