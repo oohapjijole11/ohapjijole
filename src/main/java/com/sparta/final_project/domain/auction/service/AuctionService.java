@@ -55,7 +55,7 @@ public class AuctionService {
         userRepository.findById(authUser.getId()).orElseThrow(()-> new OhapjijoleException(ErrorCode._USER_NOT_FOUND));
         Auction auction = auctionRepository.findById(auctionId).orElseThrow(() -> new OhapjijoleException(ErrorCode._NOT_FOUND_AUCTION));
         if(auction.getStatus() != Status.WAITING){
-            throw new IllegalArgumentException("경매가 준비중일 때 수정가능합니다.");
+            throw new OhapjijoleException(ErrorCode._NOT_ALLOWED_TO_UPDATE);
         }
 //        수정메소드
         gradeMeasurementForUpdate(auction,auctionRequest);

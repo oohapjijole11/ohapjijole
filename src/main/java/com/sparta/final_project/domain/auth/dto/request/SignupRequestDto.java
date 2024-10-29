@@ -25,5 +25,4 @@ public class SignupRequestDto {
     @NotBlank
     private String userRole;
 
-
 }

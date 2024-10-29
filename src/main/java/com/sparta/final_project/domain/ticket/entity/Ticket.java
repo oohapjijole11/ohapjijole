@@ -1,5 +1,6 @@
 package com.sparta.final_project.domain.ticket.entity;
 
+import com.sparta.final_project.domain.auction.entity.Auction;
 import com.sparta.final_project.domain.auction.entity.Grade;
 import com.sparta.final_project.domain.ticket.dto.request.TicketRequest;
 import jakarta.persistence.*;
@@ -29,20 +30,27 @@ public class Ticket {
     private TicketStatus ticketStatus;
 
     @Column
-    private Grade ticketGrade;
+    private Long ticketCount;
 
     @Column
-    private Long ticketCount;
+    @Enumerated(EnumType.STRING)
+    private Grade ticketGrade;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name= "auction_id")
+    private Auction auction;
+
 
     @Version
     private Long version;
 
-    public Ticket(TicketRequest ticketRequest) {
+    public Ticket(TicketRequest ticketRequest, Auction auction) {
         this.ticketTitle = ticketRequest.getTicketTitle();
         this.ticketDescription = ticketRequest.getTicketDescription();
         this.ticketStatus = ticketRequest.getTicketStatus();
         this.ticketCount = ticketRequest.getTicketCount();
         this.ticketGrade = ticketRequest.getTicketGrade();
+        this.auction = auction;
     }
 
 }

@@ -52,19 +52,19 @@ public class JwtUtil {
     }
 
     // 토큰 추출 7자리 쳐내기
-    public String substringToken(String tokenValue) {
+     public String substringToken(String tokenValue) {
         if(StringUtils.hasText(tokenValue) && tokenValue.startsWith(BEARER_PREFIX)) {
             return tokenValue.substring(7);
         }
         throw new OhapjijoleException(ErrorCode._NOT_FOUND_TOKEN); // 토큰이 없거나 유효하지 않을 때
-    }
+     }
 
-    public Claims extractClaims(String token) {
+     public Claims extractClaims(String token) {
         return Jwts.parserBuilder() // JwtParseBuilder 생성
                 .setSigningKey(key) // 키 설정
                 .build() // jwtParser 빌드
                 .parseClaimsJws(token) // 빌드된 JwtParser 에서 parseClaimsJws 호출
                 .getBody(); // Claims 추출
 
-    }
+     }
 }
