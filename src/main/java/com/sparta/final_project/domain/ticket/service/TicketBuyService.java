@@ -47,10 +47,12 @@ public class TicketBuyService {
     public String buyTicket(BuyTicketsRequest buyTicketsRequest) {
         Ticket ticket = ticketRepository.findById(buyTicketsRequest.getTicketId())
                 .orElseThrow(() -> new OhapjijoleException(ErrorCode._NOT_FIND_TICKET));
+
+        System.out.println("Buying ticket for ticketId: " + buyTicketsRequest.getTicketId() + " and userId: " + buyTicketsRequest.getUserId());
         // 사용자 찾기
         User user = userRepository.findById(buyTicketsRequest.getUserId())
                 .orElseThrow(() -> new OhapjijoleException(ErrorCode._NOT_FOUND_USER));
-
+        System.out.println("User found for ID: " + buyTicketsRequest.getUserId());
         // 티켓 수량 확인
         if (ticket.getTicketCount() == 0) {
             throw new OhapjijoleException(ErrorCode._NOT_ENOUGH_TICKET);
@@ -64,9 +66,11 @@ public class TicketBuyService {
         ticketRepository.save(ticket);  // 티켓 수 업데이트
 
         // SQS에 메시지를 전송
+        System.out.println("Sending buy ticket request to SQS for ticketId: " + buyTicketsRequest.getTicketId());
         sendBuyTicketRequest(buyTicketsRequest);
 
-        // 성공 메시지 반환
+        // 성공 메시지 반환 로그
+        System.out.println("Ticket purchase successful for ticketId: " + buyTicketsRequest.getTicketId());
         return "티켓 구매가 완료되었습니다.";
     }
     //구매 티켓 다건 조회
