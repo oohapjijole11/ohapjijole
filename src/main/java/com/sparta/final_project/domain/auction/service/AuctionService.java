@@ -2,7 +2,6 @@ package com.sparta.final_project.domain.auction.service;
 
 import com.sparta.final_project.config.security.AuthUser;
 import com.sparta.final_project.domain.auction.dto.request.AuctionRequest;
-import com.sparta.final_project.domain.auction.dto.response.AuctionProgressResponse;
 import com.sparta.final_project.domain.auction.dto.response.AuctionResponse;
 import com.sparta.final_project.domain.auction.entity.Auction;
 import com.sparta.final_project.domain.auction.entity.Grade;
@@ -14,7 +13,6 @@ import com.sparta.final_project.domain.item.repository.ItemRepository;
 import com.sparta.final_project.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -69,42 +67,6 @@ public class AuctionService {
         auctionRepository.delete(auction);
     }
 
-// 수정이 필요 시작
-//    경매 시작
-    @Scheduled(fixedRate = 1000)
-    public void startAuctionScheduler() {
-        LocalDateTime now = LocalDateTime.now();
-        List<Auction> auctions = auctionRepository.findAllByStatusAndStartTimeLessThan(Status.WAITING, now);
-        for (Auction auction : auctions) {
-            auction.setStatus(Status.BID);
-            auctionRepository.save(auction);
-        }
-    }
-
-
-    public AuctionProgressResponse getAuctionProgress(Long auctionId) {
-        Auction auction = auctionRepository.findById(auctionId).orElseThrow(() -> new OhapjijoleException(ErrorCode._NOT_FOUND_AUCTION));
-        long remainingTime = java.time.Duration.between(LocalDateTime.now(), auction.getEndTime()).toSeconds();
-        if(remainingTime < 0) {
-            remainingTime = 0;
-        }
-        return new AuctionProgressResponse(auction,remainingTime);
-    }
-
-
-//    경매 마감
-    @Scheduled(fixedRate = 1000)
-    public void endAuctionScheduler() {
-        LocalDateTime now = LocalDateTime.now();
-        List<Auction> auctions = auctionRepository.findAllByStatusAndEndTimeLessThan(Status.BID, now);
-        for (Auction auction : auctions) {
-            auction.setStatus(Status.SUCCESSBID);
-//            유찰 추가
-            auctionRepository.save(auction);
-        }
-    }
-
-// 여기까지
 
 
 //    경매 생성 및 등급 측정
