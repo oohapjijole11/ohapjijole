@@ -25,10 +25,11 @@ public class UserService {
     public void deletedUser(AuthUser authUser, DeleteUserRequestDto deleteUserRequestDto) {
 
         // authUser 이메일로 현재 로그인한 User 찾기
+        System.out.print("AuthUserEmail: " + authUser.getEmail());
         User user = userRepository.findByEmail(authUser.getEmail())
                 .orElseThrow(()-> new OhapjijoleException(ErrorCode._NOT_FOUND_USER));
 
-        // 회운의 비밀번호가 일치하는지 확인
+        // 회원의 비밀번호가 일치하는지 확인
         if(!passwordEncoder.matches(deleteUserRequestDto.getPassword(), user.getPassword())) {
             throw new OhapjijoleException(ErrorCode._PASSWORD_NOT_MATCHES);
         }

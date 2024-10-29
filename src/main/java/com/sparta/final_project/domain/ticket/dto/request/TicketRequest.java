@@ -15,4 +15,3 @@ public class TicketRequest {
     private Long auctionId;
 
 }
-

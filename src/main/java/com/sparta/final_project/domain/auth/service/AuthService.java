@@ -93,7 +93,7 @@ public class AuthService {
             throw new OhapjijoleException(ErrorCode._DELETED_USER);
         }
 
-        String bearerToken = jwtUtil.createToken(user.getId(), user.getName(), user.getEmail(), user.getRole());
+        String bearerToken = jwtUtil.createToken(user.getId(), user.getEmail(), user.getName(), user.getRole());
 
         return new SigninResponseDto(bearerToken);
     }
