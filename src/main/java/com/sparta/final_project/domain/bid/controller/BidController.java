@@ -1,13 +1,16 @@
 package com.sparta.final_project.domain.bid.controller;
 
+import com.sparta.final_project.domain.bid.service.BidService;
 import com.sparta.final_project.config.security.AuthUser;
 import com.sparta.final_project.domain.bid.dto.request.BidRequest;
 import com.sparta.final_project.domain.bid.dto.response.BidResponse;
 import com.sparta.final_project.domain.bid.dto.response.BidSimpleResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.List;
 
@@ -15,14 +18,28 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/bid")
 public class BidController {
-    private final com.sparta.final_project.domain.bid.service.BidService bidService;
+    private final BidService bidService;
 
-    @PostMapping("")
-    public ResponseEntity<BidResponse> createBid (@AuthenticationPrincipal AuthUser authUser, @RequestBody BidRequest request) {
-        return ResponseEntity.ok(bidService.createBid(authUser.getId(), request));
+    //경매장 입장
+    @GetMapping(value = "/auction/{auctionId}", produces = "text/event-stream")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<SseEmitter> subscribe(
+            @AuthenticationPrincipal AuthUser authUser,
+            @PathVariable Long auctionId,
+            // @RequestHeader를 이용하여 header를 받아 데이터를 꺼내서 사용
+            @RequestHeader(value = "Last-Event-ID", required = false, defaultValue = "") String lastEventId) {
+        return ResponseEntity.ok(bidService.subscribe(authUser,auctionId, lastEventId));
     }
 
-    @GetMapping("/auction/{auctionId}")
+
+    @PostMapping("/auction/{auctionId}")
+    public ResponseEntity<BidResponse> createBid (@AuthenticationPrincipal AuthUser authUser,
+                                                  @PathVariable Long auctionId,
+                                                  @RequestBody BidRequest request) {
+        return ResponseEntity.ok(bidService.createBid(authUser.getId(), auctionId,request));
+    }
+
+    @GetMapping("/bids/auction/{auctionId}")
     public ResponseEntity<List<BidSimpleResponse>> BidList (@PathVariable Long auctionId) {
         return ResponseEntity.ok(bidService.getBids(auctionId));
     }
