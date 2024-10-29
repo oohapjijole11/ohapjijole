@@ -80,8 +80,10 @@ public class SbidService {
     }
 
     //낙찰때 슬랙 알림
-    public void sendSlack(String slackUrl, String title, String message, String content, String fieldTitle, String fieldContent) throws IOException {
-        String a = "해당 상품을 낙찰하셨습니다";
+    public void sendSlack(String slackUrl,Sbid sbid, String fieldContent) throws IOException {
+        String title = "낙찰 소식 알림이";
+        String message = sbid.getAuction().getItem().getName()+" 상품을 낙찰하셨습니다. 지금 확인해보세요!";
+        String fieldTitle = sbid.getAuction()+"";
         slackClient.send(slackUrl, payload(p -> p
                 .text(title) // 메시지 제목
                 .iconUrl("https://raw.githubusercontent.com/kang-sumin/queens-trello/refs/heads/feat/search/src/main/resources/static/img/queens-icon.webp")
