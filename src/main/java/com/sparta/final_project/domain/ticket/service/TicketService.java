@@ -1,5 +1,8 @@
 package com.sparta.final_project.domain.ticket.service;
 import com.sparta.final_project.config.security.AuthUser;
+import com.sparta.final_project.domain.auction.entity.Auction;
+import com.sparta.final_project.domain.auction.repository.AuctionRepository;
+import com.sparta.final_project.domain.auction.service.AuctionService;
 import com.sparta.final_project.domain.common.exception.ErrorCode;
 import com.sparta.final_project.domain.common.exception.OhapjijoleException;
 import com.sparta.final_project.domain.ticket.dto.request.TicketRequest;
@@ -21,6 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TicketService {
     private final TicketRepository ticketRepository;
+    private final AuctionRepository auctionRepository;
 
     //티켓 생성
     public Ticket createticket(TicketRequest ticketRequest) {
@@ -50,7 +54,9 @@ public class TicketService {
     }
 
     public Ticket ticketStatus(TicketRequest ticketRequest){
-        Ticket ticket = new Ticket(ticketRequest);
+        Auction auction = auctionRepository.findById(ticketRequest.getAuctionId()).orElseThrow(()
+                -> new OhapjijoleException(ErrorCode._NOT_FOUND_AUCTION));
+        Ticket ticket = new Ticket(ticketRequest,auction);
         ticket.setTicketStatus(TicketStatus.PROGRESS);
         return ticket;
     }
