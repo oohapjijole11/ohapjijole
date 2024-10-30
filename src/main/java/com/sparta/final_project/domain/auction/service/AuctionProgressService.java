@@ -28,6 +28,7 @@ public class AuctionProgressService {
 
 //    경매 남은시간
     public SseEmitter startAuctionCountdown(AuthUser authUser, Long auctionId) {
+//        1시간 제한
         this.sseEmitter = new SseEmitter(60 * 60 * 1000L);
         userRepository.findById(authUser.getId()).orElseThrow(() -> new OhapjijoleException(ErrorCode._USER_NOT_FOUND));
         Auction auction = auctionRepository.findByIdAndStatus(auctionId, Status.BID);
@@ -69,6 +70,7 @@ public class AuctionProgressService {
 
 //    경매 시작
     public SseEmitter monitorAuctionStart(AuthUser authUser, Long auctionId) {
+//        1시간 제한
         this.sseEmitter = new SseEmitter(60 * 60 * 1000L);
         userRepository.findById(authUser.getId()).orElseThrow(() -> new OhapjijoleException(ErrorCode._USER_NOT_FOUND));
         Auction auction = auctionRepository.findById(auctionId)

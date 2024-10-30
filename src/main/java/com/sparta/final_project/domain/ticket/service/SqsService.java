@@ -17,19 +17,19 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class SqsService {
-
     private final AmazonSQSAsync sqsClient;
 
     @Value("${cloud.aws.sqs.queue-url}")
     private String queueUrl;
 
-
     public void sendMessage(BuyTicketsRequest buyTicketsRequest) {
+        // 메시지 본문 생성
         String messageBody = String.format("{\"ticketId\": %d, \"userId\": %d, \"ticketNumber\": %d}",
                 buyTicketsRequest.getTicketId(),
                 buyTicketsRequest.getUserId(),
                 buyTicketsRequest.getTicketNumber());
 
+        // SQS 메시지 전송
         SendMessageRequest sendMessageRequest = new SendMessageRequest(queueUrl, messageBody);
         sqsClient.sendMessage(sendMessageRequest);
     }
