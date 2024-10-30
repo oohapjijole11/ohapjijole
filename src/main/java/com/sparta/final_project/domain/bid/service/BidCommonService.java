@@ -87,4 +87,19 @@ public class BidCommonService {
         }
 
     }
+
+    @Async
+    public void startNotification(Long auctionId) {
+        String eventId = makeTimeIncludeId(auctionId);
+        // 해당 경매장의 모든 SseEmitter 가져옴
+        Map<String, SseEmitter> emitters = emitterRepository
+                .findAllEmitterStartWithByAuctionId(String.valueOf(auctionId));
+        //접속해있는 모든 참여자들에게 시작을 알림
+        emitters.forEach(
+                (key, emitter) -> {
+                    // 데이터 전송
+                    sendToClient(emitter,"bid start", key, eventId, "경매를 시작합니다!");
+                }
+        );
+    }
 }
