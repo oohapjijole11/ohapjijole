@@ -59,6 +59,7 @@ public enum ErrorCode {
     _BID_STATUS_BEFORE(HttpStatus.BAD_REQUEST, "아직 시작하지 않은 경매입니다."),
     _BID_NOT_GOING(HttpStatus.BAD_REQUEST, "경매가 진행되고 있지 않습니다."),
     _SSE_NOT_CONNECT(HttpStatus.INTERNAL_SERVER_ERROR, "경매장과 연결되지 않습니다."),
+    _NOT_HAVE_TICKET(HttpStatus.BAD_REQUEST,"경매 티켓을 가지고 있지 않습니다."),
 
     //sbid
 
