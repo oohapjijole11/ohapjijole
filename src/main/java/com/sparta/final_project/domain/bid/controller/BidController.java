@@ -32,6 +32,7 @@ public class BidController {
     }
 
 
+    //입찰
     @PostMapping("/auction/{auctionId}")
     public ResponseEntity<BidResponse> createBid (@AuthenticationPrincipal AuthUser authUser,
                                                   @PathVariable Long auctionId,
@@ -39,6 +40,7 @@ public class BidController {
         return ResponseEntity.ok(bidService.createBid(authUser.getId(), auctionId,request));
     }
 
+    //입찰 목록 조회
     @GetMapping("/bids/auction/{auctionId}")
     public ResponseEntity<List<BidSimpleResponse>> BidList (@PathVariable Long auctionId) {
         return ResponseEntity.ok(bidService.getBids(auctionId));

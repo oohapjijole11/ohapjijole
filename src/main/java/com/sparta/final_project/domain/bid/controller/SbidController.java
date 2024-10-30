@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.*;
 public class SbidController {
     private final com.sparta.final_project.domain.bid.service.SbidService sbidService;
 
+    //낙찰
     @PostMapping("/success/{auctionId}")
     public SbidResponse createSbid(@PathVariable Long auctionId) {
         return sbidService.createSbid(auctionId);
     }
 
+    //내가 낙찰한 경매 목록
     @GetMapping("/purchase")
     public Page<SbidSimpleResponse> getSbid(@AuthenticationPrincipal AuthUser authUser,
                                             @RequestParam(defaultValue = "1", required = false) int page,
