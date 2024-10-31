@@ -12,6 +12,7 @@ import com.sparta.final_project.domain.bid.repository.BidRepository;
 import com.sparta.final_project.domain.bid.repository.EmitterRepository;
 import com.sparta.final_project.domain.common.exception.ErrorCode;
 import com.sparta.final_project.domain.common.exception.OhapjijoleException;
+import com.sparta.final_project.domain.ticket.entity.BuyTickets;
 import com.sparta.final_project.domain.user.entity.User;
 import com.sparta.final_project.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +21,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -41,14 +45,18 @@ public class BidService {
     //경매장 입장
     @Transactional
     public SseEmitter subscribe(AuthUser authUser, Long auctionId, String lastEventId) {
-        //todo 유저가 해당 경매장의 티켓 있는지 확인
         //todo 경매가 입찰 없이 끝나면 유찰로 넘어가게 변경 필요
         User user = userRepository.findById(authUser.getId()).orElseThrow(()-> new OhapjijoleException(ErrorCode._USER_NOT_FOUND));
         //옥션 있는지 확인
         Auction auction = auctionRepository.findById(auctionId).orElseThrow(()-> new OhapjijoleException(ErrorCode._NOT_FOUND_AUCTION));
 
-        //경매장이 경매중인지 확인하기
-        if(auction.getStatus()!= Status.BID) throw new OhapjijoleException(ErrorCode._BID_NOT_GOING);
+        //유저가 해당 경매장의 티켓 있는지 확인
+        checkTicket(auctionId, user);
+
+        //경매 시작전 20분 부터 입장 가능
+        if(auction.getStatus()==Status.WAITING && ChronoUnit.MINUTES.between(auction.getStartTime(), LocalDateTime.now()) > 20) throw new OhapjijoleException(ErrorCode._BID_STATUS_BEFORE);
+        //경매가 끝났다면 끝났다고 오류날림
+        if(auction.getStatus()== Status.SUCCESSBID || auction.getStatus()== Status.FAILBID) throw new OhapjijoleException(ErrorCode._BID_STATUS_END);
 
         //sseemitter id 만들기
         String emitterId = commonService.makeTimeIncludeId(auctionId);
@@ -64,6 +72,11 @@ public class BidService {
         commonService.sendToClient(emitter, "sse", emitterId, eventId,
                 "연결되었습니다. EventStream Created. [auctionId=" + auctionId + "]");
 
+        //경매 시작 전이면 몇시에 시작한다고 날림
+        if(auction.getStatus()==Status.WAITING) {
+            eventId = commonService.makeTimeIncludeId(auctionId);
+            commonService.sendToClient(emitter, "not start", emitterId, eventId, auction.getStartTime()+" 에 경매가 시작됩니다");
+        }
         //해당 경매장의 처음 시작 금액 알림
         eventId = commonService.makeTimeIncludeId(auctionId);
         commonService.sendToClient(emitter, "start price", emitterId, eventId,
@@ -90,13 +103,21 @@ public class BidService {
         return emitter;
     }
 
+    private static void checkTicket(Long auctionId, User user) {
+        Optional<BuyTickets> ticket = user.getTickets().stream()
+                .filter(t-> t.getTicket().getAuction().getId().equals(auctionId))
+                .findFirst();
+        if (ticket.isEmpty()) throw new OhapjijoleException(ErrorCode._NOT_HAVE_TICKET);
+    }
+
     //입찰
     @Transactional
     public BidResponse createBid(Long userId, Long auctionId, BidRequest request) {
         //user와 경매장이 있는지 확인하기
         User user = userRepository.findById(userId).orElseThrow(()-> new OhapjijoleException(ErrorCode._USER_NOT_FOUND));
         Auction auction = auctionRepository.findById(auctionId).orElseThrow(() -> new OhapjijoleException(ErrorCode._NOT_FOUND_AUCTION));
-        //todo 유저가 해당 경매장의 티켓 있는지 확인
+        //유저가 해당 경매장의 티켓 있는지 확인
+        checkTicket(auctionId, user);
         //경매장이 경매중인지 확인하기
         if(auction.getStatus()!= Status.BID) throw new OhapjijoleException(ErrorCode._BID_NOT_GOING);
         //입찰 금액 조건을 최저가 이상 또는 최고 입찰가 초과로 지정

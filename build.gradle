@@ -63,8 +63,8 @@ dependencies {
 
     // redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-    implementation 'org.redisson:redisson-spring-boot-starter:3.37.0'   //redison
-    testImplementation 'it.ozimov:embedded-redis:0.7.2'    //redison
+//    implementation 'org.redisson:redisson-spring-boot-starter:3.37.0'   //redison
+//    testImplementation 'it.ozimov:embedded-redis:0.7.2'    //redison
     testImplementation 'com.github.kstyrc:embedded-redis:0.6'
 
     implementation 'org.springframework.boot:spring-boot-starter-aop'
@@ -79,10 +79,10 @@ dependencies {
     implementation 'com.slack.api:slack-api-client:1.39.2'
 
     //test 관련 의존성
-//    testImplementation 'org.testcontainers:testcontainers:1.17.6'
-//    testImplementation 'org.testcontainers:junit-jupiter:1.17.6'
-//    testImplementation 'org.testcontainers:mysql:1.17.6'
-//    testImplementation 'org.testcontainers:redis:1.17.6'
+    testImplementation 'org.testcontainers:testcontainers:1.17.6'
+    testImplementation 'org.testcontainers:junit-jupiter:1.17.6'
+    testImplementation 'org.testcontainers:mysql:1.17.6'
+    testImplementation 'org.testcontainers:redis:1.17.6'
 
 }
 
