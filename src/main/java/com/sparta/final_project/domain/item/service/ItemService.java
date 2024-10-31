@@ -29,6 +29,7 @@ public class ItemService {
     public ItemCreateResponse createItem(ItemCreateRequest request, AuthUser authUser) {
         User user = userRepository.findById(authUser.getId())
                 .orElseThrow(() -> new OhapjijoleException(ErrorCode._USER_NOT_FOUND));
+
         Item item = new Item(request.getName(), request.getDescription(), request.getImageUrls(), user);
         Item savedItem = itemRepository.save(item);
 
@@ -44,7 +45,7 @@ public class ItemService {
     @Cacheable(value = "items", key = "#id")
     public ItemSimpleResponse getItem(Long id) {
         Item item = itemRepository.findById(id)
-                .orElseThrow(() -> new OhapjijoleException(ErrorCode._ATTACHMENT_NOT_FOUND));
+                .orElseThrow(() -> new OhapjijoleException(ErrorCode._NOT_FOUND_ITEM));
         return new ItemSimpleResponse(
                 item.getId(),
                 item.getName(),
@@ -59,24 +60,26 @@ public class ItemService {
     @CacheEvict(value = "items", key = "#id")
     public ItemUpdateResponse updateItem(Long id, ItemUpdateRequest request) {
         Item item = itemRepository.findById(id)
-                .orElseThrow(() -> new OhapjijoleException(ErrorCode._ATTACHMENT_NOT_FOUND));
+                .orElseThrow(() -> new OhapjijoleException(ErrorCode._NOT_FOUND_ITEM));
         item.update(request.getName(), request.getDescription(), request.getImageUrls());
+        item = itemRepository.save(item);
 
         return new ItemUpdateResponse(
                 item.getId(),
                 item.getName(),
                 item.getDescription(),
                 item.getImageUrls(),
-                item.getId()
+                item.getUser().getId()
         );
     }
+
 
     // 상품 삭제
     @Transactional
     @CacheEvict(value = "items", key = "#id")
     public void deleteItem(Long id) {
         if (!itemRepository.existsById(id)) {
-            throw new OhapjijoleException(ErrorCode._ATTACHMENT_NOT_FOUND);
+            throw new OhapjijoleException(ErrorCode._NOT_FOUND_ITEM);
         }
         itemRepository.deleteById(id);
     }
