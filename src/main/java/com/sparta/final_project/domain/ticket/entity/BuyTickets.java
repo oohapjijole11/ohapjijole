@@ -27,13 +27,10 @@ public class BuyTickets {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column
-    private Long ticketnumber;
 
 
-    public BuyTickets(BuyTicketsRequest buyTicketsRequest, Ticket ticket, User user) {
+    public BuyTickets(Ticket ticket, User user) {
         this.ticket = ticket;
         this.user = user;
-        this.ticketnumber = buyTicketsRequest.getTicketNumber();
     }
 }

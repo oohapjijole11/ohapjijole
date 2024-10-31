@@ -2,7 +2,6 @@ package com.sparta.final_project.domain.ticket.controller;
 
 import com.sparta.final_project.domain.ticket.dto.request.BuyTicketsRequest;
 import com.sparta.final_project.domain.ticket.dto.response.BuyTicketsResponse;
-import com.sparta.final_project.domain.ticket.service.SqsService;
 import com.sparta.final_project.domain.ticket.service.TicketBuyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,18 +18,17 @@ import java.util.List;
 @RequestMapping("/auction/buyticket")
 public class BuyTicketsController {
     private final TicketBuyService ticketBuyService;
-    private final SqsService sqsService;
     // 티켓 구매 요청
     @PostMapping
     public ResponseEntity<String> buyTicket(@RequestBody BuyTicketsRequest buyTicketsRequest) {
-        // SQS로 메시지 전송
-        sqsService.sendMessage(buyTicketsRequest);
-        return ResponseEntity.ok("티켓 구매 요청이 SQS에 전송되었습니다."); // 응답 메시지
+        String responseMessage = ticketBuyService.buyTicket(buyTicketsRequest);
+        // 응답으로 메시지를 반환
+        return ResponseEntity.ok(responseMessage);
     }
 
     //티켓 다건조회
     @GetMapping("/buyticketList")
-    public ResponseEntity<List<BuyTicketsResponse>> getbuyTicketList() {
+    public ResponseEntity<List<BuyTicketsResponse>> getTicketList() {
         return ResponseEntity.ok().body(ticketBuyService.getbuyticketList());
     }
 }
