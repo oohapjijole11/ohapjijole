@@ -7,10 +7,8 @@ import lombok.Data;
 @Data
 public class BuyTicketsResponse {
     Long buyTicketsId;
-    Long TicketNumber;
 
     public BuyTicketsResponse(BuyTickets buyTickets) {
         this.buyTicketsId = buyTickets.getId();
-        this.TicketNumber = buyTickets.getTicketnumber();
     }
 }

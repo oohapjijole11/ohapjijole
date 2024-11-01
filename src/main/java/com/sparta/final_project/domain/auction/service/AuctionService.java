@@ -4,18 +4,15 @@ import com.sparta.final_project.config.security.AuthUser;
 import com.sparta.final_project.domain.auction.dto.request.AuctionRequest;
 import com.sparta.final_project.domain.auction.dto.response.AuctionResponse;
 import com.sparta.final_project.domain.auction.entity.Auction;
-import com.sparta.final_project.domain.auction.entity.AuctionRedis;
 import com.sparta.final_project.domain.auction.entity.Grade;
 import com.sparta.final_project.domain.auction.entity.Status;
 import com.sparta.final_project.domain.auction.repository.AuctionRepository;
 import com.sparta.final_project.domain.common.exception.ErrorCode;
 import com.sparta.final_project.domain.common.exception.OhapjijoleException;
-import com.sparta.final_project.domain.item.entity.Item;
 import com.sparta.final_project.domain.item.repository.ItemRepository;
 import com.sparta.final_project.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

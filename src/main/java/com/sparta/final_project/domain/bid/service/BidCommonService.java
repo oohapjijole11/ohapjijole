@@ -3,6 +3,7 @@ package com.sparta.final_project.domain.bid.service;
 import com.sparta.final_project.domain.auction.entity.Status;
 import com.sparta.final_project.domain.bid.entity.Bid;
 import com.sparta.final_project.domain.bid.repository.EmitterRepository;
+import com.sparta.final_project.domain.bid.repository.RedisRepository;
 import com.sparta.final_project.domain.common.exception.ErrorCode;
 import com.sparta.final_project.domain.common.exception.OhapjijoleException;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import java.util.Map;
 public class BidCommonService {
 
     private final EmitterRepository emitterRepository;
+    private final RedisRepository redisRepository;
 
     private static final long RECONNECTION_TIMEOUT = 1000L;
 
@@ -51,7 +53,7 @@ public class BidCommonService {
         Map<String, SseEmitter> emitters = emitterRepository
                 .findAllEmitterStartWithByAuctionId(String.valueOf(bid.getAuction().getId()));
         // 데이터 캐시 저장 (유실된 데이터 처리 위함)
-        emitterRepository.saveEventCache(eventId, bid.getPrice());
+        redisRepository.setbid(eventId, bid.getPrice());
 
         //해당 경매장의 모든 사용자들에게 데이터 전송
         //입찰일때
@@ -82,6 +84,10 @@ public class BidCommonService {
                     (key, emitter) -> {
                         // 데이터 전송
                         sendToClient(emitter, "BID FAIL", key, eventId, "다음 경매를 기다려주세요.");
+                        //연결 끊기
+                        emitter.complete();
+                        //관리 콜렉션에서 지움
+                        emitterRepository.deleteById(key);
                     }
             );
         }

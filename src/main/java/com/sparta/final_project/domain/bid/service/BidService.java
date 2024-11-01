@@ -10,6 +10,7 @@ import com.sparta.final_project.domain.bid.dto.response.BidSimpleResponse;
 import com.sparta.final_project.domain.bid.entity.Bid;
 import com.sparta.final_project.domain.bid.repository.BidRepository;
 import com.sparta.final_project.domain.bid.repository.EmitterRepository;
+import com.sparta.final_project.domain.bid.repository.RedisRepository;
 import com.sparta.final_project.domain.common.exception.ErrorCode;
 import com.sparta.final_project.domain.common.exception.OhapjijoleException;
 import com.sparta.final_project.domain.ticket.entity.BuyTickets;
@@ -38,6 +39,7 @@ public class BidService {
     private final UserRepository userRepository;
     private final AuctionRepository auctionRepository;
     private final BidCommonService commonService;
+    private final RedisRepository redisRepository;
 
     private static final Long DEFAULT_TIMEOUT = 60L * 1000 * 30;   //한번 들어가면 30분동안 sse로 연결됨
 
@@ -83,8 +85,7 @@ public class BidService {
                 "최저가 : "+auction.getStartPrice() + " 원");
 
         //해당 경매의 지난 알림들 가져오기
-        Map<String, Object> events = emitterRepository.findAllEventCacheStartWithAuctionId(
-                String.valueOf(auctionId));
+        Map<String, Object> events = redisRepository.findAllEventWithAuctionId(String.valueOf(auctionId));
         //만약 중간에 연결이 끝났었다면 그 이후의 알림을 보냄
         if (!lastEventId.isEmpty()) {
             events.entrySet().stream()

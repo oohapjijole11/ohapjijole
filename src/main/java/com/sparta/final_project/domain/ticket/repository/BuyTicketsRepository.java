@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.Lock;
 import java.util.Optional;
 
 public interface BuyTicketsRepository extends JpaRepository<BuyTickets, Long> {
-
+    long countByTicketId(Long ticketId);
 }
