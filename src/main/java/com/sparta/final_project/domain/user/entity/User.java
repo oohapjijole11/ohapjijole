@@ -53,6 +53,9 @@ public class User {
     // 회원탈퇴 유무
     private Boolean isdeleted = false;
 
+    @Column(name="user_slack_url", nullable = false, length = 100)
+    private String slackUrl;
+
     public User(String email, String password, String name, UserRole role) {
         this.email = email;
         this.password = password;
