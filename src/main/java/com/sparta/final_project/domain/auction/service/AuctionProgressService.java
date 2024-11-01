@@ -4,12 +4,10 @@ import com.sparta.final_project.config.security.AuthUser;
 import com.sparta.final_project.domain.auction.entity.Auction;
 import com.sparta.final_project.domain.auction.entity.Status;
 import com.sparta.final_project.domain.auction.repository.AuctionRepository;
-import com.sparta.final_project.domain.bid.service.BidCommonService;
 import com.sparta.final_project.domain.common.exception.ErrorCode;
 import com.sparta.final_project.domain.common.exception.OhapjijoleException;
 import com.sparta.final_project.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -21,18 +19,15 @@ import java.util.concurrent.Executors;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class AuctionProgressService {
 
     private final AuctionRepository auctionRepository;
     private final UserRepository userRepository;
     private SseEmitter sseEmitter;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
-    private final BidCommonService commonService;
 
 //    경매 남은시간
     public SseEmitter startAuctionCountdown(AuthUser authUser, Long auctionId) {
-//        1시간 제한
         this.sseEmitter = new SseEmitter(60 * 60 * 1000L);
         userRepository.findById(authUser.getId()).orElseThrow(() -> new OhapjijoleException(ErrorCode._USER_NOT_FOUND));
         Auction auction = auctionRepository.findByIdAndStatus(auctionId, Status.BID);
@@ -74,9 +69,7 @@ public class AuctionProgressService {
 
 //    경매 시작
     public SseEmitter monitorAuctionStart(AuthUser authUser, Long auctionId) {
-//        1시간 제한
-//        this.sseEmitter = new SseEmitter(60 * 60 * 1000L);
-        log.info("auction start : auctionId : "+auctionId);
+        this.sseEmitter = new SseEmitter(60 * 60 * 1000L);
         userRepository.findById(authUser.getId()).orElseThrow(() -> new OhapjijoleException(ErrorCode._USER_NOT_FOUND));
         Auction auction = auctionRepository.findById(auctionId)
                 .orElseThrow(() -> new OhapjijoleException(ErrorCode._NOT_FOUND_AUCTION));
@@ -88,16 +81,14 @@ public class AuctionProgressService {
                     if (now.isAfter(auction.getStartTime()) || now.isEqual(auction.getStartTime())) {
                         auction.setStatus(Status.BID);
                         auctionRepository.save(auction);
-                        //접속해 있는 모든 사용자들에게 시작되었음을 알림
-                        commonService.startNotification(auctionId);
-//                        sseEmitter.send("경매 시작!");  //접속한 사람들에게 날림
-//                        sseEmitter.complete();
+
+                        sseEmitter.send("경매 시작!");
+                        sseEmitter.complete();
                         break;
                     }
                     Thread.sleep(1000);
                 }
-//            } catch (IOException | InterruptedException e) {
-            } catch (InterruptedException e) {
+            } catch (IOException | InterruptedException e) {
                 sseEmitter.completeWithError(e);
             }
         });
