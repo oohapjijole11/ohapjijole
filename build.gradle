@@ -36,7 +36,8 @@ dependencies {
     implementation 'com.amazonaws:aws-lambda-java-events:3.11.0'
 
 // Jackson 라이브러리 추가 (JSON 직렬화/역직렬화에 필요)
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.5.6' // 버전은 필요에 맞게 수정
+
 
     // Security
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
@@ -63,9 +64,11 @@ dependencies {
 
     // redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-//    implementation 'org.redisson:redisson-spring-boot-starter:3.37.0'   //redison
+    implementation 'org.redisson:redisson-spring-boot-starter:3.37.0'   //redison
 //    testImplementation 'it.ozimov:embedded-redis:0.7.2'    //redison
     testImplementation 'com.github.kstyrc:embedded-redis:0.6'
+
+
 
     implementation 'org.springframework.boot:spring-boot-starter-aop'
 
