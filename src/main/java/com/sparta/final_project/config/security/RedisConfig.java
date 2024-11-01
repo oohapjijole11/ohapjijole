@@ -14,19 +14,20 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
 public class RedisConfig {
-
+    // Redis 서버의 호스트 주소 주입
     @Value("${spring.data.redis.host}")
     private String redisHost;
-
+    // Redis 서버의 포트 주입
     @Value("${spring.data.redis.port}")
     private int redisPort;
-
+    // Redis 서버와의 연결을 위한 RedisConnectionFactory 빈 생성
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
         RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration(redisHost, redisPort);
         return new LettuceConnectionFactory(configuration);
     }
 
+    // RedisTemplate 빈 생성으로 Redis와 데이터 상호작용 지원
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
