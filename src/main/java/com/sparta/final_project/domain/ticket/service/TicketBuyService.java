@@ -50,7 +50,7 @@ public class TicketBuyService {
         RLock lock = redissonClient.getLock(lockKey);
 
         try {
-            if (lock.tryLock(3, 5, TimeUnit.SECONDS)) {
+            if (lock.tryLock(3, 5, TimeUnit.SECONDS)) { // 락을 3초 동안 기다리고, 락을 5초 동안 유지
                 try {
                     Ticket ticket = ticketRepository.findById(buyTicketsRequest.getTicketId())
                             .orElseThrow(() -> new OhapjijoleException(ErrorCode._NOT_FIND_TICKET));
