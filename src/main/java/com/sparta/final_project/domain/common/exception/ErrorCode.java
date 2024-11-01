@@ -71,7 +71,8 @@ public enum ErrorCode {
     FILE_DELETE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "파일 삭제 에러입니다."),
 
     // ### 아래 코드 위에 ErrorCode 작성해 주세요! ErrorCode 메서드 사이는 ,(컴마)로 구분해 주세요! ###
-    _NOT_FOUND(HttpStatus.NOT_FOUND, "찾지못했습니다.");
+    _NOT_FOUND(HttpStatus.NOT_FOUND, "찾지못했습니다."), 
+    _REDIS_ERROR(HttpStatus.NOT_FOUND,"저장된 데이터를 찾을수 없습니다" );
 
 
 
