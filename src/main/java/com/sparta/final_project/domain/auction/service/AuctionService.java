@@ -69,8 +69,6 @@ public class AuctionService {
     }
 
 
-
-
 //    경매 생성 및 등급 측정
     public Auction gradeMeasurement(AuctionRequest auctionRequest){
         Auction auction = new Auction(auctionRequest);
