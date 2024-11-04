@@ -18,10 +18,4 @@ public class AuctionProgressController {
                                    @RequestHeader(value = "Last-Event-ID", required = false, defaultValue = "") String lastEventId) {
         return auctionProgressService.startAuctionCountdown(auctionId,lastEventId);
     }
-
-//    경매 시작
-    @GetMapping(value = "/start")
-    public String getAuction() {
-        return auctionProgressService.monitorAuctionStart();
-    }
 }

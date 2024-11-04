@@ -11,6 +11,7 @@ import com.sparta.final_project.domain.bid.service.SbidService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -72,19 +73,22 @@ public class AuctionProgressService {
     }
 
     //    //    경매 시작
-    public String monitorAuctionStart() {
+    @Scheduled(cron = "0 * * * * *")
+    public void monitorAuctionStart() {
         List<Auction> auctions = auctionRepository.findAllByStatus(Status.WAITING);
         LocalDateTime now = LocalDateTime.now();
-        for(Auction auction : auctions) {
+        boolean updated = false;
+        for (Auction auction : auctions) {
             if (now.isEqual(auction.getStartTime()) || now.isAfter(auction.getStartTime())) {
                 auction.setStatus(Status.BID);
-                auctionRepository.save(auction);
-                return auction.getId() + "의 경매가 시작되었습니다";
+                commonService.startNotification(auction.getId());
+                updated = true;
             }
         }
-        return "시작 될 경매가 존재하지 않습니다";
+        if (updated) {
+            auctionRepository.saveAll(auctions);
+        }
     }
-
 
 
     private boolean hasLostData(String lastEventId) {
