@@ -20,8 +20,8 @@ public class AuctionProgressController {
     }
 
 //    경매 시작
-    @GetMapping(value = "/auctionStart", produces = "text/event-stream")
-    public SseEmitter getAuction(@RequestHeader(value = "Last-Event-ID", required = false, defaultValue = "") String lastEventId) {
+    @GetMapping(value = "/start")
+    public String getAuction() {
         return auctionProgressService.monitorAuctionStart();
     }
 }

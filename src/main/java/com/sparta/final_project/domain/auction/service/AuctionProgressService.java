@@ -1,6 +1,7 @@
 package com.sparta.final_project.domain.auction.service;
 
 import com.sparta.final_project.domain.auction.entity.Auction;
+import com.sparta.final_project.domain.auction.entity.AuctionRedis;
 import com.sparta.final_project.domain.auction.entity.Status;
 import com.sparta.final_project.domain.auction.repository.AuctionRepository;
 import com.sparta.final_project.domain.bid.repository.EmitterRepository;
@@ -33,7 +34,6 @@ public class AuctionProgressService {
     private final BidService bidService;
     private final BidCommonService commonService;
     private final EmitterRepository emitterRepository;
-    private final RedisTemplate<String, Object> redisTemplate;
     private static final Long DEFAULT_TIMEOUT = 60L * 1000 * 30;
     private static final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(100);
 
@@ -72,16 +72,17 @@ public class AuctionProgressService {
     }
 
     //    //    경매 시작
-    public SseEmitter monitorAuctionStart() {
+    public String monitorAuctionStart() {
         List<Auction> auctions = auctionRepository.findAllByStatus(Status.WAITING);
         LocalDateTime now = LocalDateTime.now();
         for(Auction auction : auctions) {
             if (now.isEqual(auction.getStartTime()) || now.isAfter(auction.getStartTime())) {
                 auction.setStatus(Status.BID);
                 auctionRepository.save(auction);
+                return auction.getId() + "의 경매가 시작되었습니다";
             }
         }
-        return null;
+        return "시작 될 경매가 존재하지 않습니다";
     }
 
 
