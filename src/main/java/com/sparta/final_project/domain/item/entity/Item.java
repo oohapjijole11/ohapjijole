@@ -20,7 +20,7 @@ public class Item implements Serializable {
 
     private String name;
     private String description;
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "item_images", joinColumns = @JoinColumn(name = "item_id"))
     private List<String> imageUrls;
 
