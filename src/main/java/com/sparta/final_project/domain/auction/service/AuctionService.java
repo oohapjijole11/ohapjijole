@@ -4,11 +4,13 @@ import com.sparta.final_project.config.security.AuthUser;
 import com.sparta.final_project.domain.auction.dto.request.AuctionRequest;
 import com.sparta.final_project.domain.auction.dto.response.AuctionResponse;
 import com.sparta.final_project.domain.auction.entity.Auction;
+import com.sparta.final_project.domain.auction.entity.AuctionRedis;
 import com.sparta.final_project.domain.auction.entity.Grade;
 import com.sparta.final_project.domain.auction.entity.Status;
 import com.sparta.final_project.domain.auction.repository.AuctionRepository;
 import com.sparta.final_project.domain.common.exception.ErrorCode;
 import com.sparta.final_project.domain.common.exception.OhapjijoleException;
+import com.sparta.final_project.domain.item.entity.Item;
 import com.sparta.final_project.domain.item.repository.ItemRepository;
 import com.sparta.final_project.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +27,6 @@ public class AuctionService{
     private final AuctionRepository auctionRepository;
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
-    private final RedisTemplate<String, Object> redisTemplate;
 
     //    생성
     public AuctionResponse createAuction(AuthUser authUser, Long itemId, AuctionRequest auctionRequest) {
@@ -36,10 +37,6 @@ public class AuctionService{
         auction.setItem(item);
         auctionRepository.save(auction);
 //        Redis 저장
-        redisTemplate.opsForHash().put("AuctionRedis", auction.getId(), new AuctionRedis(auction));
-        if(redisTemplate.opsForHash().get("AuctionRedis", auction.getId()) == null){
-            throw new OhapjijoleException(ErrorCode._REDIS_ERROR);
-        }
         return new AuctionResponse(auction);
     }
 
@@ -47,14 +44,6 @@ public class AuctionService{
     public AuctionResponse getAuction(AuthUser authUser, Long auctionId) {
         userRepository.findById(authUser.getId()).orElseThrow(() -> new OhapjijoleException(ErrorCode._USER_NOT_FOUND));
         Auction auction = auctionRepository.findById(auctionId).orElseThrow(() -> new OhapjijoleException(ErrorCode._NOT_FOUND_AUCTION));
-        AuctionRedis auctionRedis = (AuctionRedis) redisTemplate.opsForHash().get("AuctionRedis", auctionId);
-        if (auctionRedis != null) {
-            System.out.println("Retrieved Auction: ID = " + auctionRedis.getId() +
-                    ", Status = " + auctionRedis.getStatus() +
-                    ", Start Time = " + auctionRedis.getStartTimeAsLocalDateTime());
-        } else {
-            System.out.println("AuctionRedis not found in Redis.");
-        }
         return new AuctionResponse(auction);
     }
 
