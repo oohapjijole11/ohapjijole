@@ -39,7 +39,10 @@ public class BidCommonService {
                     .id(eventId)
                     .data(data)
                     .reconnectTime(RECONNECTION_TIMEOUT));
-            log.info(eventId+"_"+data);
+            log.info(eventId + "_" + data);
+        }catch(IllegalStateException e) {   //서버가 일부로 중지시켰을때 나타났음
+            emitterRepository.deleteById(emitterId);
+            throw new OhapjijoleException(ErrorCode._SSE_NOT_CONNECT);
         } catch (IOException exception) {
             emitterRepository.deleteById(emitterId);
             throw new OhapjijoleException(ErrorCode._SSE_NOT_CONNECT);

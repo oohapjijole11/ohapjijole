@@ -52,7 +52,7 @@ public class SbidService {
         if(auction.getStatus()==Status.WAITING) throw new OhapjijoleException(ErrorCode._BID_STATUS_BEFORE);
         //경매 상태를 낙찰로 변경
         auction.bidSuccess(Status.SUCCESSBID, LocalDateTime.now());
-        //마지막 입찰 정보 가ㅕ오기
+        //마지막 입찰 정보 가져오기
         Bid lastBid = bidRepository.findAllByAuctionOrderByCreatedAtDesc(auction).get(0);
         //낙찰금액 가져오기
         int maxPrice = lastBid.getPrice();
