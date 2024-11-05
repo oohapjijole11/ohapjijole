@@ -23,6 +23,9 @@ public class Auction extends Timestamped {
     private Long id;
 
     @Column(nullable = false)
+    private String title;
+
+    @Column(nullable = false)
     private int startPrice;
 
     @Column(nullable = false)
@@ -45,6 +48,7 @@ public class Auction extends Timestamped {
 
 
     public Auction(AuctionRequest auctionRequest) {
+        this.title = auctionRequest.getTitle();
         this.startPrice = auctionRequest.getStartPrice();
         this.startTime = auctionRequest.getStartTime();
         this.endTime = auctionRequest.getEndTime();
