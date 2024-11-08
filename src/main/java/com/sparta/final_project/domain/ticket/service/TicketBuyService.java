@@ -36,6 +36,7 @@ public class TicketBuyService {
     private final AmazonSQSAsync amazonSQSAsync;
     private final RedissonClient redissonClient;
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private final SqsService sqsService;
 
     @Value("${cloud.aws.sqs.queue-url}")
     private String queueUrl;
@@ -60,7 +61,7 @@ public class TicketBuyService {
                     }
 
                     // 즉시 구매 로직 제거, 무조건 SQS 대기열에 추가
-                    sendToQueue(buyTicketsRequest);
+                    sqsService.sendMessage(buyTicketsRequest);
                     return "티켓 구매 요청이 대기 중입니다. 구매 가능 시 자동으로 처리됩니다.";
                 } finally {
                     lock.unlock();
@@ -74,20 +75,8 @@ public class TicketBuyService {
         }
     }
 
-    // SQS 대기열에 메시지 전송
-    private void sendToQueue(BuyTicketsRequest buyTicketsRequest) {
-        try {
-            String messageBody = objectMapper.writeValueAsString(buyTicketsRequest);
-            SendMessageRequest sendMessageRequest = new SendMessageRequest(queueUrl, messageBody);
-            amazonSQSAsync.sendMessage(sendMessageRequest);
-            System.out.println("SQS에 티켓 구매 요청이 대기 중으로 추가되었습니다: " + messageBody);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("대기열에 메시지 전송 중 오류 발생", e);
-        }
-    }
-
     // 대기열에서 메시지를 주기적으로 처리하여 티켓 구매 진행
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 10000)
     public void processQueueMessages() {
         List<Message> messages = amazonSQSAsync.receiveMessage(queueUrl).getMessages();
 
