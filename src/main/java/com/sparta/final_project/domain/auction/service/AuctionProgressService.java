@@ -1,7 +1,6 @@
 package com.sparta.final_project.domain.auction.service;
 
 import com.sparta.final_project.domain.auction.entity.Auction;
-import com.sparta.final_project.domain.auction.entity.AuctionRedis;
 import com.sparta.final_project.domain.auction.entity.Status;
 import com.sparta.final_project.domain.auction.repository.AuctionRepository;
 import com.sparta.final_project.domain.bid.repository.EmitterRepository;
@@ -10,7 +9,6 @@ import com.sparta.final_project.domain.bid.service.BidService;
 import com.sparta.final_project.domain.bid.service.SbidService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -72,23 +70,24 @@ public class AuctionProgressService {
         return sseEmitter;
     }
 
-    //    //    경매 시작
-    @Scheduled(cron = "0 * * * * *")
-    public void monitorAuctionStart() {
-        List<Auction> auctions = auctionRepository.findAllByStatus(Status.WAITING);
-        LocalDateTime now = LocalDateTime.now();
-        boolean updated = false;
-        for (Auction auction : auctions) {
-            if (now.isEqual(auction.getStartTime()) || now.isAfter(auction.getStartTime())) {
-                auction.setStatus(Status.BID);
-                commonService.startNotification(auction.getId());
-                updated = true;
-            }
-        }
-        if (updated) {
-            auctionRepository.saveAll(auctions);
-        }
-    }
+//    lambda 사용 예정
+    //        경매 시작
+//    @Scheduled(cron = "0 * * * * *")
+//    public void monitorAuctionStart() {
+//        List<Auction> auctions = auctionRepository.findAllByStatus(Status.WAITING);
+//        LocalDateTime now = LocalDateTime.now();
+//        boolean updated = false;
+//        for (Auction auction : auctions) {
+//            if (now.isEqual(auction.getStartTime()) || now.isAfter(auction.getStartTime())) {
+//                auction.setStatus(Status.BID);
+//                commonService.startNotification(auction.getId());
+//                updated = true;
+//            }
+//        }
+//        if (updated) {
+//            auctionRepository.saveAll(auctions);
+//        }
+//    }
 
 
     private boolean hasLostData(String lastEventId) {
