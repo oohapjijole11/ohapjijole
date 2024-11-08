@@ -98,7 +98,7 @@ public class AuctionService{
             auction.setGrade(Grade.C);
         } else if (auctionRequest.getStartPrice() <= 15000000) {
             auction.setGrade(Grade.B);
-        } else if (auctionRequest.getStartPrice() <= 20000000) {
+        } else if(auctionRequest.getStartPrice() <= 20000000) {
             auction.setGrade(Grade.A);
         } else if (auctionRequest.getStartPrice() <= 30000000) {
             auction.setGrade(Grade.S);
