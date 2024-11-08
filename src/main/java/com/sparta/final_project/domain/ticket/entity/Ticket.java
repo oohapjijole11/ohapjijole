@@ -54,4 +54,5 @@ public class Ticket {
         this.auction = auction;
     }
 
+
 }

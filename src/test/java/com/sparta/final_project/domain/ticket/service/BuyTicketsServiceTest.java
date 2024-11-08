@@ -68,7 +68,7 @@ public class BuyTicketsServiceTest {
                 User user = new User();
                 userRepository.save(user);
 
-                BuyTicketsRequest request = new BuyTicketsRequest(ticket.getTicketId(), user.getId(), 1L);
+                BuyTicketsRequest request = new BuyTicketsRequest(ticket.getId(), user.getId());
                 try {
                     buyTicketsService.buyTicket(request);
                     successfulPurchases.incrementAndGet(); // 성공 시 카운트 증가
@@ -89,7 +89,7 @@ public class BuyTicketsServiceTest {
         assertThat(successfulPurchases.get()).isEqualTo(INITIAL_TICKET_COUNT.intValue());
 
         // 최종 티켓  수량이 0인지 확인
-        Ticket updatedTicket = ticketRepository.findById(ticket.getTicketId()).orElseThrow();
+        Ticket updatedTicket = ticketRepository.findById(ticket.getId()).orElseThrow();
         assertThat(updatedTicket.getTicketCount()).isEqualTo(0);
 
         // 최종적으로 구매에 성공한 수량과 테스트 소요 시간 출력

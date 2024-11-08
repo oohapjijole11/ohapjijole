@@ -56,11 +56,12 @@ public class User {
     @Column(name="user_slack_url", nullable = false, length = 100)
     private String slackUrl;
 
-    public User(String email, String password, String name, UserRole role) {
+    public User(String email, String password, String name, UserRole role, String slackUrl) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.role = role;
+        this.slackUrl = slackUrl;
     }
 
     // AuthUser로 User만들 때

@@ -22,6 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static com.sparta.final_project.domain.ticket.entity.TicketStatus.PROGRESS;
 import static org.assertj.core.api.Assertions.assertThat;
 
+// 통합 테스트 코드
 @SpringBootTest
 @Execution(ExecutionMode.CONCURRENT)
 @DisplayName("분산 락")
@@ -68,7 +69,7 @@ public class TicketBuyServiceTest {
         for (int i = 0; i < threadCount; i++) {
             executorService.submit(() -> {
                 try {
-                    BuyTicketsRequest request = new BuyTicketsRequest(ticket.getTicketId(), user.getId(), 1L);
+                    BuyTicketsRequest request = new BuyTicketsRequest(ticket.getId(), user.getId());
                     String result = ticketBuyService.buyTicket(request);
 
                     // 성공 여부에 따라 카운터 증가
@@ -94,7 +95,7 @@ public class TicketBuyServiceTest {
         long endTime = System.currentTimeMillis();
         long totalTime = endTime - startTime;
 
-        Ticket updatedTicket = ticketRepository.findById(ticket.getTicketId()).orElseThrow();
+        Ticket updatedTicket = ticketRepository.findById(ticket.getId()).orElseThrow();
 
         // 검증: 성공한 구매 수는 최대 100, 실패한 구매 수는 900이 되어야 함
         assertThat(successCount.get()).isEqualTo(100);
