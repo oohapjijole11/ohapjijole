@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static com.slack.api.webhook.WebhookPayloads.payload;
@@ -63,11 +64,11 @@ public class SbidService {
         Sbid saveSbid = sbidRepository.save(sbid);
         //낙찰 알림 보내고 실시간 연결 끊기
         commonService.sseSend(lastBid, Status.SUCCESSBID);
-        String slackUrl = "https://hooks.slack.com/services/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";
+        String slackUrl = "https://hooks.slack.com/services/T07RW72D35H/B07SK4UGT24/iykaj6AMoofVfYOuRA3YbUBe";
 
 
         //todo 낙찰자에게 slack 알림 보내기
-        sendSlack(slackUrl, sbid);
+        sendSlack(slackUrl, saveSbid);
 
 
         return new SbidResponse(saveSbid);
@@ -85,8 +86,8 @@ public class SbidService {
     public void sendSlack(String slackUrl,Sbid sbid) {
         String title = "낙찰 소식 알림이";
         String message = sbid.getAuction().getItem().getName()+" 상품을 낙찰하셨습니다. 지금 확인해보세요!";
-        String fieldTitle = sbid.getAuction().getItem().getName()+" 낙찰 안내";
-        String fieldContent = "상품 이름 : "+sbid.getAuction().getItem().getName()+"\n 낙찰 일시 : "+sbid.getAuction().getEndTime()+ "\n 낙찰 가격 : "+sbid.getPrice();
+        String fieldTitle = sbid.getAuction().getTitle()+" 경매 낙찰 안내";
+        String fieldContent = "상품 이름 : "+sbid.getAuction().getItem().getName()+"\n 낙찰 일시 : "+sbid.getAuction().getEndTime().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초"))+ "\n 낙찰 가격 : "+sbid.getPrice()+" 원";
         try{
             slackClient.send(slackUrl, payload(p -> p
                     .text(title) // 메시지 제목
