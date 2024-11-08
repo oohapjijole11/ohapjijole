@@ -38,9 +38,6 @@ public class TicketBuyService {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final SqsService sqsService;
 
-    @Value("${cloud.aws.sqs.queue-url}")
-    private String queueUrl;
-
 
 
     // 티켓 구매 요청 처리
