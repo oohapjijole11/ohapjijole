@@ -10,13 +10,13 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
-    // 락 걸지 않았을 때
-    Optional<Ticket> findById(Long ticketId);
+//    // 락 걸지 않았을 때
+//    Optional<Ticket> findById(Long ticketId);
 
     //비관적 락 로직
-//    @Lock(LockModeType.PESSIMISTIC_WRITE)
-//    @Query("SELECT t FROM Ticket t WHERE t.ticketId = :ticketId")
-//    Optional<Ticket> findByIdWithLock(@Param("ticketId") Long ticketId);
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("SELECT t FROM Ticket t WHERE t.id = :ticketId")
+    Optional<Ticket> findByIdWithLock(@Param("ticketId") Long ticketId);
 
 
 }

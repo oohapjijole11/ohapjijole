@@ -59,7 +59,8 @@ public class AuthService {
                 signupRequestDto.getEmail(),
                 encodedPassword,
                 signupRequestDto.getName(),
-                role
+                role,
+                signupRequestDto.getSlackUrl()
         );
 
         // 유저 생성 후 저장
