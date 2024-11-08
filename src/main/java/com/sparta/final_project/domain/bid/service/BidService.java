@@ -22,8 +22,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -56,7 +56,8 @@ public class BidService {
         checkTicket(auctionId, user);
 
         //경매 시작전 20분 부터 입장 가능
-        if(auction.getStatus()==Status.WAITING && ChronoUnit.MINUTES.between(auction.getStartTime(), LocalDateTime.now()) > 20) throw new OhapjijoleException(ErrorCode._BID_STATUS_BEFORE);
+//        if(auction.getStatus()==Status.WAITING && ChronoUnit.MINUTES.between(auction.getStartTime(), LocalDateTime.now()) > 20) throw new OhapjijoleException(ErrorCode._BID_STATUS_BEFORE);
+        if(auction.getStatus()==Status.WAITING && Duration.between(LocalDateTime.now(),auction.getStartTime()).toMinutes()>20) throw new OhapjijoleException(ErrorCode._BID_STATUS_BEFORE);
         //경매가 끝났다면 끝났다고 오류날림
         if(auction.getStatus()== Status.SUCCESSBID || auction.getStatus()== Status.FAILBID) throw new OhapjijoleException(ErrorCode._BID_STATUS_END);
 
