@@ -23,9 +23,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.awt.*;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static com.slack.api.webhook.WebhookPayloads.payload;
@@ -53,7 +53,7 @@ public class SbidService {
         if(auction.getStatus()==Status.WAITING) throw new OhapjijoleException(ErrorCode._BID_STATUS_BEFORE);
         //경매 상태를 낙찰로 변경
         auction.bidSuccess(Status.SUCCESSBID, LocalDateTime.now());
-        //마지막 입찰 정보 가ㅕ오기
+        //마지막 입찰 정보 가져오기
         Bid lastBid = bidRepository.findAllByAuctionOrderByCreatedAtDesc(auction).get(0);
         //낙찰금액 가져오기
         int maxPrice = lastBid.getPrice();
@@ -64,9 +64,12 @@ public class SbidService {
         Sbid saveSbid = sbidRepository.save(sbid);
         //낙찰 알림 보내고 실시간 연결 끊기
         commonService.sseSend(lastBid, Status.SUCCESSBID);
+        String slackUrl = "https://hooks.slack.com/services/T07RW72D35H/B07SK4UGT24/iykaj6AMoofVfYOuRA3YbUBe";
 
 
         //todo 낙찰자에게 slack 알림 보내기
+        sendSlack(slackUrl, saveSbid);
+
 
         return new SbidResponse(saveSbid);
     }
@@ -80,23 +83,29 @@ public class SbidService {
     }
 
     //낙찰때 슬랙 알림
-    public void sendSlack(String slackUrl,Sbid sbid, String fieldContent) throws IOException {
+    public void sendSlack(String slackUrl,Sbid sbid) {
         String title = "낙찰 소식 알림이";
         String message = sbid.getAuction().getItem().getName()+" 상품을 낙찰하셨습니다. 지금 확인해보세요!";
-        String fieldTitle = sbid.getAuction()+"";
-        slackClient.send(slackUrl, payload(p -> p
-                .text(title) // 메시지 제목
-                .iconUrl("https://raw.githubusercontent.com/kang-sumin/queens-trello/refs/heads/feat/search/src/main/resources/static/img/queens-icon.webp")
-                .username("ohapjijole")
-                .attachments(List.of(
-                        Attachment.builder()
-                                .color("#ff0000") // 메시지 색상
-                                .pretext(message)// 메시지 본문 내용
-                                .fields(List.of(
-                                        new Field(fieldTitle, fieldContent, false)
-                                ))
-                                .build())))
-        );
+        String fieldTitle = sbid.getAuction().getTitle()+" 경매 낙찰 안내";
+        String fieldContent = "상품 이름 : "+sbid.getAuction().getItem().getName()+"\n 낙찰 일시 : "+sbid.getAuction().getEndTime().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초"))+ "\n 낙찰 가격 : "+sbid.getPrice()+" 원";
+        try{
+            slackClient.send(slackUrl, payload(p -> p
+                    .text(title) // 메시지 제목
+                    .iconUrl("https://github.com/oohapjijole11/ohapjijole/blob/dev/src/main/resources/static/brandimage.png")
+                    .username("ohapjijole")
+                    .attachments(List.of(
+                            Attachment.builder()
+                                    .color("#ff0000") // 메시지 색상
+                                    .pretext(message)// 메시지 본문 내용
+                                    .fields(List.of(
+                                            new Field(fieldTitle, fieldContent, false)
+                                    ))
+                                    .build())))
+            );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 
