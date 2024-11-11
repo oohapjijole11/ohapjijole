@@ -13,7 +13,5 @@ public class AuctionRequest {
     private Integer startPrice = 0;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-    private Grade grade;
-    private Status status;
 
 }
