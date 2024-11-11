@@ -22,7 +22,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class AuctionService{
+public class AuctionService {
 
     private final AuctionRepository auctionRepository;
     private final UserRepository userRepository;
@@ -32,8 +32,12 @@ public class AuctionService{
     public AuctionResponse createAuction(AuthUser authUser, Long itemId, AuctionRequest auctionRequest) {
         userRepository.findById(authUser.getId()).orElseThrow(() -> new OhapjijoleException(ErrorCode._USER_NOT_FOUND));
         Item item = itemRepository.findById(itemId).orElseThrow(() -> new OhapjijoleException(ErrorCode._NOT_FOUND_ITEM));
+        Auction auction = auctionRepository.findByItemIdAndStatusIn(item.getId(), List.of(Status.WAITING, Status.BID, Status.SUCCESSBID));
+        if (auction != null) {
+            throw new OhapjijoleException(ErrorCode._NOT_FAILED_AUCTION);
+        }
 //        경매 등급 측정, 경매 상태, AuctionEntity 정보 저장 메소드
-        Auction auction = gradeMeasurement(auctionRequest);
+        auction = gradeMeasurement(auctionRequest);
         auction.setItem(item);
         auctionRepository.save(auction);
 //        Redis 저장
@@ -98,7 +102,7 @@ public class AuctionService{
             auction.setGrade(Grade.C);
         } else if (auctionRequest.getStartPrice() <= 15000000) {
             auction.setGrade(Grade.B);
-        } else if(auctionRequest.getStartPrice() <= 20000000) {
+        } else if (auctionRequest.getStartPrice() <= 20000000) {
             auction.setGrade(Grade.A);
         } else if (auctionRequest.getStartPrice() <= 30000000) {
             auction.setGrade(Grade.S);
