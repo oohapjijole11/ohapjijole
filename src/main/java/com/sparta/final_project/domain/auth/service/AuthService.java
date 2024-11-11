@@ -5,6 +5,8 @@ import com.sparta.final_project.domain.auth.dto.request.SigninRequestDto;
 import com.sparta.final_project.domain.auth.dto.request.SignupRequestDto;
 import com.sparta.final_project.domain.common.exception.ErrorCode;
 import com.sparta.final_project.domain.common.exception.OhapjijoleException;
+import com.sparta.final_project.domain.toss.entity.VirtualAccount;
+import com.sparta.final_project.domain.toss.repository.VirtualAccountRepository;
 import com.sparta.final_project.domain.user.entity.User;
 import com.sparta.final_project.domain.user.entity.UserRole;
 import com.sparta.final_project.domain.user.repository.UserRepository;
@@ -13,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Random;
 import java.util.regex.Pattern;
 
 @Service
@@ -22,6 +25,7 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final VirtualAccountRepository virtualAccountRepository;
     private final JwtUtil jwtUtil;
 
     // 이메일 유효성 검사 정규 표현식
@@ -63,6 +67,14 @@ public class AuthService {
                 signupRequestDto.getSlackUrl()
         );
 
+//        회원가입 할때 가상계좌 자동 등록
+        VirtualAccount virtualAccount = new VirtualAccount();
+        virtualAccount.setUser(newUser);
+        virtualAccount.setAccountNumber(generateAccountNumber());
+        virtualAccount.setBalance(0.0); // Initial balance
+        virtualAccountRepository.save(virtualAccount);
+
+        newUser.setVirtualAccount(virtualAccount);
         // 유저 생성 후 저장
         userRepository.save(newUser);
     }
@@ -94,6 +106,18 @@ public class AuthService {
         }
 
         return jwtUtil.createToken(user.getId(), user.getEmail(), user.getName(), user.getRole());
+    }
+
+//    가상계좌 만드는 메소드
+    private String generateAccountNumber() {
+        String prefix = "VA";
+        String randomNumber = String.format("%010d", new Random().nextInt(1_000_000_000));
+        String accountNumber = prefix + randomNumber;
+        while (virtualAccountRepository.existsByAccountNumber(accountNumber)) {
+            randomNumber = String.format("%010d", new Random().nextInt(1_000_000_000));
+            accountNumber = prefix + randomNumber;
+        }
+        return accountNumber;
     }
 
 }
