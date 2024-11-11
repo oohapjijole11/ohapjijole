@@ -1,15 +1,14 @@
 package com.sparta.final_project.domain.user.entity;
 
-import com.sparta.final_project.config.security.AuthUser;
 import com.sparta.final_project.domain.item.entity.Item;
 
 
 import com.sparta.final_project.domain.ticket.entity.BuyTickets;
+import com.sparta.final_project.domain.toss.entity.VirtualAccount;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.security.core.GrantedAuthority;
 
 
 import java.util.List;
@@ -37,18 +36,19 @@ public class User {
     @Column
     private UserRole role;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = false)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Item> items;
 
     @Enumerated(EnumType.STRING)
     @Column
     private UserRating rating;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = false)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<BuyTickets> tickets;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    private Vaccount vaccount;
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "virtual_account_id")
+    private VirtualAccount virtualAccount;
 
     // 회원탈퇴 유무
     private Boolean isdeleted = false;
