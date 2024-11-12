@@ -64,10 +64,11 @@ public class SbidService {
         Sbid saveSbid = sbidRepository.save(sbid);
         //낙찰 알림 보내고 실시간 연결 끊기
         commonService.sseSend(lastBid, Status.SUCCESSBID);
-        String slackUrl = "https://hooks.slack.com/services/T07RW72D35H/B07SK4UGT24/iykaj6AMoofVfYOuRA3YbUBe";
+//        String slackUrl = "https://hooks.slack.com/services/T07RW72D35H/B07SK4UGT24/iykaj6AMoofVfYOuRA3YbUBe";
+        String slackUrl = sBidder.getSlackUrl();
 
 
-        //todo 낙찰자에게 slack 알림 보내기
+        //낙찰자에게 slack 알림 보내기
         sendSlack(slackUrl, saveSbid);
 
 

@@ -1,6 +1,7 @@
 package com.sparta.final_project.domain.bid.service;
 
 import com.sparta.final_project.config.security.AuthUser;
+import com.sparta.final_project.domain.aop.DistributedLock;
 import com.sparta.final_project.domain.auction.entity.Auction;
 import com.sparta.final_project.domain.auction.entity.Status;
 import com.sparta.final_project.domain.auction.repository.AuctionRepository;
@@ -114,22 +115,31 @@ public class BidService {
 
     //입찰
     @Transactional
+    @DistributedLock(key = "auctionBid", dynamicKey = "#auctionId")
     public BidResponse createBid(Long userId, Long auctionId, BidRequest request) {
         //user와 경매장이 있는지 확인하기
         User user = userRepository.findById(userId).orElseThrow(()-> new OhapjijoleException(ErrorCode._USER_NOT_FOUND));
+        log.info("유저: {}", userId);
         Auction auction = auctionRepository.findById(auctionId).orElseThrow(() -> new OhapjijoleException(ErrorCode._NOT_FOUND_AUCTION));
+        log.info("경매: {}", auctionId);
         //유저가 해당 경매장의 티켓 있는지 확인
         checkTicket(auctionId, user);
         //경매장이 경매중인지 확인하기
         if(auction.getStatus()!= Status.BID) throw new OhapjijoleException(ErrorCode._BID_NOT_GOING);
         //입찰 금액 조건을 최저가 이상 또는 최고 입찰가 초과로 지정
-        List<Bid> bidList = bidRepository.findAllByAuctionOrderByCreatedAtDesc(auction);
-        int maxBid = bidList.isEmpty() ? auction.getStartPrice()-1 : bidList.get(0).getPrice();
-        if(request.getPrice()<=maxBid) throw new OhapjijoleException(ErrorCode._NOT_LARGER_PRICE);
-        
+//        List<Bid> bidList = bidRepository.findAllByAuctionOrderByCreatedAtDesc(auction);
+//        int maxBid = bidList.isEmpty() ? auction.getStartPrice()-1 : bidList.get(0).getPrice();
+        Optional<Bid> lastBid = bidRepository.findTopByAuctionOrderByCreatedAtDesc(auction);
+        int maxBid = lastBid.isPresent() ? lastBid.get().getPrice() : auction.getStartPrice()-1;
+        if(request.getPrice()<=maxBid) {
+            log.info(" 현재 입찰가 : {}최고 입찰가 : {}", request.getPrice(), maxBid);
+            throw new OhapjijoleException(ErrorCode._NOT_LARGER_PRICE," 현재 입찰가 : "+ request.getPrice() + "최고 입찰가 : "+maxBid);
+        }
+
         //입찰 데이터 생성 및 저장
         Bid bid = new Bid(request, user, auction);
         Bid newBid = bidRepository.save(bid);
+        log.info("데이터 저장 : {}", newBid.getPrice());
         
         //저장된 데이터 실시간 알림 보내기
         commonService.sseSend(newBid, Status.BID);

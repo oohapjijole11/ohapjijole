@@ -1,6 +1,7 @@
 package com.sparta.final_project.config;
 
 import com.sparta.final_project.domain.common.exception.OhapjijoleException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
     /**
@@ -33,6 +35,7 @@ public class GlobalExceptionHandler {
         errorResponse.put("status", status.name());
         errorResponse.put("code", status.value());
         errorResponse.put("message", message);
+        log.info("OhapjijoleException ::: "+ message);
 
         return new ResponseEntity<>(errorResponse, status);
     }
