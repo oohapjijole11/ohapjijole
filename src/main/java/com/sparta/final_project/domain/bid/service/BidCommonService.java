@@ -1,11 +1,15 @@
 package com.sparta.final_project.domain.bid.service;
 
+import com.sparta.final_project.domain.aop.DistributedLock;
+import com.sparta.final_project.domain.auction.entity.Auction;
 import com.sparta.final_project.domain.auction.entity.Status;
 import com.sparta.final_project.domain.bid.entity.Bid;
+import com.sparta.final_project.domain.bid.repository.BidRepository;
 import com.sparta.final_project.domain.bid.repository.EmitterRepository;
 import com.sparta.final_project.domain.bid.repository.RedisRepository;
 import com.sparta.final_project.domain.common.exception.ErrorCode;
 import com.sparta.final_project.domain.common.exception.OhapjijoleException;
+import com.sparta.final_project.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
@@ -22,6 +26,7 @@ public class BidCommonService {
 
     private final EmitterRepository emitterRepository;
     private final RedisRepository redisRepository;
+    private final BidRepository bidRepository;
 
     private static final long RECONNECTION_TIMEOUT = 1000L;
 
@@ -110,5 +115,25 @@ public class BidCommonService {
                     sendToClient(emitter,"bid start", key, eventId, "경매를 시작합니다!");
                 }
         );
+    }
+
+    @DistributedLock(key = "auctionBid", dynamicKey = "#auctionId")
+    protected Bid saveBid(Long auctionId, int price, Auction auction, User user) {
+        //redis에서 최신 입찰 데이터 가져오는 방식
+        int lastprice = redisRepository.findlastBidprice(String.valueOf(auctionId));
+        int maxBid = lastprice==0 ? auction.getStartPrice()-1 : lastprice;
+        if(price<=maxBid) {
+            log.info(" 현재 입찰가 : {}최고 입찰가 : {}", price, maxBid);
+            throw new OhapjijoleException(ErrorCode._NOT_LARGER_PRICE," 현재 입찰가 : "+ price + "최고 입찰가 : "+maxBid);
+        }
+
+        //입찰 데이터 생성 및 저장
+        Bid bid = new Bid(price, user, auction);
+        Bid newBid = bidRepository.save(bid);
+        log.info("데이터 저장 : {}", newBid.getPrice());
+
+        //저장된 데이터 실시간 알림 보내기
+        sseSend(newBid, Status.BID);
+        return newBid;
     }
 }

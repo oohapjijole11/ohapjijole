@@ -1,7 +1,6 @@
 package com.sparta.final_project.domain.bid.service;
 
 import com.sparta.final_project.config.security.AuthUser;
-import com.sparta.final_project.domain.aop.DistributedLock;
 import com.sparta.final_project.domain.auction.entity.Auction;
 import com.sparta.final_project.domain.auction.entity.Status;
 import com.sparta.final_project.domain.auction.repository.AuctionRepository;
@@ -115,7 +114,7 @@ public class BidService {
 
     //입찰
     @Transactional
-    @DistributedLock(key = "auctionBid", dynamicKey = "#auctionId")
+//    @DistributedLock(key = "auctionBid", dynamicKey = "#auctionId")
     public BidResponse createBid(Long userId, Long auctionId, BidRequest request) {
         //user와 경매장이 있는지 확인하기
         User user = userRepository.findById(userId).orElseThrow(()-> new OhapjijoleException(ErrorCode._USER_NOT_FOUND));
@@ -131,23 +130,29 @@ public class BidService {
 //        int maxBid = bidList.isEmpty() ? auction.getStartPrice()-1 : bidList.get(0).getPrice();
 //        Optional<Bid> lastBid = bidRepository.findTopByAuctionOrderByCreatedAtDesc(auction);
 //        int maxBid = lastBid.isPresent() ? lastBid.get().getPrice() : auction.getStartPrice()-1;
-        //redis에서 최신 입찰 데이터 가져오는 방식
-        int lastprice = redisRepository.findlastBidprice(String.valueOf(auctionId));
-        int maxBid = lastprice==0 ? auction.getStartPrice()-1 : lastprice;
-        if(request.getPrice()<=maxBid) {
-            log.info(" 현재 입찰가 : {}최고 입찰가 : {}", request.getPrice(), maxBid);
-            throw new OhapjijoleException(ErrorCode._NOT_LARGER_PRICE," 현재 입찰가 : "+ request.getPrice() + "최고 입찰가 : "+maxBid);
-        }
-
-        //입찰 데이터 생성 및 저장
-        Bid bid = new Bid(request, user, auction);
-        Bid newBid = bidRepository.save(bid);
-        log.info("데이터 저장 : {}", newBid.getPrice());
-        
-        //저장된 데이터 실시간 알림 보내기
-        commonService.sseSend(newBid, Status.BID);
+        Bid newBid = commonService.saveBid(auctionId, request.getPrice(), auction, user);
         return new BidResponse(newBid);
     }
+
+//    @DistributedLock(key = "auctionBid", dynamicKey = "#auctionId")
+//    private Bid saveBid(Long auctionId, int price, Auction auction, User user) {
+//        //redis에서 최신 입찰 데이터 가져오는 방식
+//        int lastprice = redisRepository.findlastBidprice(String.valueOf(auctionId));
+//        int maxBid = lastprice==0 ? auction.getStartPrice()-1 : lastprice;
+//        if(price<=maxBid) {
+//            log.info(" 현재 입찰가 : {}최고 입찰가 : {}", price, maxBid);
+//            throw new OhapjijoleException(ErrorCode._NOT_LARGER_PRICE," 현재 입찰가 : "+ price + "최고 입찰가 : "+maxBid);
+//        }
+//
+//        //입찰 데이터 생성 및 저장
+//        Bid bid = new Bid(price, user, auction);
+//        Bid newBid = bidRepository.save(bid);
+//        log.info("데이터 저장 : {}", newBid.getPrice());
+//
+//        //저장된 데이터 실시간 알림 보내기
+//        commonService.sseSend(newBid, Status.BID);
+//        return newBid;
+//    }
 
     public List<BidSimpleResponse> getBids(Long auctionId) {
         Auction auction = auctionRepository.findById(auctionId).orElseThrow(() -> new OhapjijoleException(ErrorCode._NOT_FOUND_AUCTION));
