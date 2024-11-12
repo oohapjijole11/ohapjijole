@@ -1,6 +1,7 @@
 package com.sparta.final_project.domain.bid.service;
 
 import com.sparta.final_project.config.security.AuthUser;
+import com.sparta.final_project.domain.aop.DistributedLock;
 import com.sparta.final_project.domain.auction.entity.Auction;
 import com.sparta.final_project.domain.auction.entity.Status;
 import com.sparta.final_project.domain.auction.repository.AuctionRepository;
@@ -13,9 +14,12 @@ import com.sparta.final_project.domain.bid.repository.EmitterRepository;
 import com.sparta.final_project.domain.bid.repository.RedisRepository;
 import com.sparta.final_project.domain.common.exception.ErrorCode;
 import com.sparta.final_project.domain.common.exception.OhapjijoleException;
+import com.sparta.final_project.domain.functional.LockUtil;
 import com.sparta.final_project.domain.ticket.entity.BuyTickets;
 import com.sparta.final_project.domain.user.entity.User;
 import com.sparta.final_project.domain.user.repository.UserRepository;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,6 +31,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -41,7 +46,10 @@ public class BidService {
     private final BidCommonService commonService;
     private final RedisRepository redisRepository;
 
+    private final LockUtil lockUtil;
+
     private static final Long DEFAULT_TIMEOUT = 60L * 1000 * 30;   //한번 들어가면 30분동안 sse로 연결됨
+
 
 
     //경매장 입장
@@ -114,7 +122,8 @@ public class BidService {
 
     //입찰
     @Transactional
-    public BidResponse createBid(Long userId, Long auctionId, BidRequest request) {
+//    @DistributedLock(key = "auctionBid", dynamicKey = "#auctionId")
+    public BidResponse createBid(Long userId, Long auctionId, BidRequest request) throws Throwable {
         //user와 경매장이 있는지 확인하기
         User user = userRepository.findById(userId).orElseThrow(()-> new OhapjijoleException(ErrorCode._USER_NOT_FOUND));
         Auction auction = auctionRepository.findById(auctionId).orElseThrow(() -> new OhapjijoleException(ErrorCode._NOT_FOUND_AUCTION));
@@ -126,14 +135,18 @@ public class BidService {
         List<Bid> bidList = bidRepository.findAllByAuctionOrderByCreatedAtDesc(auction);
         int maxBid = bidList.isEmpty() ? auction.getStartPrice()-1 : bidList.get(0).getPrice();
         if(request.getPrice()<=maxBid) throw new OhapjijoleException(ErrorCode._NOT_LARGER_PRICE);
-        
-        //입찰 데이터 생성 및 저장
+
+        return lockUtil.executeWithLock("auctionBid: " + auctionId, 3, 5, TimeUnit.SECONDS, () -> {
+            //입찰 데이터 생성 및 저장
         Bid bid = new Bid(request, user, auction);
         Bid newBid = bidRepository.save(bid);
-        
+
         //저장된 데이터 실시간 알림 보내기
         commonService.sseSend(newBid, Status.BID);
         return new BidResponse(newBid);
+        });
+
+//
     }
 
     public List<BidSimpleResponse> getBids(Long auctionId) {

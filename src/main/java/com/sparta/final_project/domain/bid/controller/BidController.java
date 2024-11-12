@@ -36,7 +36,7 @@ public class BidController {
     @PostMapping("/auction/{auctionId}")
     public ResponseEntity<BidResponse> createBid (@AuthenticationPrincipal AuthUser authUser,
                                                   @PathVariable Long auctionId,
-                                                  @RequestBody BidRequest request) {
+                                                  @RequestBody BidRequest request) throws Throwable {
         return ResponseEntity.ok(bidService.createBid(authUser.getId(), auctionId,request));
     }
 
