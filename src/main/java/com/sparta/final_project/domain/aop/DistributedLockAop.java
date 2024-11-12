@@ -58,6 +58,7 @@ public class DistributedLockAop {
                         distributedLock.leaseTime(),
                         distributedLock.timeUnit()
                 );
+                log.info("락 흭득 : {}", lockKey);
 
                 if(!lockAcquired) {
                     throw new OhapjijoleException(ErrorCode._LOCK_NOT_AVAILABLE_ERROR);

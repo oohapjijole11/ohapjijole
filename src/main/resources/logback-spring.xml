@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- 콘솔에 로그 출력 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- SlackService 로그를 위한 롤링 파일 앱렌더 -->
+    <appender name="BID_SERVICE_FILE_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>src/main/resources/logs/bid-service-log.log</file>
+        <!--        &lt;!&ndash; 파일 크기나 날짜에 따라 롤링(파일 분리) 정책 설정 &ndash;&gt;-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--            &lt;!&ndash; 파일 이름 패턴 (숫자가 증가하는 방식으로 백업 파일 생성) &ndash;&gt;-->
+            <fileNamePattern>bid-service-log-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!--            &lt;!&ndash; 최대 파일 크기 설정 (10MB) &ndash;&gt;-->
+            <maxFileSize>10MB</maxFileSize>
+            <!--            &lt;!&ndash; 전체 로그 파일 크기의 상한선 (100MB로 설정) &ndash;&gt;-->
+            <totalSizeCap>100MB</totalSizeCap>
+            <maxHistory>10</maxHistory> <!-- 최대 10개의 백업 파일 유지 -->
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- BidService 클래스 로그를 파일에 기록 -->
+    <logger name="com.sparta.final_project.domain.bid.service.BidService" level="INFO" additivity="false">
+        <appender-ref ref="BID_SERVICE_FILE_APPENDER"/>
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <!-- 분산락 aop 클래스 로그를 파일에 기록 -->
+    <logger name="com.sparta.final_project.domain.aop.DistributedLockAop" level="INFO" additivity="false">
+        <appender-ref ref="BID_SERVICE_FILE_APPENDER"/>
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <!-- 전체 애플리케이션에 대한 로그 레벨 설정 -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+    </root>
+
+</configuration>

@@ -129,8 +129,11 @@ public class BidService {
         //입찰 금액 조건을 최저가 이상 또는 최고 입찰가 초과로 지정
 //        List<Bid> bidList = bidRepository.findAllByAuctionOrderByCreatedAtDesc(auction);
 //        int maxBid = bidList.isEmpty() ? auction.getStartPrice()-1 : bidList.get(0).getPrice();
-        Optional<Bid> lastBid = bidRepository.findTopByAuctionOrderByCreatedAtDesc(auction);
-        int maxBid = lastBid.isPresent() ? lastBid.get().getPrice() : auction.getStartPrice()-1;
+//        Optional<Bid> lastBid = bidRepository.findTopByAuctionOrderByCreatedAtDesc(auction);
+//        int maxBid = lastBid.isPresent() ? lastBid.get().getPrice() : auction.getStartPrice()-1;
+        //redis에서 최신 입찰 데이터 가져오는 방식
+        int lastprice = redisRepository.findlastBidprice(String.valueOf(auctionId));
+        int maxBid = lastprice==0 ? auction.getStartPrice()-1 : lastprice;
         if(request.getPrice()<=maxBid) {
             log.info(" 현재 입찰가 : {}최고 입찰가 : {}", request.getPrice(), maxBid);
             throw new OhapjijoleException(ErrorCode._NOT_LARGER_PRICE," 현재 입찰가 : "+ request.getPrice() + "최고 입찰가 : "+maxBid);
