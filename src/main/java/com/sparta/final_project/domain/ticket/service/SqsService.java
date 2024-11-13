@@ -7,6 +7,7 @@ import com.amazonaws.services.sqs.model.SendMessageRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sparta.final_project.config.security.AuthUser;
 import com.sparta.final_project.domain.ticket.dto.request.BuyTicketsRequest;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -30,8 +31,9 @@ public class SqsService {
     private String queueUrl;
 
 
-    public void sendMessage(BuyTicketsRequest buyTicketsRequest) {
+    public void sendMessage(Long userId, BuyTicketsRequest buyTicketsRequest) {
         try {
+            buyTicketsRequest.setUserId(userId);
             String messageBody = objectMapper.writeValueAsString(buyTicketsRequest);
 
             SendMessageRequest sendMessageRequest = new SendMessageRequest(queueUrl, messageBody)
