@@ -4,7 +4,6 @@ import com.sparta.final_project.config.security.AuthUser;
 import com.sparta.final_project.domain.auction.dto.request.AuctionRequest;
 import com.sparta.final_project.domain.auction.dto.response.AuctionResponse;
 import com.sparta.final_project.domain.auction.entity.Auction;
-import com.sparta.final_project.domain.auction.entity.AuctionRedis;
 import com.sparta.final_project.domain.auction.entity.Grade;
 import com.sparta.final_project.domain.auction.entity.Status;
 import com.sparta.final_project.domain.auction.repository.AuctionRepository;
@@ -32,9 +31,13 @@ public class AuctionService {
     public AuctionResponse createAuction(AuthUser authUser, Long itemId, AuctionRequest auctionRequest) {
         userRepository.findById(authUser.getId()).orElseThrow(() -> new OhapjijoleException(ErrorCode._USER_NOT_FOUND));
         Item item = itemRepository.findById(itemId).orElseThrow(() -> new OhapjijoleException(ErrorCode._NOT_FOUND_ITEM));
+//        상품이 유찰일때 다시 등록
         Auction auction = auctionRepository.findByItemIdAndStatusIn(item.getId(), List.of(Status.WAITING, Status.BID, Status.SUCCESSBID));
         if (auction != null) {
             throw new OhapjijoleException(ErrorCode._NOT_FAILED_AUCTION);
+        }
+        if(auctionRequest.getStartTime().isBefore(auctionRequest.getEndTime()) || auctionRequest.getStartTime().isEqual(auctionRequest.getEndTime())) {
+
         }
 //        경매 등급 측정, 경매 상태, AuctionEntity 정보 저장 메소드
         auction = gradeMeasurement(auctionRequest);
