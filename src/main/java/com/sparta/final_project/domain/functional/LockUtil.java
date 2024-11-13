@@ -16,7 +16,7 @@ public class LockUtil {
     }
 
     public <T> T executeWithLock(String key, long waitTime, long leaseTime,
-                                 TimeUnit unit, LockableTask<T> task) throws Throwable {
+                                 TimeUnit unit, LockableTask<T> task) {
         String lockKey = "LOCK: " + key;
         RLock rLock = redissonClient.getLock(lockKey);
 
