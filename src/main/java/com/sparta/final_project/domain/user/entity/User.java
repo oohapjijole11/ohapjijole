@@ -1,6 +1,5 @@
 package com.sparta.final_project.domain.user.entity;
 
-import com.sparta.final_project.config.security.AuthUser;
 import com.sparta.final_project.domain.item.entity.Item;
 
 
@@ -9,7 +8,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.security.core.GrantedAuthority;
 
 
 import java.util.List;
@@ -33,22 +31,21 @@ public class User {
 
     private String name;
 
+    private Double point = 0.0;
+
     @Enumerated(EnumType.STRING)
     @Column
     private UserRole role;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = false)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Item> items;
 
     @Enumerated(EnumType.STRING)
     @Column
     private UserRating rating;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = false)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<BuyTickets> tickets;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    private Vaccount vaccount;
 
     // 회원탈퇴 유무
     private Boolean isdeleted = false;

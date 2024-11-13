@@ -7,7 +7,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.time.LocalDateTime;
 
 @Getter
@@ -42,7 +41,7 @@ public class Auction extends Timestamped {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
     private Item item;
 
@@ -52,7 +51,6 @@ public class Auction extends Timestamped {
         this.startPrice = auctionRequest.getStartPrice();
         this.startTime = auctionRequest.getStartTime();
         this.endTime = auctionRequest.getEndTime();
-        this.grade = auctionRequest.getGrade();
         this.status = Status.WAITING;
     }
 

@@ -62,7 +62,6 @@ public class AuthService {
                 role,
                 signupRequestDto.getSlackUrl()
         );
-
         // 유저 생성 후 저장
         userRepository.save(newUser);
     }
@@ -95,5 +94,4 @@ public class AuthService {
 
         return jwtUtil.createToken(user.getId(), user.getEmail(), user.getName(), user.getRole());
     }
-
 }

@@ -60,15 +60,4 @@ public class EmitterRepository {
         );
     }
 
-    public Map<String, Object> findEventsSinceLastId(String lastEventId) {
-        return eventCache.entrySet().stream()
-                .filter(entry -> entry.getKey().compareTo(lastEventId) > 0)
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-    }
-
-    public void cleanUpOldEvents(String lastEventId) {
-        eventCache.entrySet().stream()
-                .filter(entry -> entry.getKey().compareTo(lastEventId) < 0)
-                .forEach(Map.Entry::getValue);
-    }
 }
