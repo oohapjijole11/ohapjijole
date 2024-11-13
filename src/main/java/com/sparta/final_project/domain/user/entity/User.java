@@ -1,17 +1,13 @@
 package com.sparta.final_project.domain.user.entity;
 
-import com.sparta.final_project.config.security.AuthUser;
 import com.sparta.final_project.domain.item.entity.Item;
-
-
 import com.sparta.final_project.domain.ticket.entity.BuyTickets;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.security.core.GrantedAuthority;
 
-
+import java.io.Serializable;
 import java.util.List;
 
 @Getter
@@ -19,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @Setter
 @Table(name = "users")
-public class User {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

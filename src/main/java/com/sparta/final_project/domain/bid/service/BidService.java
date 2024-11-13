@@ -105,11 +105,19 @@ public class BidService {
         return emitter;
     }
 
-    private static void checkTicket(Long auctionId, User user) {
-        Optional<BuyTickets> ticket = user.getTickets().stream()
+    private void checkTicket(Long auctionId, User user) {
+        String ticketId = auctionId+"_"+user.getId();
+        if(!redisRepository.findTicket(ticketId)) {
+            Optional<BuyTickets> ticket = user.getTickets().stream()
                 .filter(t-> t.getTicket().getAuction().getId().equals(auctionId))
                 .findFirst();
-        if (ticket.isEmpty()) throw new OhapjijoleException(ErrorCode._NOT_HAVE_TICKET);
+            if (ticket.isEmpty()) {
+                throw new OhapjijoleException(ErrorCode._NOT_HAVE_TICKET);
+            }else {
+                redisRepository.setTicket(ticketId, true);
+            }
+
+        }
     }
 
     //입찰
@@ -117,10 +125,22 @@ public class BidService {
 //    @DistributedLock(key = "auctionBid", dynamicKey = "#auctionId")
     public BidResponse createBid(Long userId, Long auctionId, BidRequest request) {
         //user와 경매장이 있는지 확인하기
-        User user = userRepository.findById(userId).orElseThrow(()-> new OhapjijoleException(ErrorCode._USER_NOT_FOUND));
+        User user = redisRepository.findUser("user_"+userId).orElseGet(()->{
+                    User dbUser = userRepository.findById(userId).orElseThrow(()-> new OhapjijoleException(ErrorCode._USER_NOT_FOUND));
+                    redisRepository.setUser("user_" + userId, dbUser);
+                    return dbUser;
+                }
+        );
         log.info("유저: {}", userId);
-        Auction auction = auctionRepository.findById(auctionId).orElseThrow(() -> new OhapjijoleException(ErrorCode._NOT_FOUND_AUCTION));
+        Auction auction = redisRepository.findAuction("auction_"+auctionId).orElseGet(()->{
+                Auction dbAuction = auctionRepository.findById(auctionId).orElseThrow(() -> new OhapjijoleException(ErrorCode._NOT_FOUND_AUCTION));
+                redisRepository.setAuction("auction_" + auctionId, dbAuction);
+                return dbAuction;
+            }
+        );
+//        Auction auction = auctionRepository.findById(auctionId).orElseThrow(() -> new OhapjijoleException(ErrorCode._NOT_FOUND_AUCTION));
         log.info("경매: {}", auctionId);
+
         //유저가 해당 경매장의 티켓 있는지 확인
         checkTicket(auctionId, user);
         //경매장이 경매중인지 확인하기
