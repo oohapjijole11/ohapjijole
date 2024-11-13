@@ -19,18 +19,8 @@ public class EmitterRepository {
         return sseEmitter;
     }
 
-    public void saveEventCache(String eventCacheId, Object event) {
-        eventCache.put(eventCacheId, event);
-    }
-
     public Map<String, SseEmitter> findAllEmitterStartWithByAuctionId(String auctionId) {
         return emitters.entrySet().stream()
-                .filter(entry -> entry.getKey().startsWith(auctionId))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-    }
-
-    public Map<String, Object> findAllEventCacheStartWithAuctionId(String auctionId) {
-        return eventCache.entrySet().stream()
                 .filter(entry -> entry.getKey().startsWith(auctionId))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
@@ -45,16 +35,6 @@ public class EmitterRepository {
                     if (key.startsWith(auctionId)) {
                         emitter.complete();  // 연결을 명시적으로 종료
                         emitters.remove(key);
-                    }
-                }
-        );
-    }
-
-    public void deleteAllEventCacheStartWithId(String userId) {
-        eventCache.forEach(
-                (key, emitter) -> {
-                    if (key.startsWith(userId)) {
-                        eventCache.remove(key);
                     }
                 }
         );

@@ -20,7 +20,7 @@ public class RedisRepository {
     private final String eventkey = "bid";
 
     //event저장
-    public void setbid(String eventCacheId, int price) {
+    public void setBid(String eventCacheId, int price) {
 //        redisTemplate.opsForValue().set(eventCacheId, price);
         redisTemplate.opsForHash().put(eventkey, eventCacheId, String.valueOf(price));
     }
@@ -33,12 +33,10 @@ public class RedisRepository {
                 .collect(Collectors.toMap(entry->(String)entry.getKey(), Map.Entry::getValue));
     }
 
-    public int findlastBidprice(String auctionId) {
+    public int findLastBidPrice(String auctionId) {
         Map<String, Object> result = (Map<String, Object>) (Map) redisTemplate.opsForHash().entries(eventkey);
         Optional<Map.Entry<String, Object>> price = result.entrySet().stream()
-                .filter(entry->((entry.getKey()).startsWith(auctionId)))
-                .sorted(Map.Entry.<String, Object>comparingByKey().reversed())
-                .findFirst();
+                .filter(entry -> ((entry.getKey()).startsWith(auctionId))).max(Map.Entry.comparingByKey());
         return price.map(entry -> {
                     // 값을 int로 안전하게 변환
                     try {
@@ -46,14 +44,8 @@ public class RedisRepository {
                     } catch (NumberFormatException e) {
                         return null; // 형변환 실패 시 null 반환
                     }
-                })
-                .filter(Objects::nonNull).orElse(0); // null 필터링
+                }).orElse(0); // null 필터링
 
-    }
-
-    //낙찰때 쓸 예정
-    public void deleteAllEventStartWithAuctionId(String auctionId) {
-        redisTemplate.opsForHash().delete(eventkey, auctionId);
     }
 
     public void setAuction(String auctionId, Auction auction) {

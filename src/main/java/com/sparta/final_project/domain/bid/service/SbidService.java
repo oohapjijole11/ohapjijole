@@ -17,6 +17,9 @@ import com.sparta.final_project.domain.common.exception.OhapjijoleException;
 import com.sparta.final_project.domain.user.entity.User;
 import com.sparta.final_project.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +36,7 @@ import static com.slack.api.webhook.WebhookPayloads.payload;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class SbidService {
     private final SbidRepository sbidRepository;
     private final UserRepository userRepository;
@@ -45,6 +49,7 @@ public class SbidService {
     //낙찰
     @Transactional
     public SbidResponse createSbid(Long auctionId) {
+        Logger logger = LoggerFactory.getLogger("sbid_logger");
         //해당 경매 찾기
         Auction auction = auctionRepository.findById(auctionId).orElseThrow(()-> new OhapjijoleException(ErrorCode._NOT_FOUND_AUCTION));
         //이미 끝난 경매인지 체크
@@ -55,21 +60,17 @@ public class SbidService {
         auction.bidSuccess(Status.SUCCESSBID, LocalDateTime.now());
         //마지막 입찰 정보 가져오기
         Bid lastBid = bidRepository.findAllByAuctionOrderByCreatedAtDesc(auction).get(0);
-        //낙찰금액 가져오기
-        int maxPrice = lastBid.getPrice();
         //낙찰자 정보 가져오기
         User sBidder = lastBid.getUser();
         //낙찰 데이터 생성 및 저장
-        Sbid sbid = new Sbid(sBidder, auction,maxPrice);
+        Sbid sbid = new Sbid(sBidder, auction,lastBid.getPrice());
         Sbid saveSbid = sbidRepository.save(sbid);
+        logger.info("낙찰 ::: 유저 : {} 경매 : {} 낙찰 금액 : {}", sBidder.getId(), auctionId, lastBid.getPrice());
         //낙찰 알림 보내고 실시간 연결 끊기
         commonService.sseSend(lastBid, Status.SUCCESSBID);
-//        String slackUrl = "https://hooks.slack.com/services/T07RW72D35H/B07SK4UGT24/iykaj6AMoofVfYOuRA3YbUBe";
-        String slackUrl = sBidder.getSlackUrl();
-
 
         //낙찰자에게 slack 알림 보내기
-        sendSlack(slackUrl, saveSbid);
+        sendSlack(sBidder.getSlackUrl(), saveSbid);
 
 
         return new SbidResponse(saveSbid);
@@ -85,10 +86,11 @@ public class SbidService {
 
     //낙찰때 슬랙 알림
     public void sendSlack(String slackUrl,Sbid sbid) {
+        Auction auction = sbid.getAuction();
         String title = "낙찰 소식 알림이";
-        String message = sbid.getAuction().getItem().getName()+" 상품을 낙찰하셨습니다. 지금 확인해보세요!";
-        String fieldTitle = sbid.getAuction().getTitle()+" 경매 낙찰 안내";
-        String fieldContent = "상품 이름 : "+sbid.getAuction().getItem().getName()+"\n 낙찰 일시 : "+sbid.getAuction().getEndTime().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초"))+ "\n 낙찰 가격 : "+sbid.getPrice()+" 원";
+        String message = auction.getItem().getName()+" 상품을 낙찰하셨습니다. 지금 확인해보세요!";
+        String fieldTitle = auction.getTitle()+" 경매 낙찰 안내";
+        String fieldContent = "상품 이름 : "+auction.getItem().getName()+"\n 낙찰 일시 : "+sbid.getAuction().getEndTime().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초"))+ "\n 낙찰 가격 : "+sbid.getPrice()+" 원";
         try{
             slackClient.send(slackUrl, payload(p -> p
                     .text(title) // 메시지 제목
@@ -105,6 +107,7 @@ public class SbidService {
             );
         } catch (IOException e) {
             e.printStackTrace();
+            throw new OhapjijoleException(ErrorCode._NOT_AVAILABLE_SLACK_NOTIFICATION);
         }
 
     }

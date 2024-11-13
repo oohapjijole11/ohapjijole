@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
         errorResponse.put("status", status.name());
         errorResponse.put("code", status.value());
         errorResponse.put("message", message);
-        log.info("OhapjijoleException ::: "+ message);
+        log.warn("OhapjijoleException ::: {}", message);
 
         return new ResponseEntity<>(errorResponse, status);
     }
