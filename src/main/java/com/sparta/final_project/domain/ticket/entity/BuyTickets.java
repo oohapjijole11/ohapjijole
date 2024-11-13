@@ -1,6 +1,8 @@
 package com.sparta.final_project.domain.ticket.entity;
 
+import com.sparta.final_project.config.security.AuthUser;
 import com.sparta.final_project.domain.ticket.dto.request.BuyTicketsRequest;
+
 import com.sparta.final_project.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -26,7 +28,6 @@ public class BuyTickets {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-
 
 
     public BuyTickets(Ticket ticket, User user) {
