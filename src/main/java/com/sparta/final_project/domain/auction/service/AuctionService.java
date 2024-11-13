@@ -15,7 +15,6 @@ import com.sparta.final_project.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -36,7 +35,7 @@ public class AuctionService {
         if (auction != null) {
             throw new OhapjijoleException(ErrorCode._NOT_FAILED_AUCTION);
         }
-        if(auctionRequest.getStartTime().isBefore(auctionRequest.getEndTime()) || auctionRequest.getStartTime().isEqual(auctionRequest.getEndTime())) {
+        if (auctionRequest.getStartTime().isBefore(auctionRequest.getEndTime()) || auctionRequest.getStartTime().isEqual(auctionRequest.getEndTime())) {
 
         }
 //        경매 등급 측정, 경매 상태, AuctionEntity 정보 저장 메소드

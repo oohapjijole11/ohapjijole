@@ -8,7 +8,6 @@ import com.sparta.final_project.domain.bid.repository.BidRepository;
 import com.sparta.final_project.domain.bid.repository.EmitterRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -48,7 +47,6 @@ public class AuctionProgressService {
                 auction.setStatus(Status.FAILBID);
                 sendAuctionResultMessage(auctionId, "경매가 유찰 되었습니다."); // 입찰자가 없는 경우
             }
-
             auctionRepository.save(auction); // 변경된 경매 상태 저장
         }
     }
