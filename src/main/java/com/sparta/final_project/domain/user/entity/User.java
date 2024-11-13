@@ -4,7 +4,6 @@ import com.sparta.final_project.domain.item.entity.Item;
 
 
 import com.sparta.final_project.domain.ticket.entity.BuyTickets;
-import com.sparta.final_project.domain.toss.entity.VirtualAccount;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,6 +31,8 @@ public class User {
 
     private String name;
 
+    private Double point = 0.0;
+
     @Enumerated(EnumType.STRING)
     @Column
     private UserRole role;
@@ -45,10 +46,6 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<BuyTickets> tickets;
-
-    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    @JoinColumn(name = "virtual_account_id")
-    private VirtualAccount virtualAccount;
 
     // 회원탈퇴 유무
     private Boolean isdeleted = false;
