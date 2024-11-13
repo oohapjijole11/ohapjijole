@@ -3,25 +3,19 @@ package com.sparta.final_project.domain.auction.service;
 import com.sparta.final_project.domain.auction.entity.Auction;
 import com.sparta.final_project.domain.auction.entity.Status;
 import com.sparta.final_project.domain.auction.repository.AuctionRepository;
+import com.sparta.final_project.domain.bid.entity.Bid;
+import com.sparta.final_project.domain.bid.repository.BidRepository;
 import com.sparta.final_project.domain.bid.repository.EmitterRepository;
-import com.sparta.final_project.domain.bid.service.BidCommonService;
-import com.sparta.final_project.domain.bid.service.BidService;
-import com.sparta.final_project.domain.bid.service.SbidService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -29,49 +23,55 @@ import java.util.concurrent.TimeUnit;
 public class AuctionProgressService {
 
     private final AuctionRepository auctionRepository;
-    private final SbidService sbidService;
-    private final BidService bidService;
-    private final BidCommonService commonService;
-    private final EmitterRepository emitterRepository;
-    private static final Long DEFAULT_TIMEOUT = 60L * 1000 * 30;
-    private static final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(100);
+    private final BidRepository bidRepository;
+    private final EmitterRepository emitters;
 
-    //    경매 남은시간
-    public SseEmitter startAuctionCountdown(Long auctionId, String lastEventId) {
-        Auction auction = auctionRepository.findByIdAndStatus(auctionId, Status.BID);
-//        sseEmitter id 만들기
-        String emitterId = commonService.makeTimeIncludeId(auctionId);
-        SseEmitter sseEmitter = emitterRepository.save(emitterId, new SseEmitter(DEFAULT_TIMEOUT));
-//       tory.deleteById(emitt 완료된 sseEmitterId 와 30분이 지난 sseEmitterId 삭제
-        sseEmitter.onCompletion(() -> emitterRepository.deleteAllEmitterStartWithAuctionId(String.valueOf(auctionId)));
-        sseEmitter.onTimeout(() -> emitterRepository.deleteById(emitterId));
+    //     경매 종료
+    public void auctionEnds(Long auctionId) {
+        LocalDateTime now = LocalDateTime.now();
+        Auction auction = auctionRepository.findById(auctionId).orElseThrow(() -> new RuntimeException("경매가 존재하지 않습니다."));
+        // 경매 종료 시간 확인
+        if (now.isAfter(auction.getEndTime())) {
+            // 경매에 입찰자가 있는지 확인
+            List<Bid> bids = bidRepository.findAllByAuctionOrderByCreatedAtDesc(auction);
 
-        final ScheduledFuture<?>[] scheduledFuture = new ScheduledFuture<?>[auctionId.intValue()];
-
-        scheduledFuture[auctionId.intValue() - 1] = executorService.scheduleAtFixedRate(() -> {
-            try {
-                Duration remainingTime = Duration.between(LocalDateTime.now(), auction.getEndTime());
-                if (remainingTime.isNegative() || remainingTime.isZero()) {
-                    sbidService.createSbid(auctionId);
-                    sseEmitter.send("경매가 마감되었습니다");
-                    scheduledFuture[auctionId.intValue() - 1].cancel(false);
+            if (!bids.isEmpty()) {
+                Bid lastBid = bids.get(0); // 마지막 입찰
+                if (lastBid.getUser() != null) {
+                    auction.setStatus(Status.SUCCESSBID);
+                    sendAuctionResultMessage(auctionId, lastBid.getUser().getName() + "님이 경매에 낙찰되었습니다!");
                 } else {
-                    String formattedTime = formatRemainingTime(remainingTime);
-                    sseEmitter.send(formattedTime);
-                    if (!lastEventId.isEmpty() && hasLostData(lastEventId)) {
-                        sendLostData(sseEmitter, lastEventId);
-                    }
+                    auction.setStatus(Status.FAILBID);
+                    sendAuctionResultMessage(auctionId, "경매가 유찰 되었습니다.");
                 }
-            } catch (IOException e) {
-                emitterRepository.deleteById(emitterId);
+            } else {
+                auction.setStatus(Status.FAILBID);
+                sendAuctionResultMessage(auctionId, "경매가 유찰 되었습니다."); // 입찰자가 없는 경우
             }
-        }, 0, 1, TimeUnit.SECONDS);
 
-        return sseEmitter;
+            auctionRepository.save(auction); // 변경된 경매 상태 저장
+        }
     }
 
-//    lambda 사용 예정
-    //        경매 시작
+
+    private void sendAuctionResultMessage(Long auctionId, String message) {
+        Map<String, SseEmitter> sseEmitters = emitters.findAllEmitterStartWithByAuctionId(String.valueOf(auctionId));
+        sendToEmitters(sseEmitters, message);
+    }
+
+    private void sendToEmitters(Map<String, SseEmitter> sseEmitters, String message) {
+        sseEmitters.forEach((key, emitter) -> {
+            try {
+                emitter.send(message);
+            } catch (IOException e) {
+                emitters.deleteById(key);
+                log.error("Error sending to emitter: " + e.getMessage());
+            }
+        });
+
+
+        //   AWS lambda 사용
+        //        경매 시작
 //    @Scheduled(cron = "0 * * * * *")
 //    public void monitorAuctionStart() {
 //        List<Auction> auctions = auctionRepository.findAllByStatus(Status.WAITING);
@@ -89,39 +89,5 @@ public class AuctionProgressService {
 //        }
 //    }
 
-
-    private boolean hasLostData(String lastEventId) {
-        return !lastEventId.isEmpty();
-    }
-
-    private void sendLostData(SseEmitter sseEmitter, String lastEventId) {
-//    누락된 이벤트 검색
-        Map<String, Object> missedEvents = emitterRepository.findEventsSinceLastId(lastEventId);
-        missedEvents.entrySet().stream()
-                .sorted(Map.Entry.comparingByKey()) //
-                .forEach(entry -> {
-                    String eventId = entry.getKey();
-                    Object eventData = entry.getValue();
-                    try {
-                        sseEmitter.send(SseEmitter.event()
-                                .id(eventId)
-                                .data(eventData));
-                    } catch (IOException e) {
-                        log.error("누락된 이벤트를 보내는도중 오류가 발생 (ID: {}) to client: {}", eventId, e.getMessage());
-//                        오류발생시 루프 중단
-                        return;
-                    }
-                });
-//        오래된 이벤트 제거
-        emitterRepository.cleanUpOldEvents(lastEventId);
-    }
-
-    //    시간 메소드
-    public String formatRemainingTime(Duration remainingTime) {
-        long days = remainingTime.toDays();
-        long hours = remainingTime.toHoursPart();
-        long minutes = remainingTime.toMinutesPart();
-        long seconds = remainingTime.toSecondsPart();
-        return String.format("%d 일, %d 시간, %d 분, %d 초 남은시간", days, hours, minutes, seconds);
     }
 }
