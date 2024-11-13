@@ -39,11 +39,6 @@ public enum ErrorCode {
     _INVALID_USER_NAME(HttpStatus.BAD_REQUEST,"유저이름은 최소 3자 이상,20자 이하여야 하며, 대소문자 포함 영문,숫자만 사용가능합니다." ),
     _AUTH_DELETED_USER(HttpStatus.FORBIDDEN,  "로그인 이메일과 입력한 이메일이 일치하지 않습니다."),
     _USER_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 유저를 찾을 수 없습니다." ),
-    
-    //Account
-    _NOT_FOUND_ACCOUNT(HttpStatus.NOT_FOUND,"존재 하지않는 가상계좌입니다"),
-    _BAD_REQUEST_ACCOUNT(HttpStatus.BAD_REQUEST,"입금 금액은 0원 이상이어야 하며, 정수를 사용해야합니다"),
-    _BAD_REQUEST_AMOUNT(HttpStatus.BAD_REQUEST, "잔액보다 출금금액이 더 많습니다"),
 
     //item
     _NOT_FOUND_ITEM(HttpStatus.NOT_FOUND,"상품이 존재하지 않습니다."),
