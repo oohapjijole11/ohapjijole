@@ -14,13 +14,13 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/auction")
+@RequestMapping("/auctions")
 public class AuctionController {
 
     private final AuctionService auctionService;
 
 //    생성
-    @PostMapping("item/{itemId}")
+    @PostMapping("items/{itemId}")
     public ResponseEntity<AuctionResponse> createAuction(@AuthenticationPrincipal AuthUser authUser, @PathVariable("itemId")Long itemId, @RequestBody AuctionRequest auctionRequest) {
         return ResponseEntity.ok().body(auctionService.createAuction(authUser,itemId,auctionRequest));
     }
@@ -30,7 +30,7 @@ public class AuctionController {
         return ResponseEntity.ok().body(auctionService.getAuction(authUser,auctionId));
     }
 //    다건조회
-    @GetMapping("/auctions")
+    @GetMapping("/")
     public ResponseEntity<List<AuctionResponse>> getAuctionList(@AuthenticationPrincipal AuthUser authUser) {
         return ResponseEntity.ok().body(auctionService.getAuctionList(authUser));
     }
