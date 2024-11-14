@@ -27,10 +27,7 @@ public class AuthController {
     // 로그인
     @PostMapping("/auth/signin")
     public ResponseEntity<String> signin(@Valid @RequestBody SigninRequestDto signinRequestDto) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.AUTHORIZATION, authService.signin(signinRequestDto));
-
-        return ResponseEntity.ok().headers(headers).body("SUCCESS");
+        return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, authService.signin(signinRequestDto)).body("SUCCESS");
     }
 
 }
