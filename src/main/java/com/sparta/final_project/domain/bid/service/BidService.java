@@ -138,10 +138,13 @@ public class BidService {
 
         //유저가 해당 경매장의 티켓 있는지 확인
         checkTicket(auctionId, user);
+
         //경매장이 경매중인지 확인하기
         if(auction.getStatus()!= Status.BID) throw new OhapjijoleException(ErrorCode._BID_NOT_GOING);
+
         //입찰 최고가 조회 후 입찰(다른 파일로 이동)
         Bid newBid = commonService.saveBid(auctionId, request.getPrice(), auction, user);
+
         return new BidResponse(newBid);
     }
 
