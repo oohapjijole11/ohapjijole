@@ -61,8 +61,10 @@ public enum ErrorCode {
     _BID_NOT_GOING(HttpStatus.BAD_REQUEST, "경매가 진행되고 있지 않습니다."),
     _SSE_NOT_CONNECT(HttpStatus.INTERNAL_SERVER_ERROR, "경매장과 연결되지 않습니다."),
     _NOT_HAVE_TICKET(HttpStatus.BAD_REQUEST,"경매 티켓을 가지고 있지 않습니다."),
+    _INVALID_STATUS(HttpStatus.BAD_REQUEST, "경매 상태값이 유효하지 않습니다."),
 
     //sbid
+    _NOT_AVAILABLE_SLACK_NOTIFICATION(HttpStatus.BAD_REQUEST, "슬랙 알림을 보낼 수 없습니다."),
 
     //ticket
     _NOT_FIND_TICKET(HttpStatus.BAD_REQUEST,"존재하지 않는 티켓입니다."),

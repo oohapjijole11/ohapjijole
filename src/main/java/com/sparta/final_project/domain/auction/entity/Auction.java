@@ -7,6 +7,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
@@ -14,7 +16,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 @Table(name = "auctions")
-public class Auction extends Timestamped {
+public class Auction extends Timestamped implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
