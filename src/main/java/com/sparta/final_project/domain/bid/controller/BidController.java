@@ -31,7 +31,6 @@ public class BidController {
         return ResponseEntity.ok(bidService.subscribe(authUser,auctionId, lastEventId));
     }
 
-
     //입찰
     @PostMapping("/auction/{auctionId}")
     public ResponseEntity<BidResponse> createBid (@AuthenticationPrincipal AuthUser authUser,
