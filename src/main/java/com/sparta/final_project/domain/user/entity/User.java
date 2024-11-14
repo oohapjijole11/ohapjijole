@@ -29,22 +29,21 @@ public class User implements Serializable {
 
     private String name;
 
+    private Double point = 0.0;
+
     @Enumerated(EnumType.STRING)
     @Column
     private UserRole role;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = false)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Item> items;
 
     @Enumerated(EnumType.STRING)
     @Column
     private UserRating rating;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = false)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<BuyTickets> tickets;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    private Vaccount vaccount;
 
     // 회원탈퇴 유무
     private Boolean isdeleted = false;

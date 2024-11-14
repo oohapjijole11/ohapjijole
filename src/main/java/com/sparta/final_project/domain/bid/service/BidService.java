@@ -4,6 +4,7 @@ import com.sparta.final_project.config.security.AuthUser;
 import com.sparta.final_project.domain.auction.entity.Auction;
 import com.sparta.final_project.domain.auction.entity.Status;
 import com.sparta.final_project.domain.auction.repository.AuctionRepository;
+import com.sparta.final_project.domain.auction.service.AuctionProgressService;
 import com.sparta.final_project.domain.bid.dto.request.BidRequest;
 import com.sparta.final_project.domain.bid.dto.response.BidResponse;
 import com.sparta.final_project.domain.bid.dto.response.BidSimpleResponse;
@@ -40,6 +41,7 @@ public class BidService {
     private final AuctionRepository auctionRepository;
     private final BidCommonService commonService;
     private final RedisRepository redisRepository;
+    private final AuctionProgressService auctionProgressService;
 
     private static final Long DEFAULT_TIMEOUT = 60L * 1000 * 30;   //한번 들어가면 30분동안 sse로 연결됨
 
@@ -101,6 +103,8 @@ public class BidService {
                             commonService.sendToClient(emitter,"new price", emitterId, entry.getKey(),
                                     entry.getValue()));
         }
+//        경매 종료 후 경매 상태 변경 입찰자 있으면 낙찰,없으면 유찰
+        auctionProgressService.auctionEnds(auctionId);
         return emitter;
     }
 

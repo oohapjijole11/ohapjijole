@@ -51,4 +51,14 @@ public class EmitterRepository {
                 .filter(entry -> entry.getKey().compareTo(lastEventId) < 0)
                 .forEach(Map.Entry::getValue);
     }
+    public void deleteAllEventCacheStartWithId(String userId) {
+        eventCache.forEach(
+                (key, emitter) -> {
+                    if (key.startsWith(userId)) {
+                        eventCache.remove(key);
+                    }
+                }
+        );
+    }
+
 }
