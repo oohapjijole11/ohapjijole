@@ -94,7 +94,7 @@ public class SbidService {
         try{
             slackClient.send(slackUrl, payload(p -> p
                     .text(title) // 메시지 제목
-                    .iconUrl("https://github.com/oohapjijole11/ohapjijole/blob/dev/src/main/resources/static/brandimage.webp")
+                    .iconUrl("https://raw.githubusercontent.com/oohapjijole11/ohapjijole/refs/heads/dev/src/main/resources/static/brandimage.webp")
                     .username("ohapjijole")
                     .attachments(List.of(
                             Attachment.builder()
