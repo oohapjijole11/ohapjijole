@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class EmitterRepository {
     private final Map<String, SseEmitter> emitters = new ConcurrentHashMap<>();
-    private final Map<String, Object> eventCache = new ConcurrentHashMap<>();
 
     public SseEmitter save(String emitterId, SseEmitter sseEmitter) {
         emitters.put(emitterId, sseEmitter);
@@ -27,38 +26,6 @@ public class EmitterRepository {
 
     public void deleteById(String id) {
         emitters.remove(id);
-    }
-
-    public void deleteAllEmitterStartWithAuctionId(String auctionId) {
-        emitters.forEach(
-                (key, emitter) -> {
-                    if (key.startsWith(auctionId)) {
-                        emitter.complete();  // 연결을 명시적으로 종료
-                        emitters.remove(key);
-                    }
-                }
-        );
-    }
-
-    public Map<String, Object> findEventsSinceLastId(String lastEventId) {
-        return eventCache.entrySet().stream()
-                .filter(entry -> entry.getKey().compareTo(lastEventId) > 0)
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-    }
-
-    public void cleanUpOldEvents(String lastEventId) {
-        eventCache.entrySet().stream()
-                .filter(entry -> entry.getKey().compareTo(lastEventId) < 0)
-                .forEach(Map.Entry::getValue);
-    }
-    public void deleteAllEventCacheStartWithId(String userId) {
-        eventCache.forEach(
-                (key, emitter) -> {
-                    if (key.startsWith(userId)) {
-                        eventCache.remove(key);
-                    }
-                }
-        );
     }
 
 }
