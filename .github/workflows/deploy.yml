@@ -80,7 +80,7 @@ jobs:
                   { "name": "JWT_SECRET_KEY", "value": "${{ secrets.JWT_SECRET_KEY }}" },
                   { "name": "RDS_DB_NAME", "value": "${{ secrets.RDS_DB_NAME }}" },
                   { "name": "RDS_HOST", "value": "${{ secrets.RDS_HOST }}" },
-                  { "name": "RDS_HOST", "value": "${{ secrets.DB_HOST }}" },
+                  { "name": "DB_HOST", "value": "${{ secrets.DB_HOST }}" },
                   { "name": "RDS_PASSWORD", "value": "${{ secrets.RDS_PASSWORD }}" },
                   { "name": "RDS_USERNAME", "value": "${{ secrets.RDS_USERNAME }}" },
                   { "name": "REDIS_HOST", "value": "${{ secrets.REDIS_HOST }}" },
