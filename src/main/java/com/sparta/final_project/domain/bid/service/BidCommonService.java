@@ -140,7 +140,7 @@ public class BidCommonService {
         Bid bid = new Bid(price, user, auction);
         Bid newBid = bidRepository.save(bid);
         //로그 파일에 적을 로그일 경우 logger 사용
-        logger.info("입찰 ::: 유저 : {} 경매 : {} 금액 : {}", user.getId(), auctionId, price);
+        logger.info("bid ::: userId : {} auctionId : {} price : {}", user.getId(), auctionId, price);
 
         //저장된 데이터 실시간 알림 보내기
         sseSend(newBid, Status.BID);

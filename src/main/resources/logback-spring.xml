@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
+    <property resource="application.properties"/>
 
     <!-- 콘솔에 로그 출력 -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
@@ -44,17 +45,37 @@
         </encoder>
     </appender>
 
+    <appender name="AWS_CLOUDWATCH_LOG" class="ca.pjer.logback.AwsLogsAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <layout>
+            <pattern>%d{yyyyMMdd'T'HHmmss} %thread %level %logger{15} %msg%n</pattern>
+        </layout>
+        <logGroupName>bid-log</logGroupName>
+        <logStreamUuidPrefix>bid-log-</logStreamUuidPrefix>
+        <logRegion>ap-northeast-2</logRegion>
+        <maxBatchLogEvents>50</maxBatchLogEvents>
+        <maxFlushTimeMillis>30000</maxFlushTimeMillis>
+        <maxBlockTimemillis>5000</maxBlockTimemillis>
+        <retentionTimeDays>0</retentionTimeDays>
+        <accessKeyId>${cloud.aws.credentials.access-key}</accessKeyId>  <!--${cloud.aws.credentials.access-key}-->
+        <secretAccessKey>${cloud.aws.credentials.secret-key}</secretAccessKey><!--${cloud.aws.credentials.secret-key}-->
+    </appender>
+
 
     <!--입찰에 관한 로그 설정-->
     <logger name="bid_logger" level="INFO" additivity="false">
         <appender-ref ref="BID_SERVICE_FILE_APPENDER"/>
         <appender-ref ref="STDOUT"/>
+        <appender-ref ref="AWS_CLOUDWATCH_LOG"/>
     </logger>
 
     <!--낙찰에 관한 로그 설정-->
     <logger name="sbid_logger" level="INFO" additivity="false">
         <appender-ref ref="SBID_SERVICE_FILE_APPENDER"/>
         <appender-ref ref="STDOUT"/>
+        <appender-ref ref="AWS_CLOUDWATCH_LOG"/>
     </logger>
 
     <!-- 전체 애플리케이션에 대한 로그 레벨 설정 -->
