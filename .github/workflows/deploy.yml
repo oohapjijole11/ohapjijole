@@ -87,6 +87,8 @@ jobs:
                   { "name": "REDIS_PORT", "value": "${{ secrets.REDIS_PORT }}" },
                   { "name": "AWS_S3_BUCKET", "value": "${{ secrets.AWS_S3_BUCKET }}" },
                   { "name": "AWS_SQS_QUEUE_URL", "value": "${{ secrets.AWS_SQS_QUEUE_URL }}" },
+                  { "name": "AWS_ACCESS_KEY_ID", "value": "${{ secrets.AWS_ACCESS_KEY_ID }}" },
+                  { "name": "AWS_SECRET_ACCESS_KEY", "value": "${{ secrets.AWS_SECRET_ACCESS_KEY }}" },
                   { "name": "spring.profiles.active", "value": "prod" }
                 ],
                 "logConfiguration": {
