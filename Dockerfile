@@ -3,7 +3,7 @@ FROM openjdk:17-jdk-slim
 
 # 작업 디렉토리 설정
 WORKDIR /app
-
+ENV SPRING_PROFILES_ACTIVE=prod
 # 빌드된 JAR 파일을 복사
 ARG JAR_FILE=build/libs/*.jar
 COPY ${JAR_FILE} /app/app.jar
