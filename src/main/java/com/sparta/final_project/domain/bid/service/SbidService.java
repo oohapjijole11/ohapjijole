@@ -65,7 +65,7 @@ public class SbidService {
         //낙찰 데이터 생성 및 저장
         Sbid sbid = new Sbid(sBidder, auction,lastBid.getPrice());
         Sbid saveSbid = sbidRepository.save(sbid);
-        logger.info("낙찰 ::: 유저 : {} 경매 : {} 낙찰 금액 : {}", sBidder.getId(), auctionId, lastBid.getPrice());
+        logger.info("sbid ::: userId : {} auctionId : {} price : {}", sBidder.getId(), auctionId, lastBid.getPrice());
         //낙찰 알림 보내고 실시간 연결 끊기
         commonService.sseSend(lastBid, Status.SUCCESSBID);
 
