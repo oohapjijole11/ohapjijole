@@ -95,11 +95,6 @@ dependencies {
 
     //CSV
     implementation 'com.opencsv:opencsv:5.6'
-
-    //MySQL 드라이버
-//    implementation 'mysql:mysql-connector-java:8.0.33'
-//    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-//    implementation 'org.springframework.boot:spring-boot-starter-web'
 }
 
 tasks.named('test') {
