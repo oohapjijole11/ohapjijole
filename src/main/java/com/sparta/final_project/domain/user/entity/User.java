@@ -29,7 +29,6 @@ public class User implements Serializable {
 
     private String name;
 
-    private Double point = 0.0;
 
     @Enumerated(EnumType.STRING)
     @Column
