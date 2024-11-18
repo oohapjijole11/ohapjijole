@@ -1,11 +1,8 @@
-# 🎉 **OhapJijole Ticket & Auction Service** 🎉
 
-> **"OhapJijole Ticket & Auction"**  
-> 실시간 경매와 티켓팅 서비스를 통해 사용자들에게 몰입감 넘치는 구매 경험을 제공합니다!
-> ![image (1)](https://github.com/user-attachments/assets/fec142e2-6876-42c4-8e48-ff6440be1a24)
+![image (1)](https://github.com/user-attachments/assets/fec142e2-6876-42c4-8e48-ff6440be1a24)
+**"OhapJijole Ticket & Auction"**  
+실시간 경매와 티켓팅 서비스를 통해 사용자들에게 몰입감 넘치는 구매 경험을 제공합니다!
 
-
----
 
 <div align="center">
   <img src="https://img.shields.io/badge/PROJECT-OhapJijole-blue?style=for-the-badge&logo=appveyor"/>
@@ -13,7 +10,7 @@
 
 ## 🏁 **서비스 소개**
 “**OhapJijole Ticket & Auction**”은 한정된 수량의 티켓이나 상품을 실시간 경매 형태로 제공하는 티켓팅 옥션 서비스입니다.  
-사용자는 등급과 보유한 티켓에 따라 경매에 참여하고, **경쟁 입찰을 통해 높은 금액을 제시한 사용자가 원하는 상품을 획득**할 수 있습니다.?????
+사용자는 등급과 보유한 티켓에 따라 경매에 참여하고, **경쟁 입찰을 통해 높은 금액을 제시한 사용자가 원하는 상품을 획득**할 수 있습니다.
 
 
 
@@ -72,6 +69,22 @@
     
     </details>
 ---
+
+## 🚀 **주요 기능**
+
+### 🎟️ **티켓 발급: SQS 및 Lambda를 통한 비동기 처리**
+
+<div style="border: 2px solid #FFD700; border-radius: 10px; padding: 16px; background-color: #FFFACD;">
+  <h4>🔧 **시스템 구현**</h4>
+  <ul>
+    <li>🚀 <strong>대용량 트래픽 수용</strong>: SQS와 Lambda를 활용한 비동기 티켓 발급 시스템을 구현하여 대규모 트래픽을 효율적으로 처리합니다.</li>
+    <li>🔄 <strong>동시성 제어</strong>: Lambda 함수를 통해 동시성을 제어하고 티켓 발급을 관리하여 안정적인 서비스 운영을 보장합니다.</li>
+    <li>⚙️ <strong>유연한 확장성</strong>: 서버리스 아키텍처를 채택하여 필요에 따라 자동으로 확장되며, 유지보수 비용을 절감합니다.</li>
+  </ul>
+</div>
+
+---
+
 ## 🔑 **KEY SUMMARY**
 
 ### **성능 개선: 최저가 상품 조회 성능, Redis 도입으로 3배 이상 향상**
