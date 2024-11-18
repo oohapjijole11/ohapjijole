@@ -12,62 +12,38 @@
 “**OhapJijole Ticket & Auction**”은 한정된 수량의 티켓이나 상품을 실시간 경매 형태로 제공하는 티켓팅 옥션 서비스입니다.  
 사용자는 등급과 보유한 티켓에 따라 경매에 참여하고, **경쟁 입찰을 통해 높은 금액을 제시한 사용자가 원하는 상품을 획득**할 수 있습니다.
 
-
-
 ---
 
 ## 📚 **Tech Stacks**
-<p align="center">
-  <img src="https://img.shields.io/badge/Java-007396?style=flat-square&logo=java&logoColor=white">
-  <img src="https://img.shields.io/badge/SpringBoot-6DB33F?style=flat-square&logo=springboot&logoColor=white">
-  <img src="https://img.shields.io/badge/AWS-Lambda-FF9900?style=flat-square&logo=awslambda&logoColor=white">
-  <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white">
-  <img src="https://img.shields.io/badge/Redis-C925D1?style=flat-square&logo=redis&logoColor=white">
-  <img src="https://img.shields.io/badge/GitHubActions-2088FF?style=flat-square&logo=githubactions&logoColor=white">
-  <img src="https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white">
-</p>
+
+<div align="center">
+  <!-- Backend Technologies -->
+  <img src="https://img.shields.io/badge/Java-007396?style=flat-square&logo=java&logoColor=white" alt="Java">
+  <img src="https://img.shields.io/badge/SpringBoot-6DB33F?style=flat-square&logo=springboot&logoColor=white" alt="Spring Boot">
+  <img src="https://img.shields.io/badge/Spring_Security-6DB33F?style=flat-square&logo=springsecurity&logoColor=white" alt="Spring Security">
+  <img src="https://img.shields.io/badge/JWT-000000?style=flat-square&logo=json-web-tokens&logoColor=white" alt="JWT">
+  <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white" alt="MySQL">
+  <br><br>
+  <!-- Infrastructure Technologies -->
+  <img src="https://img.shields.io/badge/AWS_ECS-FF9900?style=flat-square&logo=amazon-ecs&logoColor=white" alt="AWS ECS">
+  <img src="https://img.shields.io/badge/AWS_ECR-FF9900?style=flat-square&logo=amazon-ecr&logoColor=white" alt="AWS ECR">
+  <img src="https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white" alt="Docker">
+  <img src="https://img.shields.io/badge/AWS_RDS-4479A1?style=flat-square&logo=amazon-rds&logoColor=white" alt="AWS RDS">
+  <img src="https://img.shields.io/badge/AWS_ElastiCache-C925D1?style=flat-square&logo=amazon-elasticache&logoColor=white" alt="AWS ElastiCache">
+  <br><br>
+  <!-- Cloud Services -->
+  <img src="https://img.shields.io/badge/AWS_Lambda-FF9900?style=flat-square&logo=aws-lambda&logoColor=white" alt="AWS Lambda">
+  <img src="https://img.shields.io/badge/AWS_SQS-FF9900?style=flat-square&logo=amazon-sqs&logoColor=white" alt="AWS SQS">
+  <img src="https://img.shields.io/badge/SSE-FF9900?style=flat-square&logo=server-sent-events&logoColor=white" alt="SSE">
+  <img src="https://img.shields.io/badge/AWS_S3-FF9900?style=flat-square&logo=amazons3&logoColor=white" alt="AWS S3">
+  <br><br>
+  <!-- CI/CD & DevOps -->
+  <img src="https://img.shields.io/badge/GitHub_Actions-2088FF?style=flat-square&logo=githubactions&logoColor=white" alt="GitHub Actions">
+
+</div>
 
 ---
-## 🎯 **프로젝트 목표**
 
-1. **대규모 트래픽 대응**
-    <details>
-    <summary>🔍 자세히 보기</summary>
-    
-    - **SQS, RDS-Proxy 활용**: 비동기 처리를 통해 API 요청을 **49req/sec 이하**로 안정성을 확보합니다.
-    - **동시성 처리**: SQS의 배치 크기와 Lambda의 처리량을 활용하여 **100단위의 동시성**을 처리합니다.
-    
-    </details>
-
-2. **성능 최적화**
-    <details>
-    <summary>🔍 자세히 보기</summary>
-    
-    - **Redis 캐싱**: 경매 상품 정보와 실시간 입찰 현황을 Redis에 캐싱하여 데이터베이스 부하를 줄이고 **속도를 28% 향상**시킵니다.
-    - **RDS Proxy 사용**: CPU를 효율적으로 관리하여 데이터베이스 성능을 최적화합니다.
-    
-    </details>
-
-3. **운영 및 배포 효율화**
-    <details>
-    <summary>🔍 자세히 보기</summary>
-    
-    - **CI/CD 파이프라인 구축**: Docker와 GitHub Actions를 이용하여 **배포 자동화**를 구현합니다.
-    - **ECS Fargate 활용**: 컨테이너 기반의 확장 가능한 서비스를 **배포**합니다.
-    - **ALB Health Check**: 비정상적인 인스턴스를 자동으로 제외시켜 **안정적인 운영**을 보장합니다.
-    
-    </details>
-
-4. **데이터 일관성 및 트랜잭션 관리**
-    <details>
-    <summary>🔍 자세히 보기</summary>
-    
-    - **FIFO 패턴 관리**: SQS를 이용하여 티켓 구매 인원의 메모리 순서를 **FIFO(선입선출)** 패턴으로 관리합니다.
-    - **중복 메시지 제거**: SQS FIFO의 중복 ID 그룹과 메시지 그룹 ID를 통해 **중복 메시지**를 제거합니다.
-    - **Redisson 활용**: 입찰 데이터의 **일관성을 보장**하기 위해 Redisson을 사용합니다.
-    
-    </details>
----
 ## 👥 **팀원 역할**
 
 <div align="center">
@@ -271,31 +247,17 @@
 
 ## 🔧 **기술적 고도화**
 
-### ⚙️ **동시성 관리**
-
-| **기술** | **적용 위치** | **설명** |
-| --- | --- | --- |
-| 🛡️ **분산 락 (Redisson RLock)** | 캐시 서버 및 공유 자원 | 입찰 시 데이터 정합성을 보장하고 공유 자원을 보호하기 위해 분산 락을 사용합니다. |
-| ⚡ **AWS Lambda** | AWS Lambda 트리거 | SQS 대용량 대기열 메시지를 동시성 있게 처리하여 높은 트래픽을 효율적으로 관리합니다. |
-| 📈 **구체적 역할** | | 배치 크기를 통해 SQS에 저장된 대규모 트래픽을 백단위 이상으로 동시성을 처리 가능 |
-
-
-### 🔗 **RDS-Proxy**
-
-| **기술** | **적용 위치** | **설명** |
-| --- | --- | --- |
-| 🖧 **RDS-Proxy** | Lambda와 RDS 연결 사이 | 대규모 트래픽 처리 시 RDS의 연결 수와 처리량을 최적화하여 시스템의 안정성과 성능을 향상시킵니다. |
-| 📈 **구체적 역할** | | 연결 개수 관리, CPU 사용 최적화, 처리량 효율 향상 |
-
-### 🗄️ **캐싱 전략**
-
-| **기술** | **적용 위치** | **설명** |
-| --- | --- | --- |
-| 🚀 **Redis** | 캐시 서버 | 실시간 상품 조회 성능을 향상시키기 위해 Redis를 도입하여 데이터 접근 속도를 극대화합니다. |
-| 🗄️ **AWS ElastiCache** | 인메모리 캐시 | 데이터베이스 부하를 줄이고 응답 속도를 향상시키기 위해 자주 조회되는 데이터를 캐시에 저장합니다. |
+| **카테고리**           | **기술**                                | **적용 위치**                 | **설명**                                                                                       |
+|------------------------|-----------------------------------------|-------------------------------|------------------------------------------------------------------------------------------------|
+| ⚙️ **동시성 관리**     | 🛡️ **분산 락 (Redisson RLock)**        | 캐시 서버 및 공유 자원         | 입찰 시 데이터 정합성을 보장하고 공유 자원을 보호하기 위해 분산 락을 사용합니다.                   |
+| ⚙️ **동시성 관리**     | ⚡ **AWS Lambda**                        | AWS Lambda 트리거             | SQS 대용량 대기열 메시지를 동시성 있게 처리하여 높은 트래픽을 효율적으로 관리합니다.                |
+| ⚙️ **동시성 관리**     | 📈 **구체적 역할**                      |                               | 배치 크기를 통해 SQS에 저장된 대규모 트래픽을 백단위 이상으로 동시성을 처리 가능                  |
+| 🔗 **RDS-Proxy**       | 🖧 **RDS-Proxy**                         | Lambda와 RDS 연결 사이        | 대규모 트래픽 처리 시 RDS의 연결 수와 처리량을 최적화하여 시스템의 안정성과 성능을 향상시킵니다.     |
+| 🔗 **RDS-Proxy**       | 📈 **구체적 역할**                      |                               | 연결 개수 관리, CPU 사용 최적화, 처리량 효율 향상                                              |
+| 🗄️ **캐싱 전략**      | 🚀 **Redis**                             | 캐시 서버                      | 실시간 상품 조회 성능을 향상시키기 위해 Redis를 도입하여 데이터 접근 속도를 극대화합니다.           |
+| 🗄️ **캐싱 전략**      | 🗄️ **AWS ElastiCache**                  | 인메모리 캐시                  | 데이터베이스 부하를 줄이고 응답 속도를 향상시키기 위해 자주 조회되는 데이터를 캐시에 저장합니다.       |
 
 ---
-
 ## 🌟 **Ground Rules**
 
 <details>
