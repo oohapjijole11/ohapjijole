@@ -28,7 +28,6 @@
 </p>
 
 ---
-
 ## 🎯 **프로젝트 목표**
 
 1. **대규모 트래픽 대응**
@@ -69,7 +68,43 @@
     
     </details>
 ---
+## 👥 **팀원 역할**
 
+<div align="center">
+
+<table style="width:80%; border-collapse: collapse;">
+  <tr>
+    <td style="border: 1px solid #ddd; padding: 16px; text-align: center;">
+      <h3>🚀 홍기평</h3>
+      <p><strong>역할:</strong> ?</p>
+      <p><strong>GitHub:</strong> <a href="https://github.com/">GitHub</a></p>
+    </td>
+    <td style="border: 1px solid #ddd; padding: 16px; text-align: center;">
+      <h3>💻 배진관</h3>
+      <p><strong>역할:</strong> ?</p>
+      <p><strong>GitHub:</strong> <a href="https://github.com/">GitHub</a></p>
+    </td>
+    <td style="border: 1px solid #ddd; padding: 16px; text-align: center;">
+      <h3>🔧 황우석</h3>
+      <p><strong>역할:</strong> ?</p>
+      <p><strong>GitHub:</strong> <a href="https://github.com/">GitHub</a></p>
+    </td>
+    <td style="border: 1px solid #ddd; padding: 16px; text-align: center;">
+      <h3>📅 김진비</h3>
+      <p><strong>역할:</strong> ?</p>
+      <p><strong>GitHub:</strong> <a href="https://github.com/">GitHub</a></p>
+    </td>
+    <td style="border: 1px solid #ddd; padding: 16px; text-align: center;">
+      <h3>📝 노현지</h3>
+      <p><strong>역할:</strong> ?</p>
+      <p><strong>GitHub:</strong> <a href="https://github.com/">GitHub</a></p>
+    </td>
+  </tr>
+</table>
+
+</div>
+
+---
 ## 🚀 **주요 기능**
 
 ### 🎟️ **티켓 발급: SQS 및 Lambda를 통한 비동기 처리**
@@ -218,13 +253,6 @@
 
 ---
 
-
-
-
-
-
-
-
 ## 🛠️ **시스템 아키텍처**
 <div align="center">
   <img src="https://user-images.githubusercontent.com/12345678/architecture.png" alt="아키텍처 다이어그램" width="70%">
@@ -241,50 +269,48 @@
 
 ---
 
-## ⚙️ **기술적 고도화**
+## 🔧 **기술적 고도화**
+
+### ⚙️ **동시성 관리**
+
+| **기술** | **적용 위치** | **설명** |
+| --- | --- | --- |
+| 🛡️ **분산 락 (Redisson RLock)** | 캐시 서버 및 공유 자원 | 입찰 시 데이터 정합성을 보장하고 공유 자원을 보호하기 위해 분산 락을 사용합니다. |
+| ⚡ **AWS Lambda** | AWS Lambda 트리거 | SQS 대용량 대기열 메시지를 동시성 있게 처리하여 높은 트래픽을 효율적으로 관리합니다. |
+| 📈 **구체적 역할** | | 배치 크기를 통해 SQS에 저장된 대규모 트래픽을 백단위 이상으로 동시성을 처리 가능 |
+
+
+### 🔗 **RDS-Proxy**
+
+| **기술** | **적용 위치** | **설명** |
+| --- | --- | --- |
+| 🖧 **RDS-Proxy** | Lambda와 RDS 연결 사이 | 대규모 트래픽 처리 시 RDS의 연결 수와 처리량을 최적화하여 시스템의 안정성과 성능을 향상시킵니다. |
+| 📈 **구체적 역할** | | 연결 개수 관리, CPU 사용 최적화, 처리량 효율 향상 |
+
+### 🗄️ **캐싱 전략**
+
+| **기술** | **적용 위치** | **설명** |
+| --- | --- | --- |
+| 🚀 **Redis** | 캐시 서버 | 실시간 상품 조회 성능을 향상시키기 위해 Redis를 도입하여 데이터 접근 속도를 극대화합니다. |
+| 🗄️ **AWS ElastiCache** | 인메모리 캐시 | 데이터베이스 부하를 줄이고 응답 속도를 향상시키기 위해 자주 조회되는 데이터를 캐시에 저장합니다. |
+
+---
+
+## 🌟 **Ground Rules**
+
 <details>
-<summary><b>🍁 Redisson을 활용한 동시성 문제 해결</b></summary>
-
-- Redisson 기반의 **분산 락 시스템**을 사용하여 동시 입찰 시 데이터 충돌 방지.
-- **CPU 점유율 25% 감소**, 데이터 일관성 보장.
+  <summary>📜 **Click to View Ground Rules**</summary>
+  
+  <ul>
+    <li>🚨 <strong>문제 발생 시 즉시 공유</strong>: 문제가 발생하면 팀원들에게 빠르게 상황을 공유하여 협력 해결합니다.</li>
+    <li>💻 <strong>정규 시간 내 풀타임 화면 공유</strong>: 업무 시간 동안 항상 화면을 공유하여 투명한 협업을 유지합니다.</li>
+    <li>❓ <strong>사소한 것도 질문하기</strong>: 궁금한 점이나 막힌 부분은 사소한 것이라도 즉시 물어보고 해결합니다.</li>
+    <li>🔧 <strong>스크럼에서 트러블 슈팅 및 구현 사항 설명</strong>: 매일 스크럼 시간에 구현 진행 상황과 문제 해결 과정을 공유합니다.</li>
+    <li>📅 <strong>1Day, 1Issue, 1PR 원칙</strong>: 하루에 하나의 이슈를 처리하고 PR을 생성합니다.</li>
+    <li>📝 <strong>1PR 당 3개 이상의 리뷰 남기기</strong>: 각 PR에 대해 최소 3개의 리뷰를 작성하여 코드 품질을 개선합니다.</li>
+  </ul>
+  
 </details>
-
-<details>
-<summary><b>🍁 SQS와 Lambda를 통한 비동기 처리</b></summary>
-
-- SQS와 Lambda를 조합하여 경매 종료 시 자동 낙찰 처리.
-- 처리 속도 **2배 향상**.
-</details>
-
----
-
-## 👥 **팀원 역할**
-| 이름   | 역할                           | GitHub 링크      |
-|--------|-------------------------------|-----------------|
-| 홍기평 | ????????              | [GitHub](https://github.com/) |
-| 배진관 | ????????       | [GitHub](https://github.com/) |
-| 황우석 |????????           | [GitHub](https://github.com/) |
-| 김진비 | ????????          | [GitHub](https://github.com/) |
-| 노현지 | ????????         | [GitHub](https://github.com/) |
-
-### **Ground Rule**
-- **1 Day, 1 Issue, 1 PR** 원칙 준수.
-- 코드 리뷰 **최소 2회** 이상 필수.
-- 매일 **10분 스크럼 미팅**을 통한 일정 공유 및 문제 해결.
-
----
-
-## 📈 **성과 및 회고**
-### **성과**
-- API 처리량 **500req/sec** 달성.
-- 실시간 경매 응답 속도 **3배 개선**.
-
-### **회고**
-- **잘된 점**: 
-- **아쉬운 점**: 
-
----
-
 ## 🔮 **미래 계획**
 > **Java 21 가상 스레드** 및 **AI 기반 추천 시스템** 도입으로 사용자 맞춤형 서비스 제공 목표.
 
