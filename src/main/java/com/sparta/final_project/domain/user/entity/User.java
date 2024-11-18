@@ -29,18 +29,12 @@ public class User implements Serializable {
 
     private String name;
 
-    private Double point = 0.0;
-
     @Enumerated(EnumType.STRING)
     @Column
     private UserRole role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Item> items;
-
-    @Enumerated(EnumType.STRING)
-    @Column
-    private UserRating rating;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<BuyTickets> tickets;
@@ -89,4 +83,6 @@ public class User implements Serializable {
     public void updateUserRole(UserRole newUserRole){
         this.role = newUserRole;
     }
+
+
 }
