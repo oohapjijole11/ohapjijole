@@ -83,6 +83,4 @@ public class User implements Serializable {
     public void updateUserRole(UserRole newUserRole){
         this.role = newUserRole;
     }
-
-
 }

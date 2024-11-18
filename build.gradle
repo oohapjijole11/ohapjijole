@@ -39,7 +39,6 @@ dependencies {
     implementation 'software.amazon.awssdk:eventbridge:2.20.4'
 
 // Jackson 라이브러리 추가 (JSON 직렬화/역직렬화에 필요)
-    implementation 'org.springframework.boot:spring-boot-starter-web:2.5.6' // 버전은 필요에 맞게 수정
 
 
     // Security
