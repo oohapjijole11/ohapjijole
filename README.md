@@ -25,9 +25,8 @@
   </p>
 </div>
 
-<div align="center" style="margin-top: 20px;">
-  <img src="https://raw.githubusercontent.com/oohapjijole11/ohapjijole/main/assets/auction-preview.png" alt="Auction Preview" width="70%" style="border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-</div>
+---
+
 
 ## 📚 **기술 스택**
 
