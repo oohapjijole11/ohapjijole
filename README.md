@@ -2,7 +2,7 @@
 ![image (1)](https://github.com/user-attachments/assets/ddf9ae1f-c33e-4b31-8da7-8919dd9d540d)
 
 <h1 align="center" style="font-size: 2.8rem; font-weight: bold; color: #4A90E2; margin-top: 20px;">
-  🎟️ OhapJijole Ticket & Auction 🎟️
+   OhapJijole Ticket & Auction 
 </h1>
 
 <p align="center" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 1.2rem; color: #333;">
@@ -36,18 +36,40 @@
 
 ---
 
-## 👥 **팀원 역할**
+## 👥 팀 구성원
+
+> **오합지졸 프로젝트 멤버**
 
 <div align="center">
-
-| **이름**       | **역할**             | **GitHub**                        |
-|----------------|---------------------|----------------------------------|
-| 🚀 홍기평      | ?????????????????  | [GitHub](https://github.com/)    |
-| 💻 배진관      | ?????????????????? | [GitHub](https://github.com/)    |
-| 🔧 황우석      | ?????????????????? | [GitHub](https://github.com/)    |
-| 📅 김진비      | ?????????????????? | [GitHub](https://github.com/)    |
-| 📝 노현지      | ?????????????????? | [GitHub](https://github.com/)    |
-
+  <table>
+    <tr>
+      <td align="center">
+        <img src="https://via.placeholder.com/100" alt="홍기평" width="100" height="100" style="border-radius: 50%;"/><br>
+        <b>🚀 홍기평</b><br>
+        <a href="https://github.com/">GitHub</a>
+      </td>
+      <td align="center">
+        <img src="https://via.placeholder.com/100" alt="배진관" width="100" height="100" style="border-radius: 50%;"/><br>
+        <b>💻 배진관</b><br>
+        <a href="https://github.com/">GitHub</a>
+      </td>
+      <td align="center">
+        <img src="https://via.placeholder.com/100" alt="황우석" width="100" height="100" style="border-radius: 50%;"/><br>
+        <b>🔧 황우석</b><br>
+        <a href="https://github.com/">GitHub</a>
+      </td>
+      <td align="center">
+        <img src="https://via.placeholder.com/100" alt="김진비" width="100" height="100" style="border-radius: 50%;"/><br>
+        <b>📅 김진비</b><br>
+        <a href="https://github.com/">GitHub</a>
+      </td>
+      <td align="center">
+        <img src="https://via.placeholder.com/100" alt="노현지" width="100" height="100" style="border-radius: 50%;"/><br>
+        <b>📝 노현지</b><br>
+        <a href="https://github.com/">GitHub</a>
+      </td>
+    </tr>
+  </table>
 </div>
 
 ---
@@ -197,11 +219,7 @@
 
 ---
 
-## 🔧 **기술적 고도화**
-
-<p align="center">
-  <strong>"시스템 안정성과 성능 최적화를 위한 설계를 실현합니다."</strong>
-</p>
+## 🔧 **적용 기술 정리**
 
 | 🎨 **카테고리**       | 🌟 **기술**                          | 📌 **적용 위치**           | 📝 **설명**                                                                                 |
 |----------------------|-------------------------------------|--------------------------|-------------------------------------------------------------------------------------------|
@@ -211,29 +229,260 @@
 | 🗄️ **캐싱 전략**    | 🚀 **Redis**                       | 캐시 서버                  | 실시간 데이터 조회 성능을 극대화하며, 경매와 같은 고빈도 읽기 작업에서 빠른 응답을 보장합니다.            |
 | 🗄️ **캐싱 전략**    | 🗄️ **AWS ElastiCache**             | 인메모리 캐시              | 데이터베이스 부하를 줄이고, 자주 조회되는 데이터를 캐싱하여 응답 속도를 대폭 향상시킵니다.                |
 
----
-
-### 🎯 **기술적 구현 방식 및 효과**
-
-1. **동시성 관리**
-   - **Redisson RLock**: 분산 락 구현을 통해 경매 입찰과 같은 중요한 이벤트에서 데이터 정합성을 유지합니다.
-   - **AWS Lambda**: SQS 대기열에서 병렬로 메시지를 처리하여 대규모 트래픽 환경에서도 높은 안정성을 제공합니다.  
-     특히, Lambda의 동시성 제어와 배치 크기 설정으로 효율적인 처리 성능을 달성했습니다.
-
-2. **RDS-Proxy**
-   - Lambda와 RDS 사이의 연결을 효율적으로 관리하여 트래픽 급증 시에도 데이터베이스의 안정성을 유지합니다.
-   - 연결 수를 줄이고, CPU와 메모리 사용량을 최적화하여 처리량(Throughput)을 대폭 개선했습니다.
-
-3. **캐싱 전략**
-   - **Redis**는 상품 조회와 같은 고빈도 읽기 작업을 최적화하여 응답 속도를 크게 향상시켰습니다.
-   - **AWS ElastiCache**는 자주 요청되는 데이터를 캐싱하여 데이터베이스 부하를 줄이고, 사용자 경험을 강화합니다.
 
 ---
 
-### 🛠️ **기술적 고도화의 종합 효과**
-- **성능 개선**: Redis와 RDS-Proxy를 통해 데이터 처리 속도가 대폭 향상.
-- **안정성 강화**: 대규모 트래픽 환경에서도 안정적인 서비스 운영 가능.
-- **확장성 보장**: Lambda와 ElastiCache를 활용하여 동적으로 확장 가능한 구조 구현.
+# ✨ **기술적 고도화**
+
+---
+
+<details>
+<summary>🚀 **경매 시작 및 마감 자동화**</summary>
+
+### 🔧 [구현한 기능]
+- 경매의 시작시간과 마감시간을 현재시간과 비교하여 정확한 시간에 경매 상태를 자동으로 변경.
+
+---
+
+### 📋 [주요 로직]
+- 생성된 경매들의 시작시간과 마감시간을 비교하여 상태를 정확히 변경.
+- Lambda를 활용하여 상태 자동화.
+
+---
+
+### 🗂 [배경]
+- 실시간으로 경매 시작과 마감을 처리해야 하는 요구사항이 있었습니다.
+
+---
+
+### 🛠 [선택지]
+1. **Spring Boot의 `@Scheduled` 사용**: 1분마다 DB를 수정하는 방식.
+2. **AWS EventBridge Scheduler 사용**: Lambda 함수를 일정 시간마다 호출.
+
+---
+
+### ✅ [의사결정 및 사유]
+- **AWS EventBridge Scheduler**를 선택:
+  - 예약된 작업의 정확한 트리거 시점과 실패 시 재시도 메커니즘 제공.
+  - `@Scheduled`는 처리 지연 시 시간 문제가 발생할 가능성이 있어 제외.
+
+---
+
+### 📝 [회고]
+- **장점**: 
+  - AWS를 활용해 로그 추적과 자동화된 작업이 용이.
+- **단점**: 
+  - VPC와 IAM 설정에 시간이 소요되며, Lambda 코드의 유지보수가 번거로울 수 있음.
+- **다시 시도한다면**: Spring Batch를 활용해 대용량 데이터를 더욱 세밀히 관리.
+
+---
+
+### ⚙️ [성능 개선]
+- **변경 전**: 단일 스레드 처리, 평균 15초 소요.
+- **변경 후**: 멀티스레드 병렬 실행 도입, 평균 5~10초로 단축.
+- **적용 기술**:
+  - ThreadPool을 사용해 최대 100개의 스레드로 병렬 실행.
+
+</details>
+
+---
+
+<details>
+<summary>🔗 **동시성 제어 및 입찰 처리**</summary>
+
+### 🔧 [구현한 기능]
+- 동시 입찰 문제 해결을 위해 Redis 기반의 Redisson 분산 락을 적용.
+
+---
+
+### 📋 [주요 로직]
+1. **Hash 구조 활용**:
+   - 입찰 데이터를 관리하고, 특정 경매 ID로 시작하는 모든 입찰 정보를 조회.
+2. **최신 데이터 비교**:
+   - Key 값을 기준으로 최신 데이터를 비교하여 최고 입찰가를 확인.
+3. **락 최적화**:
+   - 필요한 부분에만 락을 적용하여 효율을 극대화.
+
+---
+
+### 🗂 [배경]
+- 비관적 락을 사용하면 DB 부하로 인해 실행 시간이 길어짐.
+- Redis를 통해 메모리 기반 처리로 실행 속도 개선.
+
+---
+
+### 🛠 [선택지]
+- 함수형 분산 락: 전역 락으로 동작.
+- 메서드 분리: 필요한 부분에만 락 적용.
+
+---
+
+### ✅ [의사결정 및 사유]
+- 메서드 분리 방식을 선택:
+  - 불필요한 락 제거로 성능 개선 (2191ms → 1100ms).
+
+---
+
+### 📝 [회고]
+- **장점**: Redis 기반으로 동시성 제어가 효율적.
+- **단점**: TTL 관리와 락 설정이 복잡할 수 있음.
+- **다시 시도한다면**: AOP 기반으로 락 적용 범위를 더 세밀히 조정.
+
+</details>
+
+---
+
+<details>
+<summary>📦 **동시성 및 대규모 트래픽 관리**</summary>
+
+### 🔧 [구현한 기능]
+- 대규모 트래픽 처리를 위한 SQS 및 Lambda 기반의 티켓 구매 대기열 시스템 구현.
+
+---
+
+### 📋 [주요 로직]
+1. **SQS**:
+   - 메시지 대기열을 사용해 대규모 요청을 분산 처리.
+2. **Lambda**:
+   - 트리거 기반으로 동작하며, 대기열 데이터를 효율적으로 처리.
+3. **RDS Proxy**:
+   - DB 연결 효율화를 통해 대량 트래픽 처리 최적화.
+
+---
+
+### 🗂 [배경]
+- SQS 단일 사용으로 대용량 트래픽 처리 한계를 경험.
+- Lambda와 Redis를 결합하여 성능 개선 필요.
+
+---
+
+### 🛠 [선택지]
+1. Lambda + SQS 배치 사이즈 조절.
+2. Redis 기반 메모리 캐싱.
+
+---
+
+### ✅ [의사결정 및 사유]
+- Lambda와 SQS 배치 사이즈 최적화로 대규모 트래픽 처리 해결.
+
+---
+
+### 📝 [회고]
+- **장점**:
+  - Lambda의 자동 확장성과 AWS 통합으로 처리 효율 극대화.
+- **단점**:
+  - AWS 의존성이 높아 아키텍처의 유연성이 다소 떨어질 수 있음.
+- **다시 시도한다면**:
+  - Redis 중심으로 캐싱 구조를 개선하여 대기열 성능을 더욱 높일 계획.
+
+---
+
+### ⚙️ [성능 개선]
+- **변경 전**: SQS 단일 호출 방식, 성능 저하 발생.
+- **변경 후**: Lambda와 SQS 최적화, 대기열 처리 속도 향상.
+
+</details>
+
+---
+
+<h1>🛠️ 트러블 슈팅: 불필요한 커넥션 점유 해결</h1>
+
+<details>
+  <summary><strong>📌 문제 배경 및 정의</strong></summary>
+  <h3>📚 배경</h3>
+  <p>대규모 데이터 처리 중 <strong>RDS</strong>에서 불필요한 연결 점유가 발생하였습니다.</p>
+  <p>연결 제한 초과로 인해 데이터 처리 지연 문제가 발생하였습니다.</p>
+
+  <h3>⚠️ 문제</h3>
+  <ul>
+    <li>RDS 연결 수를 확장하려 했으나, RDS 버전의 최대 연결 제한으로 한계 발생.</li>
+    <li>과도한 연결 점유로 인해 <strong>성능 저하 및 장애</strong>가 발생.</li>
+  </ul>
+</details>
+
+<details>
+  <summary><strong>🚀 해결 방안 및 적용 내용</strong></summary>
+  <h3>✅ 해결 방안</h3>
+  <ol>
+    <li>
+      <strong>RDS Proxy 활용:</strong>
+      <ul>
+        <li>RDS Proxy를 통해 <strong>연결 재활용 및 최적화</strong>.</li>
+        <li>테스트 시 Gradual Ramp-Up 방식을 적용해 <strong>RAM 사용량</strong>을 조절.</li>
+      </ul>
+    </li>
+    <li>
+      <strong>HikariCP 설정:</strong>
+      <ul>
+        <li>Spring Boot에서 HikariCP를 사용해 <strong>최대/최소 연결 값</strong> 조정.</li>
+        <li>
+          주요 설정:
+          <ul>
+            <li><code>maximumPoolSize</code>: 최대 연결 수 제한 설정.</li>
+            <li><code>minimumIdle</code>: 최소 연결 수를 설정해 불필요한 연결 감소.</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ol>
+
+  <h3>💡 적용 내용</h3>
+  <ul>
+    <li>
+      <strong>RDS Proxy:</strong>
+      <ul>
+        <li>기존 연결을 재활용하여 <strong>연결 풀 고갈 방지</strong>.</li>
+        <li>연결 관리 효율성을 대폭 개선.</li>
+      </ul>
+    </li>
+    <li>
+      <strong>HikariCP:</strong>
+      <ul>
+        <li><strong>최적 연결 수 관리</strong>로 성능 향상.</li>
+        <li>연결 점유 최소화로 리소스 낭비 감소.</li>
+      </ul>
+    </li>
+  </ul>
+</details>
+
+<details>
+  <summary><strong>🎯 결과 및 회고</strong></summary>
+  <h3>📈 결과</h3>
+  <ul>
+    <li>
+      <strong>RDS Proxy:</strong>
+      <ul>
+        <li>연결 풀 효율성 증가.</li>
+        <li>대규모 트래픽 처리 시 <strong>안정성 확보</strong>.</li>
+      </ul>
+    </li>
+    <li>
+      <strong>HikariCP:</strong>
+      <ul>
+        <li>연결 점유 문제 완화.</li>
+        <li>처리 속도 약 <strong>30%</strong> 향상 및 오류 발생 빈도 <strong>0%</strong> 달성.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h3>🔍 회고</h3>
+  <ul>
+    <li>
+      <strong>장점:</strong>
+      <ul>
+        <li>RDS Proxy는 연결 재활용과 안정성 측면에서 매우 유용.</li>
+        <li>HikariCP는 설정 변경만으로 빠른 성능 최적화 가능.</li>
+      </ul>
+    </li>
+    <li>
+      <strong>단점:</strong>
+      <ul>
+        <li>RDS Proxy 설정 시 AWS Console 및 권한 관리에 추가 시간이 소요.</li>
+        <li>테스트 환경에서는 RAM 사용량 증가로 리소스 관리 필요.</li>
+      </ul>
+    </li>
+  </ul>
+</details>
 
 ---
 
