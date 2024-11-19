@@ -20,43 +20,42 @@ import org.springframework.web.bind.annotation.*;
 public class ItemController {
 
     private final ItemService itemService;
+        // 상품 등록
+        @PostMapping("/items")
+        public ResponseEntity<ItemCreateResponse> createItem(
+                @RequestBody ItemCreateRequest request,
+                @AuthenticationPrincipal AuthUser authUser
+        ) {
+            // 상품 생성
+            ItemCreateResponse itemCreateResponse = itemService.createItem(request, authUser);
+            return ResponseEntity.status(HttpStatus.CREATED).body(itemCreateResponse);
+        }
+        // 상품 조회
+        @GetMapping("/items/{id}")
+        public ResponseEntity<ItemSimpleResponse> getItem(@PathVariable Long id) {
+            ItemSimpleResponse itemSimpleResponse = itemService.getItem(id);
+            return ResponseEntity.ok(itemSimpleResponse);
+        }
 
-    // 상품 등록
-    @PostMapping("/items")
-    public ResponseEntity<ItemCreateResponse> createItem(
-            @RequestBody ItemCreateRequest request,
-            @AuthenticationPrincipal AuthUser authUser
-    ) {
-        // 상품 생성
-        ItemCreateResponse itemCreateResponse = itemService.createItem(request, authUser);
-        return ResponseEntity.status(HttpStatus.CREATED).body(itemCreateResponse);
-    }
-    // 상품 조회
-    @GetMapping("/items/{id}")
-    public ResponseEntity<ItemSimpleResponse> getItem(@PathVariable Long id) {
-        ItemSimpleResponse itemSimpleResponse = itemService.getItem(id);
-        return ResponseEntity.ok(itemSimpleResponse);
-    }
-
-    // 상품 수정
-    @PutMapping("/items/{id}")
-    public ResponseEntity<ItemUpdateResponse> updateItem(
-            @PathVariable Long id,
-            @RequestBody ItemUpdateRequest request
+        // 상품 수정
+        @PutMapping("/items/{id}")
+        public ResponseEntity<ItemUpdateResponse> updateItem(
+                @PathVariable Long id,
+                @RequestBody ItemUpdateRequest request
 //            @AuthenticationPrincipal AuthUser authUser
 
-    ) {
-        ItemUpdateResponse updatedItem = itemService.updateItem(id, request);
+        ) {
+            ItemUpdateResponse updatedItem = itemService.updateItem(id, request);
 
-        // 업데이트된 상품 정보를 담은 응답 반환
-        return ResponseEntity.ok(updatedItem);
+            // 업데이트된 상품 정보를 담은 응답 반환
+            return ResponseEntity.ok(updatedItem);
+        }
+
+        // 상품 삭제
+        @DeleteMapping("items/{id}")
+        public ResponseEntity<Void> deleteItem(@PathVariable Long id) {
+            itemService.deleteItem(id);
+            return ResponseEntity.noContent().build();
+
+        }
     }
-
-    // 상품 삭제
-    @DeleteMapping("items/{id}")
-    public ResponseEntity<Void> deleteItem(@PathVariable Long id) {
-        itemService.deleteItem(id);
-        return ResponseEntity.noContent().build();
-
-    }
-}
