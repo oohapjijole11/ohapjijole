@@ -1,8 +1,9 @@
-<div align="center">
-  <img src="https://raw.githubusercontent.com/oohapjijole11/ohapjijole/main/assets/banner.png" alt="OhapJijole Banner" width="80%" style="border-radius: 10px;">
-</div>
 
-<h1 align="center" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 2.5rem; color: #4A90E2; margin-top: 20px;">✨ OhapJijole Ticket & Auction ✨</h1>
+![image (1)](https://github.com/user-attachments/assets/ddf9ae1f-c33e-4b31-8da7-8919dd9d540d)
+
+<h1 align="center" style="font-size: 2.8rem; font-weight: bold; color: #4A90E2; margin-top: 20px;">
+  🎟️ OhapJijole Ticket & Auction 🎟️
+</h1>
 
 <p align="center" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 1.2rem; color: #333;">
   <strong>실시간 경매와 티켓팅을 통해 사용자들에게 <span style="color: #FF5722;">몰입감 넘치는 경험</span>을 선사합니다!</strong>
@@ -23,10 +24,6 @@
     사용자는 등급 및 티켓 보유 상황에 따라 경매에 참여하며, <span style="color: #FF5722; font-weight: bold;">경쟁 입찰을 통해 원하는 상품</span>을 획득할 수 있습니다.  
     최적화된 경매 경험과 효율적인 입찰 시스템으로 사용자 만족도를 극대화합니다.
   </p>
-</div>
-
-<div align="center" style="margin-top: 20px;">
-  <img src="https://raw.githubusercontent.com/oohapjijole11/ohapjijole/main/assets/auction-preview.png" alt="Auction Preview" width="70%" style="border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
 </div>
 
 ---
