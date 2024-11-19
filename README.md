@@ -1,8 +1,9 @@
-<div align="center">
-  <img src="https://raw.githubusercontent.com/oohapjijole11/ohapjijole/main/assets/banner.png" alt="OhapJijole Banner" width="80%" style="border-radius: 10px;">
-</div>
 
-<h1 align="center" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 2.5rem; color: #4A90E2; margin-top: 20px;">✨ OhapJijole Ticket & Auction ✨</h1>
+![image (1)](https://github.com/user-attachments/assets/ddf9ae1f-c33e-4b31-8da7-8919dd9d540d)
+
+<h1 align="center" style="font-size: 2.8rem; font-weight: bold; color: #4A90E2; margin-top: 20px;">
+  🎟️ OhapJijole Ticket & Auction 🎟️
+</h1>
 
 <p align="center" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 1.2rem; color: #333;">
   <strong>실시간 경매와 티켓팅을 통해 사용자들에게 <span style="color: #FF5722;">몰입감 넘치는 경험</span>을 선사합니다!</strong>
@@ -26,7 +27,6 @@
 </div>
 
 ---
-
 
 ## 📚 **기술 스택**
 
