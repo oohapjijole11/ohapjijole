@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -43,7 +44,7 @@ public class User implements Serializable {
     private UserRating rating;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<BuyTickets> tickets;
+    private List<BuyTickets> tickets = new ArrayList<>();
 
     // 회원탈퇴 유무
     private Boolean isdeleted = false;

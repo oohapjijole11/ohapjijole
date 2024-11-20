@@ -1,7 +1,7 @@
 package com.sparta.final_project.domain.bid.controller;
 
 import com.sparta.final_project.config.security.AuthUser;
-import com.sparta.final_project.domain.bid.dto.response.SbidResponse;
+import com.sparta.final_project.domain.bid.dto.response.EndBidResponse;
 import com.sparta.final_project.domain.bid.dto.response.SbidSimpleResponse;
 import com.sparta.final_project.domain.bid.service.SbidService;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ public class SbidController {
 
     //낙찰
     @PostMapping("/success/{auctionId}")
-    public SbidResponse createSbid(@PathVariable Long auctionId) {
+    public EndBidResponse createSbid(@PathVariable Long auctionId) {
         return sbidService.createSbid(auctionId);
     }
 
