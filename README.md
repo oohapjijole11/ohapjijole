@@ -43,22 +43,66 @@
 
 ---
 
-## 🔑 **KEY SUMMARY**
-### **성능개선**
+# 🔑 **KEY SUMMARY**
+## **1️⃣ SQS 메시지 처리 성능 개선**
 
-**문제점**: SQS 메시지 처리 시 RDS 과부하 발생.
+### **문제점**
+- SQS 메시지 처리 중 RDS 연결 수 과부하 발생.
+- 대규모 트래픽에서 시스템 처리량 감소와 사용자 응답 속도 저하.
 
-**해결 방안**: Redis 캐싱 도입 및 RDS-Proxy 활용.
+---
 
-**결과**: 데이터 안전성 향상.
+### **해결 방안**
+1. **Redis 캐싱 도입**  
+   - 자주 조회되는 데이터를 캐시로 저장해 RDS 접근 최소화.  
+   - 데이터베이스 부하 감소, 읽기 요청 속도 향상.
 
+2. **RDS-Proxy 활용**  
+   - 연결 풀링으로 RDS 연결 효율성 증대.  
+   - Lambda와 연결 관리 최적화로 안정성 확보.
 
+---
+
+### **결과**
 | **항목**          | **도입 전** | **도입 후** | **효과**                          |
 |-------------------|------------|------------|-----------------------------------|
-| **Connection 수** | 10         | 2          | 연결 관리 효율 5배 향상           |
-| **처리량**        | 65         | 50         | 시스템 안정성 및 확장성 대폭 개선 |
+| **Connection 수** | 10         | 2          | 연결 관리 효율 **5배** 향상       |
+| **처리량**        | 65 TPS     | 50 TPS     | 시스템 안정성 및 확장성 대폭 개선 |
 
+---
 
+## **2️⃣ 입찰 처리 성능 최적화**
+
+### **문제점**
+- 입찰 100회 평균 처리 속도 **3473ms**로 비효율적.  
+- 사용자 경험 저하와 실시간 처리 요구사항 미충족.
+
+---
+
+### **해결 방안**
+1. **캐시 기반 최고 입찰가 읽기**  
+   - 기존 DB 직접 조회를 캐시 데이터 조회로 변경.  
+   - 읽기 요청 속도 대폭 개선.
+
+2. **분산락 범위 최적화**  
+   - 락 적용 범위를 데이터 읽기 및 저장 관련 메서드로 축소.  
+   - 병렬 처리 성능 개선.
+
+3. **Redis 캐시 활용**  
+   - 입찰 권한 체크를 캐시에 저장해 중복 조회 최소화.  
+   - 빠른 응답 제공 및 데이터베이스 요청 감소.
+
+---
+
+### **결과**
+| **항목**               | **개선 전**  | **개선 후**   | **효과**                                  |
+|------------------------|--------------|---------------|-------------------------------------------|
+| **입찰 평균 속도**     | 3473ms       | 476ms         | 처리 속도 약 **7배** 개선, 효율 극대화    |
+| **최고 입찰가 읽기**   | DB 직접 조회  | 캐시 데이터    | 데이터 읽기 속도 대폭 향상                |
+| **락 처리 범위**       | 메서드 전체   | 특정 메서드    | 불필요한 락 제거로 동시 처리 성능 향상     |
+| **입찰 권한 체크**     | DB 중복 조회  | Redis 캐시     | 중복 조회 감소, 빠른 응답 제공             |
+
+---
 ### **트러블 슈팅: 불필요한 커넥션 점유 해결**
 
 <details>
@@ -259,31 +303,25 @@
   <table>
     <tr>
       <td align="center">
-        <img src="https://via.placeholder.com/100" alt="홍기평" width="100" height="100" style="border-radius: 50%;"/><br>
-        <b>🚀 홍기평</b><br>
+        <b>홍기평</b><br>
         <a href="https://github.com/">GitHub</a>
       </td>
       <td align="center">
-        <img src="https://via.placeholder.com/100" alt="배진관" width="100" height="100" style="border-radius: 50%;"/><br>
-        <b>💻 배진관</b><br>
+        <b>배진관</b><br>
         <a href="https://github.com/">GitHub</a>
       </td>
       <td align="center">
-        <img src="https://via.placeholder.com/100" alt="황우석" width="100" height="100" style="border-radius: 50%;"/><br>
-        <b>🔧 황우석</b><br>
+        <b>황우석</b><br>
         <a href="https://github.com/">GitHub</a>
       </td>
       <td align="center">
-        <img src="https://via.placeholder.com/100" alt="김진비" width="100" height="100" style="border-radius: 50%;"/><br>
-        <b>📅 김진비</b><br>
+        <b>김진비</b><br>
         <a href="https://github.com/">GitHub</a>
       </td>
       <td align="center">
-        <img src="https://via.placeholder.com/100" alt="노현지" width="100" height="100" style="border-radius: 50%;"/><br>
-        <b>📝 노현지</b><br>
+        <b>노현지</b><br>
         <a href="https://github.com/">GitHub</a>
       </td>
     </tr>
   </table>
 </div>
-
