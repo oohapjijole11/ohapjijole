@@ -72,7 +72,10 @@ public class SbidService {
             commonService.sseSend(lastBid, Status.SUCCESSBID);
 
             //낙찰자에게 slack 알림 보내기
-            sendSlack(sBidder.getSlackUrl(), saveSbid);
+            sendPurchaseSlack(sBidder.getSlackUrl(), saveSbid);
+            
+            //판매자에게 slack 알림 보내기
+            sendSaleSlack(auction.getItem().getUser().getSlackUrl(), saveSbid);
 
             return new SbidResponse(saveSbid);
         }
@@ -93,14 +96,24 @@ public class SbidService {
     }
 
     //낙찰때 슬랙 알림
-    private void sendSlack(String slackUrl,Sbid sbid) {
+    private void sendPurchaseSlack(String slackUrl,Sbid sbid) {
 
         Auction auction = sbid.getAuction();
         String title = "낙찰 소식 알림이";
         String message = auction.getItem().getName()+" 상품을 낙찰하셨습니다. 지금 확인해보세요!";
-        String fieldTitle = auction.getTitle()+" 경매 낙찰 안내";
+        String fieldTitle = "["+auction.getTitle()+"]"+" 낙찰 안내";
         String fieldContent = "상품 이름 : "+auction.getItem().getName()+"\n 낙찰 일시 : "+sbid.getAuction().getEndTime().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초"))+ "\n 낙찰 가격 : "+sbid.getPrice()+" 원";
         slackService.sendSlackMessage(slackUrl, title, Color.RED, message, fieldTitle, fieldContent);
+    }
+    
+    //낙찰때 판매자에게 슬랙 알림
+    private void sendSaleSlack(String slackUrl,Sbid sbid) {
+        Auction auction = sbid.getAuction();
+        String title = "판매 소식 알림이";
+        String message = auction.getItem().getName()+" 상품이 판매되었습니다. 지금 확인해보세요!";
+        String fieldTitle = "["+auction.getTitle()+"]"+" 낙찰 안내";
+        String fieldContent = "\t 상품 이름 : "+auction.getItem().getName()+"\n 구매자 : "+sbid.getUser().getName()+"\n 낙찰 일시 : "+sbid.getAuction().getEndTime().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초"))+ "\n 낙찰 가격 : "+sbid.getPrice()+" 원";
+        slackService.sendSlackMessage(slackUrl, title, Color.YELLOW, message, fieldTitle, fieldContent);
     }
 
 
