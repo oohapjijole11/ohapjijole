@@ -1,13 +1,19 @@
 package com.sparta.final_project.domain.bid.service;
 
+import com.sparta.final_project.domain.aop.DistributedLock;
+import com.sparta.final_project.domain.auction.entity.Auction;
 import com.sparta.final_project.domain.auction.entity.Status;
 import com.sparta.final_project.domain.bid.entity.Bid;
+import com.sparta.final_project.domain.bid.repository.BidRepository;
 import com.sparta.final_project.domain.bid.repository.EmitterRepository;
 import com.sparta.final_project.domain.bid.repository.RedisRepository;
 import com.sparta.final_project.domain.common.exception.ErrorCode;
 import com.sparta.final_project.domain.common.exception.OhapjijoleException;
+import com.sparta.final_project.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -22,6 +28,7 @@ public class BidCommonService {
 
     private final EmitterRepository emitterRepository;
     private final RedisRepository redisRepository;
+    private final BidRepository bidRepository;
 
     private static final long RECONNECTION_TIMEOUT = 1000L;
 
@@ -39,7 +46,10 @@ public class BidCommonService {
                     .id(eventId)
                     .data(data)
                     .reconnectTime(RECONNECTION_TIMEOUT));
-            log.info(eventId+"_"+data);
+            log.info("알림 발생 : {}_{}", eventId, data);
+        }catch(IllegalStateException e) {   //서버가 일부로 중지시켰을때 나타났음
+            emitterRepository.deleteById(emitterId);
+            throw new OhapjijoleException(ErrorCode._SSE_NOT_CONNECT);
         } catch (IOException exception) {
             emitterRepository.deleteById(emitterId);
             throw new OhapjijoleException(ErrorCode._SSE_NOT_CONNECT);
@@ -53,21 +63,22 @@ public class BidCommonService {
         Map<String, SseEmitter> emitters = emitterRepository
                 .findAllEmitterStartWithByAuctionId(String.valueOf(bid.getAuction().getId()));
         // 데이터 캐시 저장 (유실된 데이터 처리 위함)
-        redisRepository.setbid(eventId, bid.getPrice());
+        redisRepository.setBid(eventId, bid.getPrice());
 
         //해당 경매장의 모든 사용자들에게 데이터 전송
         //입찰일때
-        if(status == Status.BID) {
-            emitters.forEach(
-                    (key, emitter) -> {
-                        // 데이터 전송
-                        sendToClient(emitter,"new price", key, eventId, bid.getPrice()+" 원");
-                    }
-            );
-        }
-        //낙찰일때
-        else if(status == Status.SUCCESSBID) {
-            emitters.forEach(
+        switch (status) {
+            case BID:
+                emitters.forEach(
+                        (key, emitter) -> {
+                            // 데이터 전송
+                            sendToClient(emitter,"new price", key, eventId, bid.getPrice()+" 원");
+                        }
+                );
+                break;
+            //낙찰일때
+            case SUCCESSBID:
+                emitters.forEach(
                     (key, emitter) -> {
                         // 데이터 전송
                         sendToClient(emitter, "BID SUCCESS", key, eventId, bid.getPrice() + " 원");
@@ -76,11 +87,11 @@ public class BidCommonService {
                         //관리 콜렉션에서 지움
                         emitterRepository.deleteById(key);
                     }
-            );
-        }
-        //유찰일때
-        else if(status == Status.FAILBID) {
-            emitters.forEach(
+                );
+                break;
+            //유찰일때
+            case FAILBID:
+                emitters.forEach(
                     (key, emitter) -> {
                         // 데이터 전송
                         sendToClient(emitter, "BID FAIL", key, eventId, "다음 경매를 기다려주세요.");
@@ -89,7 +100,10 @@ public class BidCommonService {
                         //관리 콜렉션에서 지움
                         emitterRepository.deleteById(key);
                     }
-            );
+                );
+                break;
+            default:
+                throw new OhapjijoleException(ErrorCode._INVALID_STATUS);
         }
 
     }
@@ -107,5 +121,29 @@ public class BidCommonService {
                     sendToClient(emitter,"bid start", key, eventId, "경매를 시작합니다!");
                 }
         );
+    }
+
+    @DistributedLock(key = "auctionBid", dynamicKey = "#auctionId")
+    protected Bid saveBid(Long auctionId, int price, Auction auction, User user) {
+        //메서드를 대상으로 로그 파일을 적을 logger를 따로 지정
+        Logger logger = LoggerFactory.getLogger("bid_logger");
+        //redis에서 최신 입찰 데이터 가져오는 방식
+        int lastprice = redisRepository.findLastBidPrice(String.valueOf(auctionId));
+        int maxBid = lastprice==0 ? auction.getStartPrice()-1 : lastprice;
+        if(price<=maxBid) {
+            //로그 파일에 적지 않기 때문에 log 사용
+            log.warn("입찰가 : {} 최고 입찰가 : {}", price, maxBid);
+            throw new OhapjijoleException(ErrorCode._NOT_LARGER_PRICE," 현재 입찰가 : "+ price + " 최고 입찰가 : "+maxBid);
+        }
+
+        //입찰 데이터 생성 및 저장
+        Bid bid = new Bid(price, user, auction);
+        Bid newBid = bidRepository.save(bid);
+        //로그 파일에 적을 로그일 경우 logger 사용
+        logger.info("bid ::: userId : {} auctionId : {} price : {}", user.getId(), auctionId, price);
+
+        //저장된 데이터 실시간 알림 보내기
+        sseSend(newBid, Status.BID);
+        return newBid;
     }
 }

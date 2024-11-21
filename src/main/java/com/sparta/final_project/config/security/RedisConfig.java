@@ -20,6 +20,9 @@ public class RedisConfig {
     // Redis 서버의 포트 주입
     @Value("${spring.data.redis.port}")
     private int redisPort;
+
+    private static final String REDISSON_HOST_PREFIX = "redis://";
+
     // Redis 서버와의 연결을 위한 RedisConnectionFactory 빈 생성
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
@@ -32,6 +35,7 @@ public class RedisConfig {
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(redisConnectionFactory);
+        template.setKeySerializer(new StringRedisSerializer());
         template.setHashKeySerializer(new StringRedisSerializer());
         template.setHashValueSerializer(new StringRedisSerializer());
         return template;
@@ -39,8 +43,10 @@ public class RedisConfig {
 
     @Bean
     public RedissonClient redissonClient() {
+        RedissonClient redissonClient = null;
         Config config = new Config();
-        config.useSingleServer().setAddress("redis://" + redisHost + ":" + redisPort);
-        return Redisson.create(config);
+        config.useSingleServer().setAddress(REDISSON_HOST_PREFIX + redisHost + ":" + redisPort);
+        redissonClient = Redisson.create(config);
+        return redissonClient;
     }
 }

@@ -1,6 +1,5 @@
 package com.sparta.final_project.domain.user.service;
 
-
 import com.sparta.final_project.config.security.AuthUser;
 import com.sparta.final_project.domain.common.exception.ErrorCode;
 import com.sparta.final_project.domain.common.exception.OhapjijoleException;
@@ -58,5 +57,4 @@ public class UserService {
         }
         user.updateUserRole(UserRole.ADMIN);
     }
-
 }

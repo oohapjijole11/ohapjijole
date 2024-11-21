@@ -7,12 +7,15 @@ import com.amazonaws.services.sqs.model.SendMessageRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sparta.final_project.config.security.AuthUser;
 import com.sparta.final_project.domain.ticket.dto.request.BuyTicketsRequest;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 
 @Getter
@@ -27,16 +30,20 @@ public class SqsService {
     @Value("${cloud.aws.sqs.queue-url}")
     private String queueUrl;
 
-    public void sendMessage(BuyTicketsRequest buyTicketsRequest) {
+
+    public void sendMessage(Long userId, BuyTicketsRequest buyTicketsRequest) {
         try {
+            buyTicketsRequest.setUserId(userId);
             String messageBody = objectMapper.writeValueAsString(buyTicketsRequest);
-            SendMessageRequest sendMessageRequest = new SendMessageRequest(queueUrl, messageBody);
+
+            SendMessageRequest sendMessageRequest = new SendMessageRequest(queueUrl, messageBody)
+                    .withMessageGroupId("ticketPurchaseGroup") // 필수: MessageGroupId 설정
+                    .withMessageDeduplicationId(UUID.randomUUID().toString()); // 중복 제거 ID 추가
+
             sqsClient.sendMessage(sendMessageRequest);
-            System.out.println("메시지가 SQS에 전송되었습니다: " + messageBody);
+            System.out.println("SQS에 티켓 구매 요청이 대기 중으로 추가되었습니다: " + messageBody);
         } catch (JsonProcessingException e) {
             throw new RuntimeException("SQS 메시지 전송 중 JSON 처리 오류 발생", e);
-        } catch (Exception e) {
-            throw new RuntimeException("SQS 메시지 전송 중 오류 발생", e);
         }
     }
 }

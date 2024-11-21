@@ -1,17 +1,13 @@
 package com.sparta.final_project.domain.user.entity;
 
-import com.sparta.final_project.config.security.AuthUser;
 import com.sparta.final_project.domain.item.entity.Item;
-
-
 import com.sparta.final_project.domain.ticket.entity.BuyTickets;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.security.core.GrantedAuthority;
 
-
+import java.io.Serializable;
 import java.util.List;
 
 @Getter
@@ -19,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @Setter
 @Table(name = "users")
-public class User {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,31 +29,33 @@ public class User {
 
     private String name;
 
+
     @Enumerated(EnumType.STRING)
     @Column
     private UserRole role;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = false)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Item> items;
 
     @Enumerated(EnumType.STRING)
     @Column
     private UserRating rating;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = false)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<BuyTickets> tickets;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    private Vaccount vaccount;
 
     // 회원탈퇴 유무
     private Boolean isdeleted = false;
 
-    public User(String email, String password, String name, UserRole role) {
+    @Column(name="user_slack_url", nullable = false, length = 100)
+    private String slackUrl;
+
+    public User(String email, String password, String name, UserRole role, String slackUrl) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.role = role;
+        this.slackUrl = slackUrl;
     }
 
     // AuthUser로 User만들 때

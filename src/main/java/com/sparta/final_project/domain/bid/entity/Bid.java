@@ -1,7 +1,6 @@
 package com.sparta.final_project.domain.bid.entity;
 
 import com.sparta.final_project.domain.auction.entity.Auction;
-import com.sparta.final_project.domain.bid.dto.request.BidRequest;
 import com.sparta.final_project.domain.common.entity.Timestamped;
 import com.sparta.final_project.domain.user.entity.User;
 import jakarta.persistence.*;
@@ -31,8 +30,8 @@ public class Bid extends Timestamped {
     private User user;
 
 
-    public Bid(BidRequest request, User user, Auction auction) {
-        this.price = request.getPrice();
+    public Bid(int price, User user, Auction auction) {
+        this.price = price;
         this.auction = auction;
         this.user = user;
     }

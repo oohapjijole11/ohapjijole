@@ -1,8 +1,7 @@
 package com.sparta.final_project.domain.auth.service;
 
-import com.sparta.final_project.domain.auth.dto.request.SigninRequestDto;
-import com.sparta.final_project.domain.auth.dto.response.SigninResponseDto;
 import com.sparta.final_project.config.security.JwtUtil;
+import com.sparta.final_project.domain.auth.dto.request.SigninRequestDto;
 import com.sparta.final_project.domain.auth.dto.request.SignupRequestDto;
 import com.sparta.final_project.domain.common.exception.ErrorCode;
 import com.sparta.final_project.domain.common.exception.OhapjijoleException;
@@ -60,9 +59,9 @@ public class AuthService {
                 signupRequestDto.getEmail(),
                 encodedPassword,
                 signupRequestDto.getName(),
-                role
+                role,
+                signupRequestDto.getSlackUrl()
         );
-
         // 유저 생성 후 저장
         userRepository.save(newUser);
     }
@@ -79,7 +78,7 @@ public class AuthService {
 
     // 로그인
     @Transactional
-    public SigninResponseDto signin(SigninRequestDto signinRequestDto) {
+    public String signin(SigninRequestDto signinRequestDto) {
         User user = userRepository.findByEmail(signinRequestDto.getEmail()).orElseThrow(
                 () -> new OhapjijoleException(ErrorCode._BAD_REQUEST_NOT_FOUND_USER));
 
@@ -93,9 +92,6 @@ public class AuthService {
             throw new OhapjijoleException(ErrorCode._DELETED_USER);
         }
 
-        String bearerToken = jwtUtil.createToken(user.getId(), user.getEmail(), user.getName(), user.getRole());
-
-        return new SigninResponseDto(bearerToken);
+        return jwtUtil.createToken(user.getId(), user.getEmail(), user.getName(), user.getRole());
     }
-
 }
