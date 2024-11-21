@@ -24,7 +24,6 @@ public class GlobalExceptionHandler {
         return getErrorResponse(ex.getErrorCode().getStatus(), ex.getMessage());
     }
 
-
     /**
      * @param status  : 오류 상태 코드
      * @param message : 오류 메시지
@@ -36,7 +35,6 @@ public class GlobalExceptionHandler {
         errorResponse.put("code", status.value());
         errorResponse.put("message", message);
         log.warn("OhapjijoleException ::: {}", message);
-
         return new ResponseEntity<>(errorResponse, status);
     }
 }

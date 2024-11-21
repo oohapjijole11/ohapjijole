@@ -23,5 +23,4 @@ public class UserController {
         userService.deletedUser(authUser, deleteUserRequestDto);
         return ResponseEntity.ok("회원탈퇴가 완료되었습니다");
     }
-
 }

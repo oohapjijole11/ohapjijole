@@ -6,6 +6,7 @@ import lombok.Data;
 
 @Data
 public class BuyTicketsResponse {
+
     Long buyTicketsId;
 
     public BuyTicketsResponse(BuyTickets buyTickets) {

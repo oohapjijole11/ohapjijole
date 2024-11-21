@@ -7,7 +7,6 @@ import com.amazonaws.services.sqs.model.SendMessageRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.final_project.config.security.AuthUser;
 import com.sparta.final_project.domain.ticket.dto.request.BuyTicketsRequest;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +28,6 @@ public class SqsService {
 
     @Value("${cloud.aws.sqs.queue-url}")
     private String queueUrl;
-
 
     public void sendMessage(Long userId, BuyTicketsRequest buyTicketsRequest) {
         try {

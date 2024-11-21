@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.List;
 
@@ -37,6 +36,4 @@ public class BuyTicketsController {
     public ResponseEntity<List<BuyTicketsResponse>> getTicketList() {
         return ResponseEntity.ok().body(ticketBuyService.getbuyticketList());
     }
-
-
 }

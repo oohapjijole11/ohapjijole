@@ -26,7 +26,6 @@ public class SlackTicketService {
     private final TicketRepository ticketRepository;
     private final BuyTicketsRepository buyTicketsRepository;
 
-
     //입찰 20전 티켓 가진 사람들에게 슬랙 메세지
     private void sendRemiderSlack(Long ticketId) {
         Ticket ticket = ticketRepository.findById(ticketId).orElseThrow(()-> new OhapjijoleException(ErrorCode._NOT_FIND_TICKET));
@@ -66,7 +65,4 @@ public class SlackTicketService {
         String fieldContent = "경매 시작시간 : "+auction.getStartTime().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분"))+"\n 경매 입장 등급 : "+auction.getGrade() +"\n 경매 시작 금액 : "+auction.getStartPrice() +" 원";
         slackService.sendSlackMessage(slackUrl, title, Color.GREEN, message, fieldTitle, fieldContent);
     }
-
-
-
 }

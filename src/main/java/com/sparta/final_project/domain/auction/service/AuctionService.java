@@ -36,7 +36,7 @@ public class AuctionService {
             throw new OhapjijoleException(ErrorCode._NOT_FAILED_AUCTION);
         }
         if (auctionRequest.getStartTime().isBefore(auctionRequest.getEndTime()) || auctionRequest.getStartTime().isEqual(auctionRequest.getEndTime())) {
-
+            throw new OhapjijoleException(ErrorCode._BAD_REQUEST_TIME);
         }
 //        경매 등급 측정, 경매 상태, AuctionEntity 정보 저장 메소드
         auction = gradeMeasurement(auctionRequest);

@@ -47,7 +47,6 @@ public class Auction extends Timestamped implements Serializable {
     @JoinColumn(name = "item_id")
     private Item item;
 
-
     public Auction(AuctionRequest auctionRequest) {
         this.title = auctionRequest.getTitle();
         this.startPrice = auctionRequest.getStartPrice();
@@ -55,7 +54,6 @@ public class Auction extends Timestamped implements Serializable {
         this.endTime = auctionRequest.getEndTime();
         this.status = Status.WAITING;
     }
-
 
     public void bidSuccess(Status status ,LocalDateTime endTime) {
         this.status = status;

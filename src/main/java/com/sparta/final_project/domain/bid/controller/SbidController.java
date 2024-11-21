@@ -28,6 +28,4 @@ public class SbidController {
                                             @RequestParam(defaultValue = "10", required = false) int size) {
         return sbidService.getSbids(authUser.getId(), page, size);
     }
-
-
 }

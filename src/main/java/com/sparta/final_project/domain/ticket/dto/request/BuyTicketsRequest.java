@@ -11,8 +11,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class BuyTicketsRequest {
+
     private Long ticketId;
     private Long userId;
-
 
 }

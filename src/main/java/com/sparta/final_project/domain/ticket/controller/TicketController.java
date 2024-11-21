@@ -15,7 +15,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/auction/ticket")
+@RequestMapping("/auctions/ticket")
 public class TicketController {
 
     private final TicketService ticketService;
@@ -48,7 +48,4 @@ public class TicketController {
         ticketService.deleteTicket(ticketId);
         return ResponseEntity.ok().body("경매가 삭제되었습니다.");
     }
-
-
-
 }

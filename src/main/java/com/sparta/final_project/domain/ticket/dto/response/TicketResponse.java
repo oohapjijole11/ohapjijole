@@ -7,6 +7,7 @@ import lombok.Data;
 
 @Data
 public class TicketResponse {
+
     private String ticketTitle;
     private String ticketDescription;
     private TicketStatus ticketStatus;

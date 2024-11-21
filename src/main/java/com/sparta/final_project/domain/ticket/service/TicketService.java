@@ -60,6 +60,4 @@ public class TicketService {
         ticket.setTicketStatus(TicketStatus.PROGRESS);
         return ticket;
     }
-
-
 }

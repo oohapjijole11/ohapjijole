@@ -28,7 +28,6 @@ public class JwtSecurityFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
 
-
     @Override
     protected void doFilterInternal(
             // JWT 토큰 검증, 사용자 인증 확인

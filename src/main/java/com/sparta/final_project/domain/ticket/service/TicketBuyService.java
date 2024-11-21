@@ -55,7 +55,6 @@ public class TicketBuyService {
         return "티켓 구매 요청이 대기 중입니다. 앞에 " + waitingCount + "명이 대기 중입니다.";
     }
 
-
     // SSE 구독
     public SseEmitter subscribeQueueStatus(Long userId) {
         SseEmitter sseEmitter = new SseEmitter();
@@ -79,40 +78,6 @@ public class TicketBuyService {
             }
         }
     }
-
-    // 대기열에서 메시지를 주기적으로 처리하여 티켓 구매 진행
-//    @Scheduled(fixedRate = 10000)
-//    public void processQueueMessages() {
-//        List<Message> messages = amazonSQSAsync.receiveMessage(queueUrl).getMessages();
-//
-//        for (Message message : messages) {
-//            try {
-//                BuyTicketsRequest buyTicketsRequest = objectMapper.readValue(message.getBody(), BuyTicketsRequest.class);
-//
-//                Ticket ticket = ticketRepository.findById(buyTicketsRequest.getTicketId())
-//                        .orElseThrow(() -> new OhapjijoleException(ErrorCode._NOT_FIND_TICKET));
-//
-//                if (ticket.getTicketCount() > 0) {
-//                    User user = userRepository.findById(buyTicketsRequest.getUserId())
-//                            .orElseThrow(() -> new OhapjijoleException(ErrorCode._NOT_FOUND_USER));
-//
-//                    ticket.setTicketCount(ticket.getTicketCount() - 1);
-//                    BuyTickets buyTickets = new BuyTickets(ticket, user);
-//                    buyTicketsRepository.save(buyTickets);
-//                    ticketRepository.save(ticket);
-//
-//                    System.out.println("대기열에서 티켓 구매가 완료되었습니다.");
-//                } else {
-//                    System.out.println("티켓이 소진되었습니다.");
-//                }
-//
-//                // 메시지 처리 완료 후 삭제
-//                amazonSQSAsync.deleteMessage(queueUrl, message.getReceiptHandle());
-//            } catch (Exception e) {
-//                System.err.println("대기열 메시지 처리 중 오류 발생: " + e.getMessage());
-//            }
-//        }
-//    }
 
     public List<BuyTicketsResponse> getbuyticketList() {
         List<BuyTickets> buyticketList = buyTicketsRepository.findAll();

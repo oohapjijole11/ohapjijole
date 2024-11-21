@@ -28,8 +28,6 @@ public class S3Service {
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentLength(multipartFile.getSize());
             metadata.setContentType(multipartFile.getContentType());
-
-
             amazonS3Client.putObject(
                     new PutObjectRequest(bucket, fileName, multipartFile.getInputStream(), metadata)
                     // ACL 설정 제거

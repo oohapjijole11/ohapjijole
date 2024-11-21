@@ -41,7 +41,6 @@ public class Ticket {
     @JoinColumn(name= "auction_id")
     private Auction auction;
 
-
     @Version
     private Long version;
 
@@ -53,6 +52,4 @@ public class Ticket {
         this.ticketGrade = ticketRequest.getTicketGrade();
         this.auction = auction;
     }
-
-
 }

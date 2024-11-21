@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface BuyTicketsRepository extends JpaRepository<BuyTickets, Long> {
-    long countByTicketId(Long ticketId);
 
     List<BuyTickets> findAllByTicketId(Long ticketId);
 }

@@ -8,6 +8,7 @@ import java.util.List;
 
 @Getter
 public class ItemSimpleResponse implements Serializable {
+
     private final Long id;
     private final String name;
     private final String description;

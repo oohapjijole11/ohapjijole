@@ -7,6 +7,7 @@ import lombok.Getter;
 
 @Getter
 public class TicketRequest {
+
     private String ticketTitle;
     private String ticketDescription;
     private TicketStatus ticketStatus;

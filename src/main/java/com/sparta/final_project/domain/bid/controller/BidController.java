@@ -21,7 +21,7 @@ public class BidController {
     private final BidService bidService;
 
     //경매장 입장
-    @GetMapping(value = "/auction/{auctionId}", produces = "text/event-stream")
+    @GetMapping(value = "/auctions/{auctionId}", produces = "text/event-stream")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<SseEmitter> subscribe(
             @AuthenticationPrincipal AuthUser authUser,
@@ -32,7 +32,7 @@ public class BidController {
     }
 
     //입찰
-    @PostMapping("/auction/{auctionId}")
+    @PostMapping("/auctions/{auctionId}")
     public ResponseEntity<BidResponse> createBid (@AuthenticationPrincipal AuthUser authUser,
                                                   @PathVariable Long auctionId,
                                                   @RequestBody BidRequest request) {
@@ -40,9 +40,8 @@ public class BidController {
     }
 
     //입찰 목록 조회
-    @GetMapping("/bids/auction/{auctionId}")
+    @GetMapping("/bids/auctions/{auctionId}")
     public ResponseEntity<List<BidSimpleResponse>> BidList (@PathVariable Long auctionId) {
         return ResponseEntity.ok(bidService.getBids(auctionId));
     }
-
 }

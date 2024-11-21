@@ -115,7 +115,4 @@ public class SbidService {
         String fieldContent = "\t 상품 이름 : "+auction.getItem().getName()+"\n 구매자 : "+sbid.getUser().getName()+"\n 낙찰 일시 : "+sbid.getAuction().getEndTime().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초"))+ "\n 낙찰 가격 : "+sbid.getPrice()+" 원";
         slackService.sendSlackMessage(slackUrl, title, Color.YELLOW, message, fieldTitle, fieldContent);
     }
-
-
-
 }

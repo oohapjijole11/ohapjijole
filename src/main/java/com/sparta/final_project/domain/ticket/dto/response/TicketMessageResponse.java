@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class TicketMessageResponse {
+
     private String message;
 
     public TicketMessageResponse(String message) {

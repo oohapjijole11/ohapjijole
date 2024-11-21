@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 public enum ErrorCode {
-
     //user
 
     //auth
@@ -36,6 +35,7 @@ public enum ErrorCode {
     _NOT_FOUND_AUCTION(HttpStatus.NOT_FOUND, "경매가 존재하지 않습니다"),
     _NOT_ALLOWED_TO_UPDATE(HttpStatus.NOT_MODIFIED,"진행중인 경매는 수정할 수 없습니다 "),
     _NOT_FAILED_AUCTION(HttpStatus.NOT_FOUND, "유찰된 경매만 다시 생성 가능합니다"),
+    _BAD_REQUEST_TIME(HttpStatus.BAD_REQUEST,"시간 설정이 잘못되었습니다"),
 
     //bid
     _NOT_LARGER_PRICE(HttpStatus.BAD_REQUEST, "입찰가는 현재 최고 입찰가보다 커야합니다."),
@@ -58,10 +58,6 @@ public enum ErrorCode {
     // lock
     _LOCK_NOT_AVAILABLE_ERROR(HttpStatus.NOT_FOUND, "락을 이용할 수 없습니다"),
     _LOCK_INTERRUPTED_ERROR(HttpStatus.BAD_REQUEST, "락이 중단 되었습니다");
-
-
-
-
 
     private final HttpStatus status;
     private final String message;
