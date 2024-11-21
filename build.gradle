@@ -24,6 +24,9 @@ repositories {
 }
 
 dependencies {
+    // Spring Boot의 로깅 의존성 추가
+    implementation 'org.springframework.boot:spring-boot-starter-logging'
+
     implementation 'at.favre.lib:bcrypt:0.10.2'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'

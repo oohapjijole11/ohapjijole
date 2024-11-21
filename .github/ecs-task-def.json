@@ -1,0 +1,45 @@
+{
+  "family": "ecs-task-family",
+  "networkMode": "awsvpc",
+  "containerDefinitions": [
+    {
+      "name": "ECS-TASK-CONTAINER",
+      "image": "376129840316.dkr.ecr.ap-northeast-2.amazonaws.com/nhj-server:${{ github.sha }}",
+      "portMappings": [
+        {
+          "containerPort": 8080,
+          "protocol": "tcp"
+        }
+      ],
+      "essential": true,
+      "environment": [
+        { "name": "JWT_SECRET_KEY", "value": "${{ secrets.JWT_SECRET_KEY }}" },
+        { "name": "RDS_DB_NAME", "value": "${{ secrets.RDS_DB_NAME }}" },
+        { "name": "RDS_HOST", "value": "${{ secrets.RDS_HOST }}" },
+        { "name": "DB_HOST", "value": "${{ secrets.DB_HOST }}" },
+        { "name": "RDS_PASSWORD", "value": "${{ secrets.RDS_PASSWORD }}" },
+        { "name": "RDS_USERNAME", "value": "${{ secrets.RDS_USERNAME }}" },
+        { "name": "REDIS_HOST", "value": "${{ secrets.REDIS_HOST }}" },
+        { "name": "REDIS_PORT", "value": "${{ secrets.REDIS_PORT }}" },
+        { "name": "AWS_S3_BUCKET", "value": "${{ secrets.AWS_S3_BUCKET }}" },
+        { "name": "AWS_SQS_QUEUE_URL", "value": "${{ secrets.AWS_SQS_QUEUE_URL }}" },
+        { "name": "AWS_ACCESS_KEY_ID", "value": "${{ secrets.AWS_ACCESS_KEY_ID }}" },
+        { "name": "AWS_SECRET_ACCESS_KEY", "value": "${{ secrets.AWS_SECRET_ACCESS_KEY }}" },
+        { "name": "spring.profiles.active", "value": "prod" }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/ECS-SERVICE",
+          "awslogs-region": "ap-northeast-2",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    }
+  ],
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "256",
+  "memory": "512",
+  "executionRoleArn": "arn:aws:iam::376129840316:role/ecs-Task-Execution-Role",
+  "taskRoleArn": "arn:aws:iam::376129840316:role/Ecs-Task-Role"
+}

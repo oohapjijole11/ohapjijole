@@ -78,7 +78,6 @@ public class ItemService {
         );
     }
 
-
     // 상품 삭제
     @Transactional
     @CacheEvict(value = "items", key = "#id")
