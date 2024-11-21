@@ -302,23 +302,18 @@
     <tr>
       <td align="center">
         <b>홍기평</b><br>
-        <a href="https://github.com/">GitHub</a>
       </td>
       <td align="center">
         <b>배진관</b><br>
-        <a href="https://github.com/">GitHub</a>
       </td>
       <td align="center">
         <b>황우석</b><br>
-        <a href="https://github.com/">GitHub</a>
       </td>
       <td align="center">
         <b>김진비</b><br>
-        <a href="https://github.com/">GitHub</a>
       </td>
       <td align="center">
         <b>노현지</b><br>
-        <a href="https://github.com/">GitHub</a>
       </td>
     </tr>
   </table>
