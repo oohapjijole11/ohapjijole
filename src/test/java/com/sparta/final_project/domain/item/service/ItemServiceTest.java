@@ -60,7 +60,7 @@ public class ItemServiceTest {
     @Test
     public void createItem_ValidRequest_Success() {
         // Given: User 및 요청 데이터 생성
-        User user = new User("test@example.com", "password", "Test User", UserRole.USER);
+        User user = new User("test@example.com", "password", "Test User", UserRole.USER, "http://slack-url.example.com");
         ItemCreateRequest request = new ItemCreateRequest("Test Item", "This is a test item.", List.of("imageUrl1", "imageUrl2"));
 
 
@@ -86,7 +86,7 @@ public class ItemServiceTest {
     public void getItem_ValidId_Success() {
         // Given: Item 및 ID 생성
         Long itemId = 1L; // 예상 ID 설정
-        User user = new User("test@naver.com", "testpassword", "Test User", UserRole.USER);
+        User user = new User("test@naver.com", "testpassword", "Test User", UserRole.USER, "http://slack-url.example.com");
 
         // Mock Item 객체 생성
         Item item = Mockito.mock(Item.class);
@@ -130,7 +130,7 @@ public class ItemServiceTest {
         // Given
         Long itemId = 1L; // 수정할 아이템의 ID
         ItemUpdateRequest request = new ItemUpdateRequest("Updated Item", "Updated description", List.of("updatedImageUrl"));
-        User mockUser = new User("testuser@example.com", "password", "Test User", UserRole.USER);
+        User mockUser = new User("testuser@example.com", "password", "Test User", UserRole.USER, "http://slack-url.example.com");
 
         // Create an Item instance with an ID and existing image URL
         Item item = new Item("Original Item", "Original description", List.of("originalImageUrl"), mockUser);
