@@ -217,9 +217,10 @@
 |  **캐싱 전략**    |  **AWS ElastiCache**             | 인메모리 캐시              | 데이터베이스 부하를 줄이고, 자주 조회되는 데이터를 캐싱하여 응답 속도를 대폭 향상시킵니다.                |
 
 **인프라 아키텍처**
-<div align="center">
-  <img src="https://user-images.githubusercontent.com/12345678/architecture.png" alt="Architecture Diagram" width="80%">
-</div>
+
+![아키텍처최종 drawio](https://github.com/user-attachments/assets/82ec1d9d-7a30-4685-beb6-f2f0fed11567)
+
+![_cicd drawio](https://github.com/user-attachments/assets/cd915739-8e56-42d3-b270-556f4da20e32)
 
 ---
 
