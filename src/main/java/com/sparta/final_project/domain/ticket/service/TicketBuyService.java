@@ -15,6 +15,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -30,6 +31,7 @@ public class TicketBuyService {
     private final BuyTicketsRepository buyTicketsRepository;
     private final SqsService sqsService;
     private final ConcurrentMap<Long, SseEmitter> sseEmitters = new ConcurrentHashMap<>();
+
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
