@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
@@ -15,12 +16,15 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 @Table(name = "auctions")
-public class Auction extends Timestamped {
+public class Auction extends Timestamped implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "auction_id", nullable = false)
     private Long id;
+
+    @Column(nullable = false)
+    private String title;
 
     @Column(nullable = false)
     private int startPrice;
@@ -39,16 +43,16 @@ public class Auction extends Timestamped {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
     private Item item;
 
 
     public Auction(AuctionRequest auctionRequest) {
+        this.title = auctionRequest.getTitle();
         this.startPrice = auctionRequest.getStartPrice();
         this.startTime = auctionRequest.getStartTime();
         this.endTime = auctionRequest.getEndTime();
-        this.grade = auctionRequest.getGrade();
         this.status = Status.WAITING;
     }
 

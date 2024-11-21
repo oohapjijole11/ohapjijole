@@ -1,8 +1,9 @@
 package com.sparta.final_project.domain.bid.controller;
 
 import com.sparta.final_project.config.security.AuthUser;
-import com.sparta.final_project.domain.bid.dto.response.SbidResponse;
+import com.sparta.final_project.domain.bid.dto.response.EndBidResponse;
 import com.sparta.final_project.domain.bid.dto.response.SbidSimpleResponse;
+import com.sparta.final_project.domain.bid.service.SbidService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -10,13 +11,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/bid")
+@RequestMapping("/sbids")
 public class SbidController {
-    private final com.sparta.final_project.domain.bid.service.SbidService sbidService;
+    private final SbidService sbidService;
 
     //낙찰
     @PostMapping("/success/{auctionId}")
-    public SbidResponse createSbid(@PathVariable Long auctionId) {
+    public EndBidResponse createSbid(@PathVariable Long auctionId) {
         return sbidService.createSbid(auctionId);
     }
 

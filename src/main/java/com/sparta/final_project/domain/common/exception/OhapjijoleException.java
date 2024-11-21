@@ -11,4 +11,9 @@ public class OhapjijoleException extends RuntimeException {
         super(errorcode.getMessage());
         this.errorCode = errorcode;
     }
+
+    public OhapjijoleException(ErrorCode errorcode, String plusmessage) {
+        super(errorcode.getMessage() + plusmessage);
+        this.errorCode = errorcode;
+    }
 }

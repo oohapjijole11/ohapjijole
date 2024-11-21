@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property resource="application.properties"/>
+
+    <!-- 콘솔에 로그 출력 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 입찰을 위한 롤링 파일 앱렌더 -->
+    <appender name="BID_SERVICE_FILE_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>src/main/resources/logs/bid/bid-log.log</file>
+        <!--        &lt;!&ndash; 파일 크기나 날짜에 따라 롤링(파일 분리) 정책 설정 &ndash;&gt;-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--            &lt;!&ndash; 파일 이름 패턴 (숫자가 증가하는 방식으로 백업 파일 생성) &ndash;&gt;-->
+            <fileNamePattern>bid-log-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!--            &lt;!&ndash; 최대 파일 크기 설정 (10MB) &ndash;&gt;-->
+            <maxFileSize>10MB</maxFileSize>
+            <!--            &lt;!&ndash; 전체 로그 파일 크기의 상한선 (100MB로 설정) &ndash;&gt;-->
+            <totalSizeCap>100MB</totalSizeCap>
+            <maxHistory>10</maxHistory> <!-- 최대 10개의 백업 파일 유지 -->
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 낙찰을 위한 롤링 파일 앱렌더 -->
+    <appender name="SBID_SERVICE_FILE_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>src/main/resources/logs/sbid/sbid-log.log</file>
+        <!--        &lt;!&ndash; 파일 크기나 날짜에 따라 롤링(파일 분리) 정책 설정 &ndash;&gt;-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--            &lt;!&ndash; 파일 이름 패턴 (숫자가 증가하는 방식으로 백업 파일 생성) &ndash;&gt;-->
+            <fileNamePattern>sbid-log-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!--            &lt;!&ndash; 최대 파일 크기 설정 (10MB) &ndash;&gt;-->
+            <maxFileSize>10MB</maxFileSize>
+            <!--            &lt;!&ndash; 전체 로그 파일 크기의 상한선 (100MB로 설정) &ndash;&gt;-->
+            <totalSizeCap>100MB</totalSizeCap>
+            <maxHistory>10</maxHistory> <!-- 최대 10개의 백업 파일 유지 -->
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="AWS_CLOUDWATCH_LOG" class="ca.pjer.logback.AwsLogsAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <layout>
+            <pattern>%d{yyyyMMdd'T'HHmmss} %thread %level %logger{15} %msg%n</pattern>
+        </layout>
+        <logGroupName>bid-log</logGroupName>
+        <logStreamUuidPrefix>bid-log-</logStreamUuidPrefix>
+        <logRegion>ap-northeast-2</logRegion>
+        <maxBatchLogEvents>50</maxBatchLogEvents>
+        <maxFlushTimeMillis>30000</maxFlushTimeMillis>
+        <maxBlockTimemillis>5000</maxBlockTimemillis>
+        <retentionTimeDays>0</retentionTimeDays>
+        <accessKeyId>${cloud.aws.credentials.access-key}</accessKeyId>  <!--${cloud.aws.credentials.access-key}-->
+        <secretAccessKey>${cloud.aws.credentials.secret-key}</secretAccessKey><!--${cloud.aws.credentials.secret-key}-->
+    </appender>
+
+
+    <!--입찰에 관한 로그 설정-->
+    <logger name="bid_logger" level="INFO" additivity="false">
+<!--        <appender-ref ref="BID_SERVICE_FILE_APPENDER"/>-->
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="AWS_CLOUDWATCH_LOG"/>
+    </logger>
+
+    <!--낙찰에 관한 로그 설정-->
+    <logger name="sbid_logger" level="INFO" additivity="false">
+<!--        <appender-ref ref="SBID_SERVICE_FILE_APPENDER"/>-->
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="AWS_CLOUDWATCH_LOG"/>
+    </logger>
+
+    <!-- 전체 애플리케이션에 대한 로그 레벨 설정 -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+    </root>
+
+</configuration>

@@ -4,6 +4,7 @@ import com.sparta.final_project.config.security.AuthUser;
 import com.sparta.final_project.domain.auction.entity.Auction;
 import com.sparta.final_project.domain.auction.entity.Status;
 import com.sparta.final_project.domain.auction.repository.AuctionRepository;
+import com.sparta.final_project.domain.auction.service.AuctionProgressService;
 import com.sparta.final_project.domain.bid.dto.request.BidRequest;
 import com.sparta.final_project.domain.bid.dto.response.BidResponse;
 import com.sparta.final_project.domain.bid.dto.response.BidSimpleResponse;
@@ -22,8 +23,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -40,6 +41,7 @@ public class BidService {
     private final AuctionRepository auctionRepository;
     private final BidCommonService commonService;
     private final RedisRepository redisRepository;
+    private final AuctionProgressService auctionProgressService;
 
     private static final Long DEFAULT_TIMEOUT = 60L * 1000 * 30;   //한번 들어가면 30분동안 sse로 연결됨
 
@@ -56,7 +58,7 @@ public class BidService {
         checkTicket(auctionId, user);
 
         //경매 시작전 20분 부터 입장 가능
-        if(auction.getStatus()==Status.WAITING && ChronoUnit.MINUTES.between(auction.getStartTime(), LocalDateTime.now()) > 20) throw new OhapjijoleException(ErrorCode._BID_STATUS_BEFORE);
+        if(auction.getStatus()==Status.WAITING && Duration.between(LocalDateTime.now(),auction.getStartTime()).toMinutes()>20) throw new OhapjijoleException(ErrorCode._BID_STATUS_BEFORE);
         //경매가 끝났다면 끝났다고 오류날림
         if(auction.getStatus()== Status.SUCCESSBID || auction.getStatus()== Status.FAILBID) throw new OhapjijoleException(ErrorCode._BID_STATUS_END);
 
@@ -101,37 +103,52 @@ public class BidService {
                             commonService.sendToClient(emitter,"new price", emitterId, entry.getKey(),
                                     entry.getValue()));
         }
+//        경매 종료 후 경매 상태 변경 입찰자 있으면 낙찰,없으면 유찰
+        auctionProgressService.auctionEnds(auctionId);
         return emitter;
     }
 
-    private static void checkTicket(Long auctionId, User user) {
-        Optional<BuyTickets> ticket = user.getTickets().stream()
+    private void checkTicket(Long auctionId, User user) {
+        String ticketId = auctionId+"_"+user.getId();
+        if(!redisRepository.findTicket(ticketId)) {
+            Optional<BuyTickets> ticket = user.getTickets().stream()
                 .filter(t-> t.getTicket().getAuction().getId().equals(auctionId))
                 .findFirst();
-        if (ticket.isEmpty()) throw new OhapjijoleException(ErrorCode._NOT_HAVE_TICKET);
+            if (ticket.isEmpty()) {
+                throw new OhapjijoleException(ErrorCode._NOT_HAVE_TICKET);
+            }else {
+                redisRepository.setTicket(ticketId, true);
+            }
+
+        }
     }
 
     //입찰
     @Transactional
     public BidResponse createBid(Long userId, Long auctionId, BidRequest request) {
-        //user와 경매장이 있는지 확인하기
-        User user = userRepository.findById(userId).orElseThrow(()-> new OhapjijoleException(ErrorCode._USER_NOT_FOUND));
-        Auction auction = auctionRepository.findById(auctionId).orElseThrow(() -> new OhapjijoleException(ErrorCode._NOT_FOUND_AUCTION));
+        //user와 경매장이 있는지 확인하기(레디스에 캐시로 검색 후 없으면 db에 검색해서 redis에 저장)
+        User user = redisRepository.findUser("user_"+userId).orElseGet(()->{
+                    User dbUser = userRepository.findById(userId).orElseThrow(()-> new OhapjijoleException(ErrorCode._USER_NOT_FOUND));
+                    redisRepository.setUser("user_" + userId, dbUser);
+                    return dbUser;
+                }
+        );
+        Auction auction = redisRepository.findAuction("auction_"+auctionId).orElseGet(()->{
+                Auction dbAuction = auctionRepository.findById(auctionId).orElseThrow(() -> new OhapjijoleException(ErrorCode._NOT_FOUND_AUCTION));
+                redisRepository.setAuction("auction_" + auctionId, dbAuction);
+                return dbAuction;
+            }
+        );
+
         //유저가 해당 경매장의 티켓 있는지 확인
         checkTicket(auctionId, user);
+
         //경매장이 경매중인지 확인하기
         if(auction.getStatus()!= Status.BID) throw new OhapjijoleException(ErrorCode._BID_NOT_GOING);
-        //입찰 금액 조건을 최저가 이상 또는 최고 입찰가 초과로 지정
-        List<Bid> bidList = bidRepository.findAllByAuctionOrderByCreatedAtDesc(auction);
-        int maxBid = bidList.isEmpty() ? auction.getStartPrice()-1 : bidList.get(0).getPrice();
-        if(request.getPrice()<=maxBid) throw new OhapjijoleException(ErrorCode._NOT_LARGER_PRICE);
-        
-        //입찰 데이터 생성 및 저장
-        Bid bid = new Bid(request, user, auction);
-        Bid newBid = bidRepository.save(bid);
-        
-        //저장된 데이터 실시간 알림 보내기
-        commonService.sseSend(newBid, Status.BID);
+
+        //입찰 최고가 조회 후 입찰(다른 파일로 이동)
+        Bid newBid = commonService.saveBid(auctionId, request.getPrice(), auction, user);
+
         return new BidResponse(newBid);
     }
 

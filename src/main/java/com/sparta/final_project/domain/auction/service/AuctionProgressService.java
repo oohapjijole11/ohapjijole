@@ -1,98 +1,91 @@
 package com.sparta.final_project.domain.auction.service;
 
-import com.sparta.final_project.config.security.AuthUser;
 import com.sparta.final_project.domain.auction.entity.Auction;
 import com.sparta.final_project.domain.auction.entity.Status;
 import com.sparta.final_project.domain.auction.repository.AuctionRepository;
-import com.sparta.final_project.domain.common.exception.ErrorCode;
-import com.sparta.final_project.domain.common.exception.OhapjijoleException;
-import com.sparta.final_project.domain.user.repository.UserRepository;
+import com.sparta.final_project.domain.bid.entity.Bid;
+import com.sparta.final_project.domain.bid.repository.BidRepository;
+import com.sparta.final_project.domain.bid.repository.EmitterRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
-import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuctionProgressService {
 
     private final AuctionRepository auctionRepository;
-    private final UserRepository userRepository;
-    private SseEmitter sseEmitter;
-    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private final BidRepository bidRepository;
+    private final EmitterRepository emitters;
 
-//    경매 남은시간
-    public SseEmitter startAuctionCountdown(AuthUser authUser, Long auctionId) {
-        this.sseEmitter = new SseEmitter(60 * 60 * 1000L);
-        userRepository.findById(authUser.getId()).orElseThrow(() -> new OhapjijoleException(ErrorCode._USER_NOT_FOUND));
-        Auction auction = auctionRepository.findByIdAndStatus(auctionId, Status.BID);
-        if(auction == null){
-            throw new OhapjijoleException(ErrorCode._NOT_FOUND_AUCTION);
-        }
+    //     경매 종료
+    public void auctionEnds(Long auctionId) {
+        LocalDateTime now = LocalDateTime.now();
+        Auction auction = auctionRepository.findById(auctionId).orElseThrow(() -> new RuntimeException("경매가 존재하지 않습니다."));
+        // 경매 종료 시간 확인
+        if (now.isAfter(auction.getEndTime())) {
+            // 경매에 입찰자가 있는지 확인
+            List<Bid> bids = bidRepository.findAllByAuctionOrderByCreatedAtDesc(auction);
 
-        executor.submit(() -> {
-            try {
-                while (true) {
-                    Duration remainingTime = Duration.between(LocalDateTime.now(), auction.getEndTime());
-
-                    if (remainingTime.isNegative() || remainingTime.isZero()) {
-                        auction.setStatus(Status.SUCCESSBID);
-                        auctionRepository.save(auction);
-                        sseEmitter.send("마감!");
-                        sseEmitter.complete();
-                        break;
-                    } else {
-                        long days = remainingTime.toDays();
-                        long hours = remainingTime.toHoursPart();
-                        long minutes = remainingTime.toMinutesPart();
-                        long seconds = remainingTime.toSecondsPart();
-                        String formattedTime = String.format(
-                                "%d 일, %d 시간, %d 분, %d 초 남은시간",
-                                days, hours, minutes, seconds
-                        );
-                        sseEmitter.send(formattedTime);
-                    }
-
-                    Thread.sleep(1000);
+            if (!bids.isEmpty()) {
+                Bid lastBid = bids.get(0); // 마지막 입찰
+                if (lastBid.getUser() != null) {
+                    auction.setStatus(Status.SUCCESSBID);
+                    sendAuctionResultMessage(auctionId, lastBid.getUser().getName() + "님이 경매에 낙찰되었습니다!");
+                } else {
+                    auction.setStatus(Status.FAILBID);
+                    sendAuctionResultMessage(auctionId, "경매가 유찰 되었습니다.");
                 }
-            } catch (IOException | InterruptedException e) {
-                sseEmitter.completeWithError(e);
+            } else {
+                auction.setStatus(Status.FAILBID);
+                sendAuctionResultMessage(auctionId, "경매가 유찰 되었습니다."); // 입찰자가 없는 경우
             }
-        });
-        return sseEmitter;
+            auctionRepository.save(auction); // 변경된 경매 상태 저장
+        }
     }
 
-//    경매 시작
-    public SseEmitter monitorAuctionStart(AuthUser authUser, Long auctionId) {
-        this.sseEmitter = new SseEmitter(60 * 60 * 1000L);
-        userRepository.findById(authUser.getId()).orElseThrow(() -> new OhapjijoleException(ErrorCode._USER_NOT_FOUND));
-        Auction auction = auctionRepository.findById(auctionId)
-                .orElseThrow(() -> new OhapjijoleException(ErrorCode._NOT_FOUND_AUCTION));
 
-        executor.submit(() -> {
+    private void sendAuctionResultMessage(Long auctionId, String message) {
+        Map<String, SseEmitter> sseEmitters = emitters.findAllEmitterStartWithByAuctionId(String.valueOf(auctionId));
+        sendToEmitters(sseEmitters, message);
+    }
+
+    private void sendToEmitters(Map<String, SseEmitter> sseEmitters, String message) {
+        sseEmitters.forEach((key, emitter) -> {
             try {
-                while (true) {
-                    LocalDateTime now = LocalDateTime.now();
-                    if (now.isAfter(auction.getStartTime()) || now.isEqual(auction.getStartTime())) {
-                        auction.setStatus(Status.BID);
-                        auctionRepository.save(auction);
-
-                        sseEmitter.send("경매 시작!");
-                        sseEmitter.complete();
-                        break;
-                    }
-                    Thread.sleep(1000);
-                }
-            } catch (IOException | InterruptedException e) {
-                sseEmitter.completeWithError(e);
+                emitter.send(message);
+            } catch (IOException e) {
+                emitters.deleteById(key);
+                log.error("Error sending to emitter: " + e.getMessage());
             }
         });
 
-        return sseEmitter;
+
+        //   AWS lambda 사용
+        //        경매 시작
+//    @Scheduled(cron = "0 * * * * *")
+//    public void monitorAuctionStart() {
+//        List<Auction> auctions = auctionRepository.findAllByStatus(Status.WAITING);
+//        LocalDateTime now = LocalDateTime.now();
+//        boolean updated = false;
+//        for (Auction auction : auctions) {
+//            if (now.isEqual(auction.getStartTime()) || now.isAfter(auction.getStartTime())) {
+//                auction.setStatus(Status.BID);
+//                commonService.startNotification(auction.getId());
+//                updated = true;
+//            }
+//        }
+//        if (updated) {
+//            auctionRepository.saveAll(auctions);
+//        }
+//    }
+
     }
 }
