@@ -94,7 +94,7 @@ public class BidCommonService {
                 emitters.forEach(
                     (key, emitter) -> {
                         // 데이터 전송
-                        sendToClient(emitter, "BID FAIL", key, eventId, "다음 경매를 기다려주세요.");
+                        sendToClient(emitter, "BID FAIL", key, eventId, "경매가 유찰되었습니다. 다음 경매를 기다려주세요.");
                         //연결 끊기
                         emitter.complete();
                         //관리 콜렉션에서 지움
