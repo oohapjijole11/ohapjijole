@@ -1,279 +1,350 @@
 
-![image (1)](https://github.com/user-attachments/assets/fec142e2-6876-42c4-8e48-ff6440be1a24)
-**"OhapJijole Ticket & Auction"**  
-실시간 경매와 티켓팅 서비스를 통해 사용자들에게 몰입감 넘치는 구매 경험을 제공합니다!
+![image (1)](https://github.com/user-attachments/assets/ddf9ae1f-c33e-4b31-8da7-8919dd9d540d)
 
+<h1 align="center" style="font-size: 2.8rem; font-weight: bold; color: #4A90E2; margin-top: 20px;">
+   OhapJijole Ticket & Auction 
+</h1>
 
-<div align="center">
-  <img src="https://img.shields.io/badge/PROJECT-OhapJijole-blue?style=for-the-badge&logo=appveyor"/>
+<p align="center" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 1.2rem; color: #333;">
+  <strong>실시간 경매와 티켓팅을 통해 사용자들에게 <span style="color: #FF5722;">몰입감 넘치는 경험</span>을 선사합니다!</strong>
+</p>
+
+<div align="center" style="margin-top: 20px;">
+  <img src="https://img.shields.io/badge/PROJECT-OhapJijole-blue?style=for-the-badge&logo=appveyor" alt="Project Badge">
 </div>
+
+---
 
 ## 🏁 **서비스 소개**
-“**OhapJijole Ticket & Auction**”은 한정된 수량의 티켓이나 상품을 실시간 경매 형태로 제공하는 티켓팅 옥션 서비스입니다.  
-사용자는 등급과 보유한 티켓에 따라 경매에 참여하고, **경쟁 입찰을 통해 높은 금액을 제시한 사용자가 원하는 상품을 획득**할 수 있습니다.
-
----
-
-## 📚 **Tech Stacks**
-
-<div align="center">
-  <!-- Backend Technologies -->
-  <img src="https://img.shields.io/badge/Java-007396?style=flat-square&logo=java&logoColor=white" alt="Java">
-  <img src="https://img.shields.io/badge/SpringBoot-6DB33F?style=flat-square&logo=springboot&logoColor=white" alt="Spring Boot">
-  <img src="https://img.shields.io/badge/Spring_Security-6DB33F?style=flat-square&logo=springsecurity&logoColor=white" alt="Spring Security">
-  <img src="https://img.shields.io/badge/JWT-000000?style=flat-square&logo=json-web-tokens&logoColor=white" alt="JWT">
-  <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white" alt="MySQL">
-  <br><br>
-  <!-- Infrastructure Technologies -->
-  <img src="https://img.shields.io/badge/AWS_ECS-FF9900?style=flat-square&logo=amazon-ecs&logoColor=white" alt="AWS ECS">
-  <img src="https://img.shields.io/badge/AWS_ECR-FF9900?style=flat-square&logo=amazon-ecr&logoColor=white" alt="AWS ECR">
-  <img src="https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white" alt="Docker">
-  <img src="https://img.shields.io/badge/AWS_RDS-4479A1?style=flat-square&logo=amazon-rds&logoColor=white" alt="AWS RDS">
-  <img src="https://img.shields.io/badge/AWS_ElastiCache-C925D1?style=flat-square&logo=amazon-elasticache&logoColor=white" alt="AWS ElastiCache">
-  <br><br>
-  <!-- Cloud Services -->
-  <img src="https://img.shields.io/badge/AWS_Lambda-FF9900?style=flat-square&logo=aws-lambda&logoColor=white" alt="AWS Lambda">
-  <img src="https://img.shields.io/badge/AWS_SQS-FF9900?style=flat-square&logo=amazon-sqs&logoColor=white" alt="AWS SQS">
-  <img src="https://img.shields.io/badge/SSE-FF9900?style=flat-square&logo=server-sent-events&logoColor=white" alt="SSE">
-  <img src="https://img.shields.io/badge/AWS_S3-FF9900?style=flat-square&logo=amazons3&logoColor=white" alt="AWS S3">
-  <br><br>
-  <!-- CI/CD & DevOps -->
-  <img src="https://img.shields.io/badge/GitHub_Actions-2088FF?style=flat-square&logo=githubactions&logoColor=white" alt="GitHub Actions">
+<div>
+    <strong>OhapJijole Ticket & Auction</strong>은 제한된 수량의 티켓이나 상품을 실시간 경매 형식으로 제공하는 서비스입니다.  
+    사용자는 등급 및 티켓 보유 상황에 따라 경매에 참여하며, <span style="color: #FF5722; font-weight: bold;">경쟁 입찰을 통해 원하는 상품</span>을 획득할 수 있습니다.  
+    최적화된 경매 경험과 효율적인 입찰 시스템으로 사용자 만족도를 극대화합니다.
 
 </div>
 
----
-
-## 👥 **팀원 역할**
+## **기술 스택**
 
 <div align="center">
-
-<table style="width:80%; border-collapse: collapse;">
-  <tr>
-    <td style="border: 1px solid #ddd; padding: 16px; text-align: center;">
-      <h3>🚀 홍기평</h3>
-      <p><strong>역할:</strong> ?</p>
-      <p><strong>GitHub:</strong> <a href="https://github.com/">GitHub</a></p>
-    </td>
-    <td style="border: 1px solid #ddd; padding: 16px; text-align: center;">
-      <h3>💻 배진관</h3>
-      <p><strong>역할:</strong> ?</p>
-      <p><strong>GitHub:</strong> <a href="https://github.com/">GitHub</a></p>
-    </td>
-    <td style="border: 1px solid #ddd; padding: 16px; text-align: center;">
-      <h3>🔧 황우석</h3>
-      <p><strong>역할:</strong> ?</p>
-      <p><strong>GitHub:</strong> <a href="https://github.com/">GitHub</a></p>
-    </td>
-    <td style="border: 1px solid #ddd; padding: 16px; text-align: center;">
-      <h3>📅 김진비</h3>
-      <p><strong>역할:</strong> ?</p>
-      <p><strong>GitHub:</strong> <a href="https://github.com/">GitHub</a></p>
-    </td>
-    <td style="border: 1px solid #ddd; padding: 16px; text-align: center;">
-      <h3>📝 노현지</h3>
-      <p><strong>역할:</strong> ?</p>
-      <p><strong>GitHub:</strong> <a href="https://github.com/">GitHub</a></p>
-    </td>
-  </tr>
-</table>
-
+  <img src="https://skillicons.dev/icons?i=java,spring,mysql,aws,docker,githubactions,redis" alt="Tech Stack" />
 </div>
 
----
-## 🚀 **주요 기능**
+##  **주요 기능**
 
-### 🎟️ **티켓 발급: SQS 및 Lambda를 통한 비동기 처리**
+### **티켓 발급: SQS 및 Lambda를 통한 비동기 처리**
 
-<div style="border: 2px solid #FFD700; border-radius: 10px; padding: 16px; background-color: #FFFACD;">
-  <h4>🔧 **시스템 구현**</h4>
+<div>
   <ul>
-    <li>🚀 <strong>대용량 트래픽 수용</strong>: SQS와 Lambda를 활용한 비동기 티켓 발급 시스템을 구현하여 대규모 트래픽을 효율적으로 처리합니다.</li>
-    <li>🔄 <strong>동시성 제어</strong>: Lambda 함수를 통해 동시성을 제어하고 티켓 발급을 관리하여 안정적인 서비스 운영을 보장합니다.</li>
-    <li>⚙️ <strong>유연한 확장성</strong>: 서버리스 아키텍처를 채택하여 필요에 따라 자동으로 확장되며, 유지보수 비용을 절감합니다.</li>
+    <li> 대용량 트래픽 수용: SQS 및 Lambda를 활용한 비동기 티켓 발급 시스템.</li>
+    <li> 동시성 제어: Lambda와 RDS-Proxy를 통한 안정적인 티켓 발급.</li>
+    <li> 확장성: 서버리스 아키텍처 채택으로 자동 확장.</li>
   </ul>
 </div>
 
 ---
 
-## 🔑 **KEY SUMMARY**
+# 🔑 **KEY SUMMARY**
+## **1️⃣ SQS 메시지 처리 성능 개선**
+### **문제점**
+- SQS 메시지 처리 중 RDS 연결 수 과부하 발생.
+- 대규모 트래픽에서 시스템 처리량 감소와 사용자 응답 속도 저하.
 
-### **성능 개선: 최저가 상품 조회 성능, Redis 도입으로 3배 이상 향상**
-<details>
-  <summary>🔍 도입 배경</summary>
-  
-  - **문제점**:  
-    SQS의 메시지를 Lambda 함수에서 처리할 때 RDS에 과도한 부하 발생
-  
-  - **필요성**:  
-    RDS 부하 감소, 안정성 향상, 연결 개수 관리 기능 필요
-</details>
+### **해결 방안**
+1. **Redis 캐싱 도입**  
+   - 자주 조회되는 데이터를 캐시로 저장해 RDS 접근 최소화.  
+   - 데이터베이스 부하 감소, 읽기 요청 속도 향상.
 
-<details>
-  <summary>📊 한줄 요약</summary>
-  
-  | <span style="color:#4CAF50">**항목**</span> | <span style="color:#FF5722">**도입 전**</span> | <span style="color:#2196F3">**도입 후**</span> | <span style="color:#9C27B0">**효과**</span> |
-  | --- | --- | --- | --- |
-  | **Connection 수** | 10 | 2 | 5배 효율 증가 |
-  | **Throughput** | 65 | 50 | 시스템 안정성 및 장기적 확장성 향상 |
-</details>
+2. **RDS-Proxy 활용**  
+   - 연결 풀링으로 RDS 연결 효율성 증대.  
+   - Lambda와 연결 관리 최적화로 안정성 확보.
 
-<details>
-  <summary>🛠️ 기술 선택지</summary>
-  
-  | **기술** | **장점** |
-  | --- | --- |
-  | **RDS-Proxy** | - Connection 및 처리량 관리<br>- RDS 부하 감소 |
-  | **Redis 캐싱** | - 읽기 작업 성능 극대화<br>- RDS 부하 추가 감소 |
-  
-  **결론**:  
-  RDS-Proxy 도입을 선택하여 연결 관리 및 응답 처리 속도를 크게 개선하고, 처리량 조절을 통해 안정성을 확보하였습니다.
-</details>
+
+### **결과**
+| **항목**          | **도입 전** | **도입 후** | **효과**                          |
+|-------------------|------------|------------|-----------------------------------|
+| **Connection 수** | 10         | 2          | 연결 관리 효율 **5배** 향상       |
+| **처리량**        | 65 TPS     | 50 TPS     | 시스템 안정성 및 확장성 대폭 개선 |
 
 ---
 
-## 🛠️ **인프라 아키텍처 & 적용 기술**
+## **2️⃣ 입찰 처리 성능 최적화** 
 
-### **데이터베이스 및 캐싱**
+### **문제점**
+- 입찰 100회 평균 응답 시간 **3473ms**로 비효율적.  
+- 사용자 경험 저하와 실시간 처리 요구사항 미충족.
 
-<details>
-  <summary>📚 데이터베이스 및 캐싱 상세</summary>
-  
-  1. **Redis**  
-     - **적용 위치**: 캐시 서버  
-     - **사용 이유**: 실시간 상품 조회 성능 향상.
-  
-  2. **RDS-Proxy**  
-     - **적용 위치**: Lambda와 RDS 연결 사이  
-     - **사용 이유**: SQS에 메시지를 Lambda 함수에서 처리 시 RDS의 기능 최적화를 위해 필요  
-     - **구체적 역할**: 대규모 트래픽 처리 시 연결 개수와 CPU, 처리량 효율 및 안정성 향상
-</details>
 
-### **동시성**
 
-<details>
-  <summary>⚡ 동시성 상세</summary>
-  
-  1. **Redisson**  
-     - **적용 위치**: 캐시 서버 및 분산락  
-     - **사용 이유**:  
-       - **분산락(Redisson RLock)**: 입찰 시 데이터 정합성 보장, 공유 자원 보호  
-       - **TTL 설정**: 타임세일 종료 시 데이터 자동 삭제
-  
-  2. **AWS Lambda**  
-     - **적용 위치**: AWS Lambda 트리거  
-     - **사용 이유**: SQS 대용량 대기열 메시지 동시성 처리  
-     - **구체적 역할**: 배치 크기를 통해 SQS에 저장된 대규모 트래픽을 백단위 이상으로 동시성을 처리 가능
-</details>
+### **해결 방안**
+1. **캐시 기반 최고 입찰가 읽기**  
+   - 기존 DB 직접 조회를 캐시 데이터 조회로 변경.  
+   - 읽기 요청 속도 대폭 개선.
 
-### **메시징 시스템**
+2. **분산락 범위 최적화**  
+   - 락 적용 범위를 데이터 읽기 및 저장 관련 메서드로 축소.  
+   - 병렬 처리 성능 개선.
 
-<details>
-  <summary>📬 메시징 시스템 상세</summary>
-  
-  1. **AWS SQS**  
-     - **적용 위치**: 서비스 간 비동기 통신  
-     - **사용 이유**: 대규모 메시지 처리를 위한 안정적 메시징 큐 구현.  
-     - **구체적 역할**: 주문 생성 시 티켓 대기열 생성, FIFO(선입선출)을 통한 메시지 순서 보장
-  
-  2. **SSE (Server-Sent Events)**  
-     - **적용 위치**: 경매, 티켓 구매  
-     - **사용 이유**: 사용자가 실시간으로 입찰 상황이나 티켓 구매 상황을 알기 위한 기능  
-     - **구체적 역할**: 경매나 사용자의 아이디로 해당 알림창을 불러와 실시간 알림을 띄움
-</details>
+3. **Redis 캐시 활용**  
+   - 입찰 권한 체크를 캐시에 저장해 중복 조회 최소화.  
+   - 빠른 응답 제공 및 데이터베이스 요청 감소.
 
-### **자동화**
 
-<details>
-  <summary>🤖 자동화 상세</summary>
-  
-  1. **AWS EventBridge Scheduler**  
-     - **적용 위치**: AWS  
-     - **사용 이유**: 일정 시간에 경매 시작 자동화.  
-     - **구체적 역할**: 경매의 시작 시간에 맞춰 자동으로 경매를 시작시키는 Lambda 함수 호출
-</details>
 
-### **인프라 및 배포**
-
-<details>
-  <summary>🚀 인프라 및 배포 상세</summary>
-  
-  1. **GitHub Actions**  
-     - **적용 위치**: CI/CD 파이프라인  
-     - **사용 이유**: 코드 푸쉬 시 자동으로 빌드, 테스트, 배포 과정을 실행하여 개발 프로세스의 효율성과 일관성 향상
-  
-  2. **Docker**  
-     - **적용 위치**: 애플리케이션 컨테이너화  
-     - **사용 이유**: 애플리케이션을 컨테이너화하여 환경 일관성을 유지하고, 배포 속도를 개선함으로써 다양한 환경에서의 원활한 실행 보장.
-  
-  3. **AWS Elastic Container Registry (ECR)**  
-     - **적용 위치**: 도커 이미지 저장소  
-     - **사용 이유**: AWS와의 긴밀한 통합을 통해 안전하고 확장 가능한 도커 이미지 관리를 가능하게 하여, 배포 프로세스를 간소화함.
-  
-  4. **AWS ECS Fargate**  
-     - **적용 위치**: 컨테이너 오케스트레이션 및 배포  
-     - **사용 이유**: 서버리스 방식으로 컨테이너를 관리하여 인프라 관리 부담을 줄이고, 확장성과 유연성을 제공함.
-  
-  5. **AWS Application Load Balancer (ALB)**  
-     - **적용 위치**: 트래픽 분산  
-     - **사용 이유**: 외부 트래픽을 내부 서비스로 안정적으로 라우팅하고, SSL 종료 및 로드 밸런싱을 통해 보안과 성능을 강화함.
-  
-  6. **AWS ElastiCache**  
-     - **적용 위치**: 인메모리 캐시  
-     - **사용 이유**: 데이터베이스 부하를 줄이고 응답 속도를 향상시키기 위해 자주 조회되는 데이터를 캐시에 저장함으로써 애플리케이션 성능을 최적화함.
-  
-  7. **AWS RDS (Relational Database Service)**  
-     - **적용 위치**: 관계형 데이터베이스  
-     - **사용 이유**: 관리형 데이터베이스 서비스를 통해 데이터의 안정적인 저장과 고가용성을 보장하며, 다양한 데이터베이스 엔진을 지원하여 유연성을 제공함.
-</details>
+### **결과**
+| **항목**               | **개선 전**  | **개선 후**   | **효과**                                  |
+|------------------------|--------------|---------------|-------------------------------------------|
+| **입찰 평균 응답 시간**     | 3473ms       | 476ms         | 처리 속도 약 **7배** 개선, 효율 극대화    |
+| **최고 입찰가 읽기**   | DB 직접 조회  | 캐시 데이터    | 데이터 읽기 속도 대폭 향상                |
+| **락 처리 범위**       | 메서드 전체   | 특정 메서드    | 불필요한 락 제거로 동시 처리 성능 향상     |
+| **입찰 권한 체크**     | DB 중복 조회  | Redis 캐시     | 중복 조회 감소, 빠른 응답 제공             |
 
 ---
-
-## 🛠️ **시스템 아키텍처**
-<div align="center">
-  <img src="https://user-images.githubusercontent.com/12345678/architecture.png" alt="아키텍처 다이어그램" width="70%">
-</div>
-
-### **설명**
-- **ECS 인스턴스**에서 ????????????????
-- **RDS(MySQL)**와 **ElastiCache(Redis)**를 통한 데이터 저장 및 캐싱.
-- **SQS**를 이용한 비동기 메시지 처리.
-- **GitHub Actions**를 통한 자동화된 **CI/CD 파이프라인 구축**.
-- ??????
-- ???????
-- ?????
-
----
-
-## 🔧 **기술적 고도화**
-
-| **카테고리**           | **기술**                                | **적용 위치**                 | **설명**                                                                                       |
-|------------------------|-----------------------------------------|-------------------------------|------------------------------------------------------------------------------------------------|
-| ⚙️ **동시성 관리**     | 🛡️ **분산 락 (Redisson RLock)**        | 캐시 서버 및 공유 자원         | 입찰 시 데이터 정합성을 보장하고 공유 자원을 보호하기 위해 분산 락을 사용합니다.                   |
-| ⚙️ **동시성 관리**     | ⚡ **AWS Lambda**                        | AWS Lambda 트리거             | SQS 대용량 대기열 메시지를 동시성 있게 처리하여 높은 트래픽을 효율적으로 관리합니다.                |
-| ⚙️ **동시성 관리**     | 📈 **구체적 역할**                      |                               | 배치 크기를 통해 SQS에 저장된 대규모 트래픽을 백단위 이상으로 동시성을 처리 가능                  |
-| 🔗 **RDS-Proxy**       | 🖧 **RDS-Proxy**                         | Lambda와 RDS 연결 사이        | 대규모 트래픽 처리 시 RDS의 연결 수와 처리량을 최적화하여 시스템의 안정성과 성능을 향상시킵니다.     |
-| 🔗 **RDS-Proxy**       | 📈 **구체적 역할**                      |                               | 연결 개수 관리, CPU 사용 최적화, 처리량 효율 향상                                              |
-| 🗄️ **캐싱 전략**      | 🚀 **Redis**                             | 캐시 서버                      | 실시간 상품 조회 성능을 향상시키기 위해 Redis를 도입하여 데이터 접근 속도를 극대화합니다.           |
-| 🗄️ **캐싱 전략**      | 🗄️ **AWS ElastiCache**                  | 인메모리 캐시                  | 데이터베이스 부하를 줄이고 응답 속도를 향상시키기 위해 자주 조회되는 데이터를 캐시에 저장합니다.       |
-
----
-## 🌟 **Ground Rules**
+### **트러블 슈팅: 불필요한 커넥션 점유 해결**
 
 <details>
-  <summary>📜 **Click to View Ground Rules**</summary>
-  
+  <summary><strong> 문제 배경 및 정의</strong></summary>
+  <h3> 배경</h3>
+  <p>대규모 데이터 처리 중 <strong>RDS</strong>에서 불필요한 연결 점유가 발생하였습니다.</p>
+  <p>연결 제한 초과로 인해 데이터 처리 지연 문제가 발생하였습니다.</p>
+
+  <h3>문제</h3>
   <ul>
-    <li>🚨 <strong>문제 발생 시 즉시 공유</strong>: 문제가 발생하면 팀원들에게 빠르게 상황을 공유하여 협력 해결합니다.</li>
-    <li>💻 <strong>정규 시간 내 풀타임 화면 공유</strong>: 업무 시간 동안 항상 화면을 공유하여 투명한 협업을 유지합니다.</li>
-    <li>❓ <strong>사소한 것도 질문하기</strong>: 궁금한 점이나 막힌 부분은 사소한 것이라도 즉시 물어보고 해결합니다.</li>
-    <li>🔧 <strong>스크럼에서 트러블 슈팅 및 구현 사항 설명</strong>: 매일 스크럼 시간에 구현 진행 상황과 문제 해결 과정을 공유합니다.</li>
-    <li>📅 <strong>1Day, 1Issue, 1PR 원칙</strong>: 하루에 하나의 이슈를 처리하고 PR을 생성합니다.</li>
-    <li>📝 <strong>1PR 당 3개 이상의 리뷰 남기기</strong>: 각 PR에 대해 최소 3개의 리뷰를 작성하여 코드 품질을 개선합니다.</li>
+    <li>RDS 연결 수를 확장하려 했으나, RDS 버전의 최대 연결 제한으로 한계 발생.</li>
+    <li>과도한 연결 점유로 인해 <strong>성능 저하 및 장애</strong>가 발생.</li>
   </ul>
-  
 </details>
-## 🔮 **미래 계획**
-> **Java 21 가상 스레드** 및 **AI 기반 추천 시스템** 도입으로 사용자 맞춤형 서비스 제공 목표.
 
-**"OhapJijole"와 함께하는 새로운 경매 경험을 기대해주세요! 감사합니다.** 😊
+<details>
+  <summary><strong> 해결 방안 및 적용 내용</strong></summary>
+  <h3> 해결 방안</h3>
+  <ol>
+    <li>
+      <strong>RDS Proxy 활용:</strong>
+      <ul>
+        <li>RDS Proxy를 통해 <strong>연결 재활용 및 최적화</strong>.</li>
+        <li>테스트 시 Gradual Ramp-Up 방식을 적용해 <strong>RAM 사용량</strong>을 조절.</li>
+      </ul>
+    </li>
+    <li>
+      <strong>HikariCP 설정:</strong>
+      <ul>
+        <li>Spring Boot에서 HikariCP를 사용해 <strong>최대/최소 연결 값</strong> 조정.</li>
+        <li>
+          주요 설정:
+          <ul>
+            <li><code>maximumPoolSize</code>: 최대 연결 수 제한 설정.</li>
+            <li><code>minimumIdle</code>: 최소 연결 수를 설정해 불필요한 연결 감소.</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ol>
+
+  <h3> 적용 내용</h3>
+  <ul>
+    <li>
+      <strong>RDS Proxy:</strong>
+      <ul>
+        <li>기존 연결을 재활용하여 <strong>연결 풀 고갈 방지</strong>.</li>
+        <li>연결 관리 효율성을 대폭 개선.</li>
+      </ul>
+    </li>
+    <li>
+      <strong>HikariCP:</strong>
+      <ul>
+        <li><strong>최적 연결 수 관리</strong>로 성능 향상.</li>
+        <li>연결 점유 최소화로 리소스 낭비 감소.</li>
+      </ul>
+    </li>
+  </ul>
+</details>
+
+<details>
+  <summary><strong> 결과 및 회고</strong></summary>
+  <h3>결과</h3>
+  <ul>
+    <li>
+      <strong>RDS Proxy:</strong>
+      <ul>
+        <li>연결 풀 효율성 증가.</li>
+        <li>대규모 트래픽 처리 시 <strong>안정성 확보</strong>.</li>
+      </ul>
+    </li>
+    <li>
+      <strong>HikariCP:</strong>
+      <ul>
+        <li>연결 점유 문제 완화.</li>
+        <li>처리 속도 약 <strong>30%</strong> 향상 및 오류 발생 빈도 <strong>0%</strong> 달성.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h3> 회고</h3>
+  <ul>
+    <li>
+      <strong>장점:</strong>
+      <ul>
+        <li>RDS Proxy는 연결 재활용과 안정성 측면에서 매우 유용.</li>
+        <li>HikariCP는 설정 변경만으로 빠른 성능 최적화 가능.</li>
+      </ul>
+    </li>
+    <li>
+      <strong>단점:</strong>
+      <ul>
+        <li>RDS Proxy 설정 시 AWS Console 및 권한 관리에 추가 시간이 소요.</li>
+        <li>테스트 환경에서는 RAM 사용량 증가로 리소스 관리 필요.</li>
+      </ul>
+    </li>
+  </ul>
+</details>
+
+---
+
+## **인프라 아키텍처 & 적용 기술**
+
+ **적용 기술 정리**
+
+| **카테고리**       |  **기술**                          | **적용 위치**           |  **설명**                                                                                 |
+|----------------------|-------------------------------------|--------------------------|-------------------------------------------------------------------------------------------|
+|  **동시성 관리**   |  **Redisson RLock**               | 캐시 서버 및 공유 자원     | 입찰 시 발생하는 데이터 경합 문제를 해결하고, 분산 환경에서 안전한 데이터 처리를 보장합니다.          |
+|  **동시성 관리**   |  **AWS Lambda**                   | SQS 트리거                | 대규모 메시지를 병렬로 처리하여 높은 트래픽 환경에서도 안정적이고 효율적으로 운영할 수 있습니다.          |
+|  **RDS-Proxy**     |  **RDS-Proxy**                   | Lambda와 RDS 연결 사이    | 연결 풀링을 통해 RDS의 부하를 줄이고, 처리량 및 성능을 최적화하여 안정적인 데이터 접근을 지원합니다.      |
+|  **캐싱 전략**    |  **Redis**                       | 캐시 서버                  | 실시간 데이터 조회 성능을 극대화하며, 경매와 같은 고빈도 읽기 작업에서 빠른 응답을 보장합니다.            |
+|  **캐싱 전략**    |  **AWS ElastiCache**             | 인메모리 캐시              | 데이터베이스 부하를 줄이고, 자주 조회되는 데이터를 캐싱하여 응답 속도를 대폭 향상시킵니다.                |
+
+**인프라 아키텍처**
+
+![최종이요 drawio](https://github.com/user-attachments/assets/1eff2a5d-0659-4d1b-aa9c-ef1305d91753)
+
+
+![_cicd drawio](https://github.com/user-attachments/assets/cd915739-8e56-42d3-b270-556f4da20e32)
+
+---
+
+# 기술적 고도화
+
+<details>
+<summary>1. 경매 시작과 마감 자동화</summary>
+
+### 기능 개요
+- 경매의 시작시간과 마감시간을 현재시간과 비교하여 정확한 시간에 상태를 자동으로 변경.
+
+### 주요 로직
+- 생성된 경매들의 시작시간과 마감시간을 비교하여 상태를 정확히 변경.
+- Lambda를 활용하여 상태 자동화.
+
+### 배경
+- 경매의 시작과 마감을 실시간으로 진행할 필요가 있었고, 정확한 시간에 상태 변경이 요구됨.
+
+### 요구사항
+- 정확한 시간에 경매의 시작과 마감이 이루어져야 하며, 일관성 있게 작동해야 함.
+
+### 선택지
+1. **Spring Boot의 `@Scheduled` 사용**:
+   - 로컬 프로젝트에서 1분마다 DB를 수정.
+2. **AWS EventBridge Scheduler 사용**:
+   - Lambda 함수를 일정 시간마다 호출.
+
+### 의사결정
+- **EventBridge Scheduler 선택 이유**:
+  - 정확한 트리거 시점과 실패 시 재시도 가능.
+  - 여러 인스턴스에서 중복 실행 방지.
+  - 예약 작업 실행 수에 따른 비용 절감.
+
+### 성능 개선 및 코드 개선 요약
+- Lambda 코드의 경매 상태 변화를 멀티스레드 병렬 실행으로 변경.
+
+### 문제 정의
+- 기존 단일 스레드 작업으로 인해 처리 속도가 느림.
+
+### 가설
+- 주기적인 데이터베이스 호출과 비효율적인 쿼리 호출로 성능 저하 발생 가능.
+
+### 해결 방안
+1. **문제 해결 의사결정**:
+   - 시작과 마감 쿼리를 하나로 합쳐 DB 호출을 줄임.
+   - 단일 스레드에서 멀티스레드로 병렬 실행 변경.
+2. **해결 과정**:
+   - 데이터베이스 호출을 두 번에서 한 번으로 줄여 리소스 낭비 제거.
+   - ThreadPool을 사용해 최대 10개의 스레드로 병렬 실행 가능.
+
+### 해결 완료
+- **결과**:
+  - 병렬 실행으로 평균 처리 속도가 15초에서 5~10초로 단축.
+- **전후 데이터 비교**:
+  - 성능 개선 전: 평균 15초 소요.
+  - 성능 개선 후: 평균 5~10초 소요.
+
+    
+</details>
+
+<details>
+<summary>2. 동시성 및 대규모 트래픽 관리</summary>
+
+### 기능 개요
+- SQS 및 Lambda 기반의 티켓 구매 대기열 시스템 구현.
+
+### 주요 로직
+1. SQS로 대규모 요청 분산 처리.
+2. Lambda를 활용한 효율적 대기열 데이터 처리.
+3. RDS Proxy를 통한 DB 연결 효율화.
+
+### 선택지
+1. Lambda + SQS 배치 사이즈 최적화.
+2. Redis 기반 메모리 캐싱.
+
+### 의사결정
+- Lambda와 SQS 최적화를 통해 트래픽 처리 안정성 확보.
+
+### 성능 개선
+- 변경 전: SQS 단일 호출로 성능 저하.
+- 변경 후: SQS와 Lambda 최적화로 속도 개선.
+</details>
+<details>
+<summary>3. Redisson 분산락의 범위를 한정하여 입찰 속도 개선</summary>
+
+### 주요 로직
+동시성 제어를 위한 락 설정
+
+### 선택지
+1. 비관적 락
+2. 함수형 분산 락 : 전역락 방식
+3. 메서드 분리후 aop 형태 분산 락
+
+### 의사결정
+1. 비관적 락 vs 분산락
+비관적 락을 했을 시에는 DB에 직접 조회가 되기 때문에 실행이 끝나는데 시간이 어느 정도 소요
+redis의 인메모리 DB를 사용하여 DB에 가해지는 부하를 줄이므로 서 실행이 완료되는 데까지의
+소요 시간을 비교하고 더 빠르다는것을 확인
+2. 함수형 분산락 vs aop 형태 분산락
+유저 100명이 입찰을 100개의 평균속도를 기준으로 속도 비교 결과 AOP 속도가 빨라서 선택
+- 함수형 분산 락 : 평균  2800ms->평균  1418ms
+- 메서드 분리 : 평균  2800ms->평균  609ms
+
+</details>
+
+## **팀 구성원**
+
+> **오합지졸 프로젝트 멤버**
+
+<div align="center">
+  <table>
+    <tr>
+      <td align="center">
+        <b>홍기평</b><br>
+      </td>
+      <td align="center">
+        <b>배진관</b><br>
+      </td>
+      <td align="center">
+        <b>황우석</b><br>
+      </td>
+      <td align="center">
+        <b>김진비</b><br>
+      </td>
+      <td align="center">
+        <b>노현지</b><br>
+      </td>
+    </tr>
+  </table>
+</div>

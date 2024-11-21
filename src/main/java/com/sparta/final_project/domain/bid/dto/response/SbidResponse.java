@@ -8,7 +8,7 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 @Getter
-public class SbidResponse {
+public class SbidResponse extends EndBidResponse{
     private Long id;
     private Integer price;
     private Integer charge;

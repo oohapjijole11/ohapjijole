@@ -41,7 +41,7 @@ public class SlackService {
 
             );
         }catch (IOException e) {
-            log.warn("slack error ::: " +e.getMessage());
+            log.warn("slack error ::: slackUrl : {} notification content :  {} erorrmessage : {}", slackUrl, title, e.getMessage());
             throw new OhapjijoleException(ErrorCode._NOT_AVAILABLE_SLACK_NOTIFICATION);
         }
 
@@ -64,7 +64,7 @@ public class SlackService {
                                     .build())))
             );
         }catch (IOException e) {
-            log.warn("slack error ::: " +e.getMessage());
+            log.warn("slack error ::: slackUrl : {} notification content :  {} erorrmessage : {}", slackUrl, fieldTitle, e.getMessage());
             throw new OhapjijoleException(ErrorCode._NOT_AVAILABLE_SLACK_NOTIFICATION);
         }
     }
@@ -82,7 +82,7 @@ public class SlackService {
                                     .build())))
             );
         }catch (IOException e) {
-            log.warn("slack error ::: " +e.getMessage());
+            log.warn("slack error ::: slackUrl : {} notification content :  {} erorrmessage : {}", slackUrl, message, e.getMessage());
             throw new OhapjijoleException(ErrorCode._NOT_AVAILABLE_SLACK_NOTIFICATION);
         }
     }

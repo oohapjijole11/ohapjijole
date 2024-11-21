@@ -66,14 +66,14 @@
 
     <!--입찰에 관한 로그 설정-->
     <logger name="bid_logger" level="INFO" additivity="false">
-        <appender-ref ref="BID_SERVICE_FILE_APPENDER"/>
+<!--        <appender-ref ref="BID_SERVICE_FILE_APPENDER"/>-->
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="AWS_CLOUDWATCH_LOG"/>
     </logger>
 
     <!--낙찰에 관한 로그 설정-->
     <logger name="sbid_logger" level="INFO" additivity="false">
-        <appender-ref ref="SBID_SERVICE_FILE_APPENDER"/>
+<!--        <appender-ref ref="SBID_SERVICE_FILE_APPENDER"/>-->
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="AWS_CLOUDWATCH_LOG"/>
     </logger>
