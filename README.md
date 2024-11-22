@@ -214,7 +214,7 @@
 
 **인프라 아키텍처**
 
-![최종이요 drawio](https://github.com/user-attachments/assets/1eff2a5d-0659-4d1b-aa9c-ef1305d91753)
+![설계도2 drawio](https://github.com/user-attachments/assets/b56f404f-6ce2-4cd6-a556-76645b791d25)
 
 
 ![_cicd drawio](https://github.com/user-attachments/assets/cd915739-8e56-42d3-b270-556f4da20e32)
